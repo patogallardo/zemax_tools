@@ -10,4 +10,6 @@ Copy the macro in your macro folder.
 
 In the merit function, call ZPLM and give argument 0 for the Mac#. You need to specify the field location Hx, Hy, entries Px, Py are not used.
 
+In the image below, an average F/# is reported, also x+, x-, y+ and y- F/#s are displayed in the following rows.
+
 ![example](https://github.com/patogallardo/zemax_tools/blob/master/zemax_macros/FNumberFromChiefRay_MeritFunction/Capture.PNG)
