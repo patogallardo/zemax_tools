@@ -8,4 +8,4 @@ F Numbers for extreme directions are also reported in memory locations 1-4.
 
 Copy the macro in your macro folder. 
 
-Call 
+In the merit function, call ZPLM and give argument 0 for the Mac#. You need to specify the field location Hx, Hy, entries Px, Py are not used.
