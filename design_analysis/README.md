@@ -1,7 +1,7 @@
 # TMA design analysis
 
-|Name   |       |       |       |       |
-|---    |---    |---    |---    |---    |
+|Name   |Layout |Img quality    |   Telecentricity      |F/#        |
+|---    |---    |---            |---                    |---        |
 |       |       |       |       |       |
 |       |       |       |       |       |
 |       |       |       |       |       |
