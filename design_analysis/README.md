@@ -11,3 +11,7 @@
 * Image quality is obtained by a rms-field map in Zemax. Focal plane map is obtained by mapping Strehl ratios across a rectangular grid in field space and mapping angles to focal plane coordinates via chief-ray positions and a linear bidimensional interpolation.
 * Telecentricity angle is obtained by tracing the chief-ray and using the z-axis cosine at the image plane surface.
 * F/# is obtained by tracing the chief-ray and marginal rays in the x, and y directions. F/# is computed with the dot product of the direction vector of the marginal ray and the chief ray for each case. f/# is then averaged in the x-y direcitons as 0.25(f_x- + f_x+ + f_y- + f_y+) where f_x+ denotes the f number in the positive x direction and so forth.
+
+## Vignetting
+
+This analysis was done setting a tertiary diameter based in SPV1TMA as an upper bound. Outer white areas in maps are vignetted areas for the marginal rays.
