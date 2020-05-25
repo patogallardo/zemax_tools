@@ -6,7 +6,7 @@
 
 ## Strehls
 
-![](strehls/TmaV1x_focal_plane_strehls.png)
+![](strehls/F3p0_focal_plane_strehls.png)
 
 ## F/#
 
