@@ -1,6 +1,6 @@
 # TMA_ExPolD.zmx
 ## Layout
-![](layout\3DLayout.png)
+![](layout/3DLayout.png)
 ## Chief Ray Angles
 ![](chief_ray\chief_ray_angles_hist.png)
 ![](chief_ray\chief_ray_angles_map.png)
