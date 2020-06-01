@@ -1,6 +1,6 @@
 ''' From TMA design, export rays from normalized sky coordinates to focal plane coordinates.
 
-
+This script will use field position 1 to get Hx, Hy.
 '''
 
 from win32com.client.gencache import EnsureDispatch, EnsureModule
@@ -12,37 +12,28 @@ import numpy as np
 import os
 import sys
 import pandas as pd
+import math as mt
+import glob
+import warnings
 
-fname = sys.argv[1]
+if len(sys.argv) == 2: # optional support for specifying filename 
+    fname = sys.argv[1]
+else:
+    print('No file name provided, searching current directory')
+    fnames = glob.glob('*.zmx')
+    assert len(fnames) == 1
+    fname = fnames[0]
+projectName = fname
 fname = os.path.abspath(fname)
 
 print("opening %s" %fname)
 
-#parameters of the extraction
-
-hx_min = -6.5/14.5
-hx_max = 6.5/14.5
-hy_min = -14.5/14.5
-hy_max = -6.0/14.5
+delta_xy_deg = 7 # center field plus minus delta
 N_points = 300
 
-meshgrid = np.meshgrid(np.linspace(hx_min, hx_max, N_points), np.linspace(hy_min, hy_max, N_points))
+# list of pupil positions to sample
+pxpys = [[0, 0],[0,1],[0,-1],[1,0],[-1,0]]
 
-hx_arr = meshgrid[0].flatten()
-hy_arr = meshgrid[1].flatten()
-assert len(hx_arr) == len(hy_arr)
-
-#end parameters
-
-# Notes
-#
-# The python project and script was tested with the following tools:
-#       Python 3.4.3 for Windows (32-bit) (https://www.python.org/downloads/) - Python interpreter
-#       Python for Windows Extensions (32-bit, Python 3.4) (http://sourceforge.net/projects/pywin32/) - for COM support
-#       Microsoft Visual Studio Express 2013 for Windows Desktop (https://www.visualstudio.com/en-us/products/visual-studio-express-vs.aspx) - easy-to-use IDE
-#       Python Tools for Visual Studio (https://pytools.codeplex.com/) - integration into Visual Studio
-#
-# Note that Visual Studio and Python Tools make development easier, however this python script should should run without either installed.
 
 class PythonStandaloneApplication(object):
     class LicenseException(Exception):
@@ -135,32 +126,82 @@ if __name__ == '__main__':
     testFile = fname
     TheSystem.LoadFile(testFile, False)
 
+    nsur = TheSystem.LDE.NumberOfSurfaces
+    
+    #explore surfaces and extract mirror names and surface numbers
+    TheLDE = TheSystem.LDE
+    
+    mirrors = []
+    mirror_names = []
+    for j in range(1, nsur):
+        if TheLDE.GetSurfaceAt(j).Material == 'MIRROR':
+            mirrors.append(j)
+            mirror_names.append(TheLDE.GetSurfaceAt(j).Comment)
+        
+    
     #! [e22s01_py]
     # Set up Batch Ray Trace
     raytrace = TheSystem.Tools.OpenBatchRayTrace()
-    nsur = TheSystem.LDE.NumberOfSurfaces
-#    max_rays = 30
-    normUnPolData = raytrace.CreateNormUnpol(len(hx_arr), constants.RaysType_Real, nsur)
-    #! [e22s01_py]
 
-    #! [e22s02_py]
-    # Define batch ray trace constants
-#    max_wave = TheSystem.SystemData.Wavelengths.NumberOfWavelengths
+# Determine maximum field
     num_fields = TheSystem.SystemData.Fields.NumberOfFields
-    #! [e22s02_py]
-
-    # Initialize x/y image plane arrays
-    x_ary = np.empty([len(hx_arr)])
-    y_ary = np.empty([len(hy_arr)])
-
-    #! [e22s03_py]
-    # Determine maximum field in Y only
+#store field labeled 1 to be center field    
+    field1 = [TheSystem.SystemData.Fields.GetField(1).X,
+              TheSystem.SystemData.Fields.GetField(1).Y]
+    
+    
     max_field = 0.0
     for i in range(1, num_fields + 1):
-        if (abs(TheSystem.SystemData.Fields.GetField(i).Y) > max_field):
-            max_field = abs(TheSystem.SystemData.Fields.GetField(i).Y)
-    #! [e22s03_py]
+        r_field = mt.sqrt(TheSystem.SystemData.Fields.GetField(i).Y**2 + 
+                          TheSystem.SystemData.Fields.GetField(i).X**2)
+        if (r_field > max_field):
+            max_field = r_field
+#center around first field
+    center_field_x_deg = TheSystem.SystemData.Fields.GetField(1).X
+    center_field_y_deg = TheSystem.SystemData.Fields.GetField(1).Y
+    print('CenterField x: %1.3f, CenterField y: %1.3f' % (center_field_x_deg, center_field_y_deg) )
+    print('Max Field: %1.3f' %max_field)
 
+    
+#define field positions
+#    assert delta_xy_deg < max_field # check that deltaxydeg is within maxfield
+    hx_min, hx_max = [(center_field_x_deg - delta_xy_deg)/max_field,
+                      (center_field_x_deg + delta_xy_deg)/max_field]
+
+    hy_min, hy_max = [(center_field_y_deg - delta_xy_deg)/max_field,
+                      (center_field_y_deg + delta_xy_deg)/max_field]
+
+    meshgrid = np.meshgrid(np.linspace(hx_min, hx_max, N_points), 
+                           np.linspace(hy_min, hy_max, N_points))
+
+    hx_arr = meshgrid[0].flatten()
+    hy_arr = meshgrid[1].flatten()
+    assert len(hx_arr) == len(hy_arr)
+#end define field positions
+
+
+#    max_rays = 30
+    normUnPolData = raytrace.CreateNormUnpol(len(hx_arr) * len(pxpys), 
+                                             constants.RaysType_Real, nsur)
+#    max_wave = TheSystem.SystemData.Wavelengths.NumberOfWavelengths
+
+    # Initialize x/y image plane arrays
+    x_ary = np.empty([len(pxpys)*len(hx_arr)])# center field +4 extreme fields
+    y_ary = np.empty([len(pxpys)*len(hy_arr)])
+
+    error_code = np.empty([len(pxpys)*len(hy_arr)], dtype=np.int32)
+    vignette_code = np.empty([len(pxpys)*len(hy_arr)], dtype=np.int32)
+    l = np.empty([len(pxpys)*len(hy_arr)], dtype=np.float32)
+    m = np.empty([len(pxpys)*len(hy_arr)], dtype=np.float32)
+    n = np.empty([len(pxpys)*len(hy_arr)], dtype=np.float32)
+
+    px_output = np.empty([len(pxpys) * len(hx_arr)], dtype=np.float32)
+    py_output = np.empty([len(pxpys) * len(hx_arr)], dtype=np.float32)
+    hx_output = np.empty([len(pxpys) * len(hx_arr)], dtype=np.float32)
+    hy_output = np.empty([len(pxpys) * len(hx_arr)], dtype=np.float32)
+
+    #! [e22s03_py]
+    
     if TheSystem.SystemData.Fields.GetFieldType() == constants.FieldType_Angle:
         field_type = 'Angle'
     elif TheSystem.SystemData.Fields.GetFieldType() == constants.FieldType_ObjectHeight:
@@ -174,10 +215,15 @@ if __name__ == '__main__':
             # Adding Rays to Batch, varying normalised object height hy
     normUnPolData.ClearData()
     waveNumber = 1
-    px, py = 0, 0
-
-    for j in range(len(hx_arr)):
-        normUnPolData.AddRay(waveNumber, hx_arr[j], hy_arr[j], px, py, constants.OPDMode_None)
+    
+    ray_counter = 0
+    for pxpy in pxpys:
+        px, py = pxpy
+        for j in range(len(hx_arr)):
+            px_output[ray_counter], py_output[ray_counter] = px, py
+            hx_output[ray_counter], hy_output[ray_counter] = hx_arr[j], hy_arr[j]
+            normUnPolData.AddRay(waveNumber, hx_arr[j], hy_arr[j], px, py, constants.OPDMode_None)
+            ray_counter += 1
             #! [e22s04_py]
     
     print('running raytrace...')
@@ -190,28 +236,48 @@ if __name__ == '__main__':
     output = normUnPolData.ReadNextResult()
 
     j=0
-    while output[0]:                                                    # success
-        if ((output[2] == 0) and (output[3] == 0)):                     # ErrorCode & vignetteCode
-            x_ary[j] = output[4]   # X
-            y_ary[j] = output[5]   # Y
-        else:
-            x_ary[j] = np.nan
-            y_ary[j] = np.nan
+    while output[0]:                                # success
+        error_code[j] = output[2]
+        vignette_code[j] = output[3]
+        x_ary[j] = output[4]   # X
+        y_ary[j] = output[5]   # Y
+        l[j] = output[7]
+        m[j] = output[8]
+        n[j] = output[9]
         output = normUnPolData.ReadNextResult()
         j += 1
 
-    print("Ray: hx, hy = %1.3e, %1.3e" % (hx_arr[0], hy_arr[0]))
-    print("x: %1.3e" % x_ary[0])
-    print("y: %1.3e" % y_ary[0])
-    #! [e22s07_py]
+    hx_deg = max_field * hx_output
+    hy_deg = max_field * hy_output
 
-    hx_deg = max_field * hx_arr
-    hy_deg = max_field * hy_arr
-
-    package = {'hx_deg': hx_deg, 'hy_deg': hy_deg, 'x_pos': x_ary, 'y_pos': y_ary}
+    package = {'hx_deg': hx_deg, 
+               'hy_deg': hy_deg, 
+               'x_pos': x_ary, 
+               'y_pos': y_ary,
+               'px': px_output,
+               'py': py_output,
+               'error_code': error_code,
+               'vignette_code': vignette_code,
+               'l': l,
+               'm': m,
+               'n':n}
     df = pd.DataFrame(package)
-    df.to_csv('%s_field_positions.csv' % (fname.split('\\')[-1].split('.zmx')[0]))
+    fname_out = 'ray_db.hdf'
+    df.to_hdf(fname_out, key='df', complevel=9)
+    
+    system_variables={'project_name': projectName,
+                      'center_field_x': field1[0],
+                      'center_field_y': field1[1],
+                      'max_field': max_field}   
 
+    warnings.filterwarnings("ignore")
+    df_variables = pd.Series(system_variables)
+    df_variables.to_hdf(fname_out, key='system_variables')
+
+    mirror_data = {'mirror_name': mirror_names,
+                   'mirror_surface': mirrors }
+    df_mirror_data = pd.DataFrame(mirror_data)
+    df_mirror_data.to_hdf(fname_out, key='mirror_data')
     # This will clean up the connection to OpticStudio.
     # Note that it closes down the server instance of OpticStudio, so you for maximum performance do not do
     # this until you need to.

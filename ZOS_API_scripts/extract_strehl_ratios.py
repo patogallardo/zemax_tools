@@ -12,15 +12,24 @@ import numpy as np
 import os
 import sys
 import pandas as pd
+import glob
 
-fname = sys.argv[1]
+if len(sys.argv) == 2:
+    fname = sys.argv[1]
+else:
+    fnames = glob.glob('*.zmx')
+    assert len(fnames) == 1
+    fname = fnames[0]
+    print('No filename provided, using %s' %fname)
 fname = os.path.abspath(fname)
+
+print('Exporting Strehl ratios for field 1.\n\nRemember to check zmx file.')
 
 print("opening %s" %fname)
 
 #parameters of the extraction
 
-sampling = 200 #number of samples to be sampled
+sampling = 200 #number of samples to be extracted
 field_semi_width = 7
 
 
@@ -149,7 +158,6 @@ if __name__ == '__main__':
     analysis.WaitForCompletion()
     analysisSettings = analysis.GetSettings()
 
-    print("RMS field map has analysis specific settings? ", analysis.HasAnalysisSpecificSettings)  # True; no ModifySettings
     newSettings = analysis.GetSettings()
     rms_settings = CastTo(newSettings, "IAS_RMSFieldMap")  # Cast to IAS_Spot interface; enables access to Spot Diagram properties
     rms_settings.Field.SetFieldNumber(1)
@@ -183,15 +191,10 @@ if __name__ == '__main__':
     
     toStore = {'xx_deg': xx, 'yy_deg': yy, 'z_strehl': zz}
     df = pd.DataFrame(toStore)
-    df.to_csv('%s_strehl_map.csv' % (fname.split('\\')[-1].split('.zmx')[0]))
+    fname_out = 'strehl_map.hdf'
+    df.to_hdf(fname_out, key='df')
+    print("File %s written" % fname_out)
 
-
-    plt.hexbin(xx, yy, zz)
-    plt.colorbar()
-    plt.show()
 
     del zosapi
     zosapi = None
-
-    
-    # place plt.show() after clean up to release OpticStudio from memory
