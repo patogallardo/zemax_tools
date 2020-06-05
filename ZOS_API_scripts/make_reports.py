@@ -1,13 +1,14 @@
 import pandas as pd
 import glob
 directory = ['layout', 
-             'chief_ray', 
-             'fNumbers', 
-             'strehls']
+             'strehls',
+             'fNumbers',
+             'chief_ray']
+
 name = ['Layout', 
-        'Chief Ray Angles', 
-        'f/#', 
-        'Strehl Ratios']
+        'Strehl Ratios',
+        'f/#',
+        'Chief Ray Angles']
 
 def list_images_in_dir(dir):
     fnames = glob.glob(dir)
