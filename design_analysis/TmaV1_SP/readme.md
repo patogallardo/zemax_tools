@@ -11,5 +11,7 @@
 ## Chief Ray Angles
 ![](chief_ray/chief_ray_angles_hist.png)
 ![](chief_ray/chief_ray_angles_map.png)
-## distortion
+## Plate Scale
+![](plate_scale/plate_scale.png)
+## Distortion
 ![](distortion/distortion.png)

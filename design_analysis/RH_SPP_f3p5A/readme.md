@@ -1,5 +1,6 @@
-# ExPolf3.5F12x8.zmx
+# SPPf3p5A.zmx
 ## Layout
+![](layout/3DLayout.png)
 ## Strehl Ratios
 ![](strehls/focal_plane_strehls.png)
 ![](strehls/sky_strehls.png)
