@@ -1,4 +1,4 @@
-# ExPolf3.5F12x8.zmx
+# ExPolf3.5F10x10.zmx
 ## Layout
 ## Strehl Ratios
 ![](strehls/focal_plane_strehls.png)
