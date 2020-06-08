@@ -7,7 +7,7 @@
 |[MDN f/3.3](MDN_F3p3)      |[png](MDN_F3p3/layout/3DLayout.png)  |[focal plane](MDN_F3p3/strehls/focal_plane_strehls.png)|   [<7 deg](MDN_F3p3/chief_ray/chief_ray_angles_map.png)  |3.39 [map](MDN_F3p3/fNumbers/fnumber_av.png) [hist](MDN_F3p3/fNumbers/fnumber_hists.png)          |
 |[PAG f/3.4](PAG_F3p4)      |[png](PAG_F3p4/layout/3DLayout.png)  |[focal plane](PAG_F3p4/strehls/focal_plane_strehls.png)  | [<3.8 deg](PAG_F3p4/chief_ray/chief_ray_angles_map.png)  |3.47 [map](PAG_F3p4/fNumbers/fnumber_av.png) [hist](PAG_F3p4/fNumbers/fnumber_hists.png)          |
 |[RH f/3.0](RH_F3p0)        |[png](RH_F3p0/layout/3DLayout.png)   |[focal plane](RH_F3p0/strehls/focal_plane_strehls.png)  | [<6.5 deg](RH_F3p0/chief_ray/chief_ray_angles_map.png)  |3.03 [map](RH_F3p0/fNumbers/fnumber_av.png) [hist](RH_F3p0/fNumbers/fnumber_hists.png)          |
-|[RH f/3.5 10x10](RH_TMP_f3p5_10x10) |[png](RH_TMP_f3p5_10x10/layout/3DLayout.png) | [focal plane] (RH_TMP_f3p5_10x10/strehls/focal_plane_strehls.png) | [](RH_TMP_f3p5_10x10/chief_ray/chief_ray_angles_map.png) | x.xx [map](RH_TMP_f3p5_10x10/fNumbers/fnumber_av.png) [hist](RH_TMP_f3p5_10x10/fNumbers/fnumber_hists.png) |
+|[RH f/3.5 10x10](RH_TMP_f3p5_10x10) |[png](RH_TMP_f3p5_10x10/layout/3DLayout.png) | [focal plane](RH_TMP_f3p5_10x10/strehls/focal_plane_strehls.png) | [<5.3 deg](RH_TMP_f3p5_10x10/chief_ray/chief_ray_angles_map.png) | 3.47 [map](RH_TMP_f3p5_10x10/fNumbers/fnumber_av.png) [hist](RH_TMP_f3p5_10x10/fNumbers/fnumber_hists.png) |
 
 
 
