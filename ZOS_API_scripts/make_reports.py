@@ -3,12 +3,16 @@ import glob
 directory = ['layout', 
              'strehls',
              'fNumbers',
-             'chief_ray']
+             'chief_ray',
+             'plate_scale',
+             'distortion']
 
 name = ['Layout', 
         'Strehl Ratios',
         'f/#',
-        'Chief Ray Angles']
+        'Chief Ray Angles',
+        'Plate Scale',
+        'Distortion']
 
 def list_images_in_dir(dir):
     fnames = glob.glob(dir)

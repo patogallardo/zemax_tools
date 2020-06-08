@@ -11,7 +11,8 @@ programs_to_run = [r'C:\Users\pgall\Documents\wilson\code\zemax_tools\ZOS_API_sc
 r'C:\Users\pgall\Documents\wilson\code\zemax_tools\ZOS_API_scripts\extract_strehl_ratios.py',
 r'C:\Users\pgall\Documents\wilson\code\zemax_tools\ZOS_API_scripts\focal_plane_strehl_ratios.py',
 r'C:\Users\pgall\Documents\wilson\code\zemax_tools\ZOS_API_scripts\f_numbers.py',
-r'C:\Users\pgall\Documents\wilson\code\zemax_tools\ZOS_API_scripts\plate_scale.py']
+r'C:\Users\pgall\Documents\wilson\code\zemax_tools\ZOS_API_scripts\plate_scale.py',
+r'C:\Users\pgall\Documents\wilson\code\zemax_tools\ZOS_API_scripts\distortion.py']
 
 print('Processing all files within subfolders...')
 for fname in fnames: # change this later

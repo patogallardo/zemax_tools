@@ -149,7 +149,8 @@ def plotArea_focal_plane(x_mm, y_mm, z_strehl, thresholds=[0.7, 0.8, 0.9],
 
     #now make the plot
     fig, ax = plt.subplots(figsize=[8,4.5])
-    ax.hexbin(x_mm, y_mm, z_strehl)
+    hb = ax.hexbin(x_mm, y_mm, z_strehl)
+    plt.colorbar(hb, ax=ax)
     cs = ax.contour(x_bin, y_bin, res.statistic.T, thresholds )
 
     if overlay_ellipse:
@@ -218,7 +219,8 @@ def plot_img_qual_sky(db, thresholds=[0.7, 0.8, 0.9]):
 
     #now make the plot
     fig, ax = plt.subplots(figsize=[8,4.5])
-    ax.hexbin(x, y, z)
+    hb = ax.hexbin(x, y, z)
+    plt.colorbar(hb, ax=ax)
     cs = ax.contour(x_bin, y_bin, res.statistic.T, thresholds,
                     cmap='inferno' )
     ax.clabel(cs, inline=1, fontsize=15)
