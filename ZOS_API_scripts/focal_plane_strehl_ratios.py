@@ -11,7 +11,7 @@ s = pd.read_hdf('ray_db.hdf', 'system_variables')
 center_field_deg = [s.center_field_x, s.center_field_y]
 
 overlay_ellipse = True
-ry, rx = 2600/2, 3400/2 # from meeting notes 20200511
+ry, rx = 2200/2, 3100/2 # from meeting notes 20200511
 
 
 def get_field_positions_and_strehl_map_fname():
@@ -180,14 +180,15 @@ def plotArea_focal_plane(x_mm, y_mm, z_strehl, thresholds=[0.7, 0.8, 0.9],
     plt.grid(alpha=0.3)
 
     #bubble
-    texts = ['Area Strehl > %1.1f: %1.3fm$^2$' %(thresholds[j], areas[j]/1e6)
+    texts = ['Area Strehl > %1.1f: %1.1fm$^2$' %(thresholds[j], areas[j]/1e6)
              for j in range(len(thresholds))]
     textstr = '\n'.join(texts)
     props = dict(boxstyle='round', facecolor='white', alpha=1)
-    plt.figtext(0.71, 0.8, textstr, bbox=props, fontsize=10)
+    plt.figtext(0.65, 0.8, textstr, bbox=props, fontsize=8)
     plt.figtext(0.9, 0.05, projectName + '.zmx', fontsize=5, ha='right')
     if not os.path.exists('./strehls'):
         os.mkdir('./strehls')
+    fig.tight_layout()
     plt.savefig('./strehls/focal_plane_strehls.png', dpi=150)
     plt.close()
     
@@ -242,8 +243,8 @@ def plot_img_qual_sky(db, thresholds=[0.7, 0.8, 0.9]):
                                                          areas[j])
              for j in range(len(thresholds))]
     textstr = '\n'.join(texts)
-    props = dict(boxstyle='round', facecolor='white', alpha=1)
-    plt.figtext(0.8, 0.83, textstr, bbox=props, fontsize=8)
+    props = dict(boxstyle='round', facecolor='white', alpha=0.7)
+    plt.figtext(0.68, 0.83, textstr, bbox=props, fontsize=8)
     plt.figtext(0.9, 0.05, projectName + '.zmx', fontsize=5, ha='right')
     if not os.path.exists('./strehls'):
         os.mkdir('./strehls')

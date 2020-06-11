@@ -1,4 +1,4 @@
-''' From TMA design, export rays from normalized sky coordinates to focal plane coordinates.
+''' From TMA design, export rays from pupil plane.
 
 This script will use field position 1 to get Hx, Hy.
 '''
@@ -32,7 +32,10 @@ delta_xy_deg = 7 # center field plus minus delta
 N_points = 300
 
 # list of pupil positions to sample
-pxpys = [[0, 0],[0,1],[0,-1],[1,0],[-1,0]]
+Nsamples = 20 # use Nsamples for the ring and one for the chief ray
+theta = np.linspace(0, 2*np.pi, Nsamples)
+pxpys = list(zip(np.cos(theta), np.sin(theta))) + [(0,0)]
+
 
 
 class PythonStandaloneApplication(object):
@@ -126,7 +129,7 @@ if __name__ == '__main__':
     testFile = fname
     TheSystem.LoadFile(testFile, False)
 
-    TheSystem.SystemData.Fields.Normalization = 0 # force radial normalization
+    TheSystem.SystemData.Fields.Normalization = 0 #force circular norm
 
     nsur = TheSystem.LDE.NumberOfSurfaces
     
@@ -135,11 +138,14 @@ if __name__ == '__main__':
     
     mirrors = []
     mirror_names = []
+    nPupil = None
     for j in range(1, nsur):
         if TheLDE.GetSurfaceAt(j).Material == 'MIRROR':
             mirrors.append(j)
             mirror_names.append(TheLDE.GetSurfaceAt(j).Comment)
-        
+        if 'Pupil' in TheLDE.GetSurfaceAt(j).Comment:
+            nPupil = j
+            print("Pupil in surface %i" % nPupil)
     
     #! [e22s01_py]
     # Set up Batch Ray Trace
@@ -161,10 +167,7 @@ if __name__ == '__main__':
 #center around first field
     center_field_x_deg = TheSystem.SystemData.Fields.GetField(1).X
     center_field_y_deg = TheSystem.SystemData.Fields.GetField(1).Y
-    print('CenterField x: %1.3f, CenterField y: %1.3f' % (center_field_x_deg, center_field_y_deg) )
-    print('Max Field: %1.3f' %max_field)
 
-    
 #define field positions
 #    assert delta_xy_deg < max_field # check that deltaxydeg is within maxfield
     hx_min, hx_max = [(center_field_x_deg - delta_xy_deg)/max_field,
@@ -181,10 +184,8 @@ if __name__ == '__main__':
     assert len(hx_arr) == len(hy_arr)
 #end define field positions
 
-
-#    max_rays = 30
     normUnPolData = raytrace.CreateNormUnpol(len(hx_arr) * len(pxpys), 
-                                             constants.RaysType_Real, nsur)
+                                             constants.RaysType_Real, nPupil)
 #    max_wave = TheSystem.SystemData.Wavelengths.NumberOfWavelengths
 
     # Initialize x/y image plane arrays
@@ -264,7 +265,7 @@ if __name__ == '__main__':
                'm': m,
                'n':n}
     df = pd.DataFrame(package)
-    fname_out = 'ray_db.hdf'
+    fname_out = 'ray_db_pupil.hdf'
     df.to_hdf(fname_out, key='df', complevel=9)
     
     system_variables={'project_name': projectName,
@@ -283,8 +284,6 @@ if __name__ == '__main__':
     # This will clean up the connection to OpticStudio.
     # Note that it closes down the server instance of OpticStudio, so you for maximum performance do not do
     # this until you need to.
-    del zosapi
-    zosapi = None
 
-    
-    # place plt.show() after clean up to release OpticStudio from memory
+    #del zosapi
+    #zosapi = None
