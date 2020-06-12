@@ -6,12 +6,13 @@ import scipy.interpolate as interp
 from scipy import stats
 import os
 import sys
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 s = pd.read_hdf('ray_db.hdf', 'system_variables')
 center_field_deg = [s.center_field_x, s.center_field_y]
 
-overlay_ellipse = True
-ry, rx = 2200/2, 3100/2 # from meeting notes 20200511
+overlay_circle = True
+rs = [2200/2, 3200/2] # radii for circles overlay
 
 
 def get_field_positions_and_strehl_map_fname():
@@ -126,7 +127,7 @@ def interpolate_grid(df_pos):
 
 
 def plotArea_focal_plane(x_mm, y_mm, z_strehl, thresholds=[0.7, 0.8, 0.9],
-             overlay_ellipse=False, rxry = [1, 1]):
+             overlay_circle=False, rs = [2000, 3000]):
     sel = np.logical_not(np.isnan(x_mm))
     x, y, z = x_mm[sel], y_mm[sel], z_strehl[sel]
     res = stats.binned_statistic_2d(x, y, z, statistic='mean',
@@ -148,47 +149,54 @@ def plotArea_focal_plane(x_mm, y_mm, z_strehl, thresholds=[0.7, 0.8, 0.9],
                                                        areas[j]/1e6))
 
     #now make the plot
-    fig, ax = plt.subplots(figsize=[8,4.5])
+    fig, ax = plt.subplots(figsize=[6,5])
     hb = ax.hexbin(x_mm, y_mm, z_strehl)
-    plt.colorbar(hb, ax=ax)
-    cs = ax.contour(x_bin, y_bin, res.statistic.T, thresholds )
 
-    if overlay_ellipse:
-        assert len(rxry) == 2
-        rx, ry = rxry
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size="3%", pad=0.05)
+
+    cbar = plt.colorbar(hb, cax=cax, ticks=np.arange(0, 1.1, 0.1))
+    cbar.set_label('Strehl ratio [-]')
+
+    cs = ax.contour(x_bin, y_bin, res.statistic.T, thresholds,
+                    cmap='inferno' )
+
+    if overlay_circle:
         theta = np.linspace(0, 2*np.pi, 1000)
-        x = rx*np.cos(theta)
-        y = ry*np.sin(theta)
-        ellipse_area = np.pi * rx * ry/1e6 # in m^2
-        plt.plot(x, y, 
-                 label='ellipse with\nrx: %1.0f mm\nry: %1.0f mm\nA=%1.3f$m^2$'% (rx, ry, ellipse_area),
-                 color='black')
-        plt.legend(loc='lower left', fontsize=8)
+        for j, r in enumerate(rs):
+            x = r * np.cos(theta)
+            y = r * np.sin(theta)
+            circle_area = np.pi * r**2/1e6 # in m^2
+            ax.plot(x, y, 
+                 label='circle with r= %1.2f m\nA=%1.3f$m^2$'% (r/1000, circle_area),
+                 color='C%i' %j)
+        ax.legend(loc='lower left', fontsize=8)
     ax.clabel(cs, inline=1, fontsize=15)
-
-    plt.xlabel('$x_{focalPlane}$ [mm]')
-    plt.ylabel('$y_{focalPlane}$ [mm]')
+    ax.set_aspect('equal')
+    
+    ax.set_xlabel('$x_{focalPlane}$ [mm]')
+    ax.set_ylabel('$y_{focalPlane}$ [mm]')
 
     x_min, x_max = np.min(x_mm[sel]), np.max(x_mm[sel])
     y_min, y_max = np.min(y_mm[sel]), np.max(y_mm[sel])
 
-    plt.xlim([1.1*x_min, 1.1*x_max])
-    plt.ylim([1.1*y_min, 1.1*y_max])
+    ax.set_xlim([x_min, x_max])
+    ax.set_ylim([y_min, y_max])
 
-    plt.title('Focal plane Strehl ratio at $\lambda=1mm$')
+    ax.set_title('Focal plane Strehl ratio at $\lambda=1mm$')
 #    plt.colorbar()
-    plt.grid(alpha=0.3)
+    ax.grid(alpha=0.3)
 
     #bubble
     texts = ['Area Strehl > %1.1f: %1.1fm$^2$' %(thresholds[j], areas[j]/1e6)
              for j in range(len(thresholds))]
     textstr = '\n'.join(texts)
     props = dict(boxstyle='round', facecolor='white', alpha=1)
-    plt.figtext(0.65, 0.8, textstr, bbox=props, fontsize=8)
-    plt.figtext(0.9, 0.05, projectName + '.zmx', fontsize=5, ha='right')
+    plt.figtext(0.57, 0.78, textstr, bbox=props, fontsize=8, alpha=0.7)
+    plt.figtext(0.9, 0.05, projectName, fontsize=5, ha='right')
     if not os.path.exists('./strehls'):
         os.mkdir('./strehls')
-    fig.tight_layout()
+#    fig.tight_layout()
     plt.savefig('./strehls/focal_plane_strehls.png', dpi=150)
     plt.close()
     
@@ -219,24 +227,31 @@ def plot_img_qual_sky(db, thresholds=[0.7, 0.8, 0.9]):
                                                          areas[j]))
 
     #now make the plot
-    fig, ax = plt.subplots(figsize=[8,4.5])
+    fig, ax = plt.subplots(figsize=[6,5])
+
     hb = ax.hexbin(x, y, z)
-    plt.colorbar(hb, ax=ax)
+
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size="3%", pad=0.05)
+
+    cbar = plt.colorbar(hb, cax=cax, ticks=np.arange(0, 1.1, 0.1))
+    cbar.set_label('Strehl ratio [-]')
+
     cs = ax.contour(x_bin, y_bin, res.statistic.T, thresholds,
                     cmap='inferno' )
     ax.clabel(cs, inline=1, fontsize=15)
 
-    plt.xlabel('$x_{sky}$ [deg]')
-    plt.ylabel('$y_{sky}$ [deg]')
+    ax.set_xlabel('$x_{sky}$ [deg]')
+    ax.set_ylabel('$y_{sky}$ [deg]')
 
-    x_min, x_max = np.min(x), np.max(x)
-    y_min, y_max = np.min(y), np.max(y)
+#    x_min, x_max = np.min(x), np.max(x)
+#    y_min, y_max = np.min(y), np.max(y)
 
-    plt.xlim([1.1*x_min, 1.1*x_max])
-    plt.ylim([1.1*y_min, 1.1*y_max])
+#    plt.xlim([1.1*x_min, 1.1*x_max])
+#    plt.ylim([1.1*y_min, 1.1*y_max])
 
-    plt.title('Sky Strehl ratio at $\lambda=1mm$')
-    plt.grid(alpha=0.3)
+    ax.set_title('Sky Strehl ratio at $\lambda=1mm$')
+    ax.grid(alpha=0.3)
 
 #    bubble
     texts = ['$\Omega_{Strehl > %1.1f}$: %1.1f deg$^2$' %(thresholds[j], 
@@ -244,7 +259,7 @@ def plot_img_qual_sky(db, thresholds=[0.7, 0.8, 0.9]):
              for j in range(len(thresholds))]
     textstr = '\n'.join(texts)
     props = dict(boxstyle='round', facecolor='white', alpha=0.7)
-    plt.figtext(0.68, 0.83, textstr, bbox=props, fontsize=8)
+    plt.figtext(0.63, 0.83, textstr, bbox=props, fontsize=8)
     plt.figtext(0.9, 0.05, projectName + '.zmx', fontsize=5, ha='right')
     if not os.path.exists('./strehls'):
         os.mkdir('./strehls')
@@ -265,7 +280,7 @@ y_mm = v(positions_to_eval)
 
 
 plotArea_focal_plane(x_mm, y_mm, db.df_strh.z_strehl.values, 
-                     overlay_ellipse=overlay_ellipse, 
-                     rxry=[rx, ry])
+                     overlay_circle=overlay_circle, 
+                     rs=rs)
 
 plot_img_qual_sky(db)
