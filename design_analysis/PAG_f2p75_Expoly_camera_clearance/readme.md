@@ -14,3 +14,5 @@
 ![](plate_scale/plate_scale.png)
 ## Distortion
 ![](distortion/distortion.png)
+## Ellipticity
+![](ellipticity/ellipticity.png)
