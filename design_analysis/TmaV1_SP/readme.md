@@ -16,3 +16,11 @@
 ## Distortion
 ![](distortion/distortion.png)
 ## Ellipticity
+## Footprints
+![](footprints/footprints_pri.JPG)
+![](footprints/footprints_sec.JPG)
+![](footprints/footprints_ter.JPG)
+## Mirror Sag
+![](sag/surface_sag_surf_pri.JPG)
+![](sag/surface_sag_surf_sec.JPG)
+![](sag/surface_sag_surf_ter.JPG)

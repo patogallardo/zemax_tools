@@ -1,6 +1,5 @@
 # TMPf3p1C2p9A.zmx
 ## Layout
-![](layout/3DLayout.png)
 ## Strehl Ratios
 ![](strehls/focal_plane_strehls.png)
 ![](strehls/sky_strehls.png)
@@ -17,3 +16,12 @@
 ![](distortion/distortion.png)
 ## Ellipticity
 ![](ellipticity/ellipticity.png)
+## Footprints
+![](footprints/footprints_Image.JPG)
+![](footprints/footprints_prime.JPG)
+![](footprints/footprints_second.JPG)
+![](footprints/footprints_tert.JPG)
+## Mirror Sag
+![](sag/surface_sag_surf_prime.JPG)
+![](sag/surface_sag_surf_second.JPG)
+![](sag/surface_sag_surf_tert.JPG)
