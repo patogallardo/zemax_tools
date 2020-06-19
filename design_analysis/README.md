@@ -1,14 +1,15 @@
 # TMA design analysis
 
-|Name           |Layout                                           |Img quality                                                   |   Telecentricity                                    |F/#        |
-|---            |---                                              |---                                                           |---                                                  |---        |
-|[SP TMA](TmaV1_SP)         |[png](TmaV1_SP/layout/3DLayout.png)  |[focal plane](TmaV1_SP/strehls/focal_plane_strehls.png)| [<2.8 deg](TmaV1_SP/chief_ray/chief_ray_angles_map.png)  |3.70 [map](TmaV1_SP/fNumbers/fnumber_av.png) [hist](TmaV1_SP/fNumbers/fnumber_hists.png)          |
-|[PAG f/3.0](PAG_F3p0)      |[png](PAG_F3p0/layout/3DLayout.png)  |[focal plane](PAG_F3p0/strehls/focal_plane_strehls.png)  |  [<12 deg](PAG_F3p0/chief_ray/chief_ray_angles_map.png)  |3.03 [map](PAG_F3p0/fNumbers/fnumber_av.png) [hist](PAG_F3p0/fNumbers/fnumber_hists.png)          |
-|[MDN f/3.3](MDN_F3p3)      |[png](MDN_F3p3/layout/3DLayout.png)  |[focal plane](MDN_F3p3/strehls/focal_plane_strehls.png)|   [<7 deg](MDN_F3p3/chief_ray/chief_ray_angles_map.png)  |3.39 [map](MDN_F3p3/fNumbers/fnumber_av.png) [hist](MDN_F3p3/fNumbers/fnumber_hists.png)          |
-|[PAG f/3.4](PAG_F3p4)      |[png](PAG_F3p4/layout/3DLayout.png)  |[focal plane](PAG_F3p4/strehls/focal_plane_strehls.png)  | [<3.8 deg](PAG_F3p4/chief_ray/chief_ray_angles_map.png)  |3.47 [map](PAG_F3p4/fNumbers/fnumber_av.png) [hist](PAG_F3p4/fNumbers/fnumber_hists.png)          |
-|[RH f/3.0](RH_F3p0)        |[png](RH_F3p0/layout/3DLayout.png)   |[focal plane](RH_F3p0/strehls/focal_plane_strehls.png)  | [<6.5 deg](RH_F3p0/chief_ray/chief_ray_angles_map.png)  |3.03 [map](RH_F3p0/fNumbers/fnumber_av.png) [hist](RH_F3p0/fNumbers/fnumber_hists.png)          |
-|[RH f/3.5 10x10](RH_TMP_f3p5_10x10) |[png](RH_TMP_f3p5_10x10/layout/3DLayout.png) | [focal plane](RH_TMP_f3p5_10x10/strehls/focal_plane_strehls.png) | [<5.3 deg](RH_TMP_f3p5_10x10/chief_ray/chief_ray_angles_map.png) | 3.47 [map](RH_TMP_f3p5_10x10/fNumbers/fnumber_av.png) [hist](RH_TMP_f3p5_10x10/fNumbers/fnumber_hists.png) |
-|[RH f2.75 12x8](RH_TMP_f2p75_12x8) | [png](RH_TMP_f2p75_12x8/layout/3DLayout.png) | [focal plane](RH_TMP_f2p75_12x8/strehls/focal_plane_strehls.png) | [<8.5 deg](RH_TMP_f2p75_12x8/chief_ray/chief_ray_angles_map.png) | 2.71 [map](RH_TMP_f2p75_12x8/fNumbers/fnumber_av.png) [hist](RH_TMP_f2p75_12x8/fNumbers/fnumber_hists.png)
+|Name         | f/# | fov [deg^2] | focal plane [m^2] | M1, M2, M3 (2rx,2ry)[mm] | M1, M2, M3 sag[mm]| cr-boresight angle [deg] |
+TMPf2p5_c2p2A |2.47 |82.6 |4.1| (5002, 5865), (3216, 4738), (5194, 5500)|243, 444,445| 15.5|
+TMPf2p8_c2p2A |2.75 |65.4 |4.0| (5001, 5818), (3280, 4446), (5238, 5499)|226, 335,348| 13.6|  
+TMPf3p0C2p8   |3.00 |92.0 |6.7| (5001, 5535), (3217, 4301), (5244, 5499)|189, 330, 386| 17.5|  
+TMPf3p1_c2p9A |3.11 |88.8 |6.9| (5001, 5556), (3188, 4294), (5216, 5500)|195, 336, 367| 16.5|
+TMPf3p15C2p8  |3.16 |83.7 |6.7| (5001, 5503), (3260, 4237), (5222, 5500)|177, 283, 341| 12.9|
+TMPf3p25_c2p9A|3.27 |80.0 |6.8| (5000, 5503), (3185, 4126), (5203, 5499)|189, 289, 328| 14.1|
+TMPf3p3_c3p2A |3.32 |93.4 |8.3| (5001, 5603), (3032, 2103), (5196, 5500)|219, 278, 383| 20.4| 
+TMPf3p6_c3p2A |3.61 |79.7 |8.2| (5500, 5480), (3130, 3985), (5218, 5499)|183, 275, 312| 15.5|
+TmaV1_SP      |3.70 |62.3 |6.6| (5002, 5287), (3700, 3700), (5500, 4700)|xx,xx,xx| 9.95|
 
 
 
@@ -17,7 +18,11 @@
 * F/# is obtained by tracing the chief-ray and marginal rays in the x, and y directions. F/# is computed with the dot product of the direction vector of the marginal ray and the chief ray for each case. f/# is then averaged in the x-y direcitons as 0.25(f_x- + f_x+ + f_y- + f_y+) where f_x+ denotes the f number in the positive x direction and so forth.
 * Grid distortion was computed by tracing a uniform grid equally spaced (1 deg) rays in x-y and mapping the chief ray to the focal plane.
 * Plate scale was computed by tracing rays in the x and y direction and mapping the chief ray to the focal plane. A first order polynomial was then fit.
+* Footprints are obtained by doing a footprint analysis in Zemax, the stop is kept before the primary.
+* Mirror diameter is obtained from the x-y max ray for a footprint as described in the previous line.
+* Sag is exported directly from Zemax
+
 
 ## Vignetting
 
-This analysis was done setting a tertiary diameter based in SPV1TMA as an upper bound. Outer white areas in maps are vignetted areas for the marginal rays.
+* White areas in maps (f/# and strehls) corresponds to one of the marginal rays vignetting.
