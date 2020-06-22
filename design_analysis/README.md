@@ -12,7 +12,7 @@
 [TMPf3p6_c3p2A](20200611_RH_TMPf3p6_c3p2A) |3.61 |79.7 |8.2| (5500, 5480), (3130, 3985), (5218, 5499)|183, 275, 312| 15.5|
 [TmaV1_SP](TmaV1_SP)      |3.70 |62.3 |6.6| [(5100, 5628), (3700, 3779), (5500, 4742)](https://github.com/patogallardo/zemax_tools/blob/master/design_analysis/TmaV1_SP/cad/TmaV1x.PDF)|[155,133,249](https://github.com/patogallardo/zemax_tools/blob/master/design_analysis/TmaV1_SP/cad/TmaV1x.PDF)| 9.95|
 [TMP_big_f3p0](20200621_RH_TMP_Big_f3p00) |3.01 |86.9 |6.3| (5002, 5527), (3588, 5074), (5348, 5499)|158, 318, 339| 10.8|
-
+[TMP_small_f3p66](20200621_RH_TMP_Small_f2p66)|2.64| 69.5| 3.9| (5001, 5772.8), (3544,4836), (5320, 5499)| 173, 293, 354| 8,3|
 
 
 * Image quality is obtained by a rms-field map in Zemax. Focal plane map is obtained by mapping Strehl ratios across a rectangular grid in field space and mapping angles to focal plane coordinates via chief-ray positions and a linear bidimensional interpolation.
