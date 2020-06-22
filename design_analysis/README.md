@@ -1,6 +1,6 @@
 # TMA design analysis
 
-|Name         | f/# | fov [deg^2] | focal plane [m^2] | M1, M2, M3 (2rx,2ry)[mm] | M1, M2, M3 sag[mm]| cr-boresight angle [deg] |
+|Name         | f/# | fov [deg^2] | focal plane [m^2] | M1, M2, M3 active diameter (2rx,2ry)[mm] | M1, M2, M3 sag[mm]| cr-boresight angle [deg] |
 | ---| --- |--- |--- | --- | --- | --- |
 [TMPf2p5_c2p2A](20200611_RH_TMPf2p5_c2p2A) |2.47 |82.6 |4.1| (5002, 5865), (3216, 4738), (5194, 5500)|243, 444,445| 15.5|
 [TMPf2p8_c2p2A](20200611_RH_TMPf2p8_c2p2A) |2.75 |65.4 |4.0| (5001, 5818), (3280, 4446), (5238, 5499)|226, 335,348| 13.6|  
