@@ -32,4 +32,5 @@ Footprints are obtained by doing a footprint analysis in Zemax in each surface o
 Mirror diameter is obtained from the x-y max ray for a footprint as described in the previous line. This works for TMP models. TMAV1_SP requires a special treatment as the tilt in the mirror makes the x-y footprint harder to interpret. For this reason the diamters for this model are taken from the solid model, see link in SP model.
 ## Mirror Sag
 Sag is exported directly from Zemax. This works for TMP models, and its interpretation is not straightfoward for TMAV1_SP. In this case, the three reflectors were exported to Solidworks (see folder cad), where sag was evaluated by defining a plane across the rim of the mirror and measuring the distance from the plane to the center point of the reflector.
-
+## Chief Ray - Boresight angle
+Chief ray to boresight angle is obtained by computing dot product between chief ray before the primary and chief ray at image plane for the center field. TMAV1 needs special treatment. [see pdf](https://github.com/patogallardo/zemax_tools/blob/master/ZOS_API_scripts/misc/Chief_ray_boresight-focal_plane_angle.pdf)
