@@ -126,7 +126,7 @@ def interpolate_grid(df_pos):
 
 
 
-def plotArea_focal_plane(x_mm, y_mm, z_strehl, thresholds=[0.7, 0.8, 0.9],
+def plotArea_focal_plane(x_mm, y_mm, z_strehl, thresholds=[0.7, 0.8, 0.9, 0.95],
              overlay_circle=False, rs = [2000, 3000]):
     sel = np.logical_not(np.isnan(x_mm))
     x, y, z = x_mm[sel], y_mm[sel], z_strehl[sel]
@@ -145,7 +145,7 @@ def plotArea_focal_plane(x_mm, y_mm, z_strehl, thresholds=[0.7, 0.8, 0.9],
              for above_threshold in above_thresholds]
 
     for j in range(len(thresholds)): 
-        print('Area above Strehl %1.1f: %3.1f [m^2]' %(thresholds[j], 
+        print('Area above Strehl %1.2f: %3.1f [m^2]' %(thresholds[j], 
                                                        areas[j]/1e6))
 
     #now make the plot
@@ -155,7 +155,7 @@ def plotArea_focal_plane(x_mm, y_mm, z_strehl, thresholds=[0.7, 0.8, 0.9],
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="3%", pad=0.05)
 
-    cbar = plt.colorbar(hb, cax=cax, ticks=np.arange(0, 1.1, 0.1))
+    cbar = plt.colorbar(hb, cax=cax, ticks=np.array([0.7, 0.8, 0.9, 0.95, 0.99]))
     cbar.set_label('Strehl ratio [-]')
 
     cs = ax.contour(x_bin, y_bin, res.statistic.T, thresholds,
@@ -188,7 +188,7 @@ def plotArea_focal_plane(x_mm, y_mm, z_strehl, thresholds=[0.7, 0.8, 0.9],
     ax.grid(alpha=0.3)
 
     #bubble
-    texts = ['Area Strehl > %1.1f: %1.1fm$^2$' %(thresholds[j], areas[j]/1e6)
+    texts = ['Area Strehl > %1.2f: %1.1fm$^2$' %(thresholds[j], areas[j]/1e6)
              for j in range(len(thresholds))]
     textstr = '\n'.join(texts)
     props = dict(boxstyle='round', facecolor='white', alpha=1)
@@ -201,7 +201,7 @@ def plotArea_focal_plane(x_mm, y_mm, z_strehl, thresholds=[0.7, 0.8, 0.9],
     plt.close()
     
 
-def plot_img_qual_sky(db, thresholds=[0.7, 0.8, 0.9]):
+def plot_img_qual_sky(db, thresholds=[0.7, 0.8, 0.9, 0.95]):
     df_strh = db.df_strh
     sel = df_strh.vignetted == 0
     
@@ -223,7 +223,7 @@ def plot_img_qual_sky(db, thresholds=[0.7, 0.8, 0.9]):
              for above_threshold in above_thresholds]
 
     for j in range(len(thresholds)): 
-        print('Area above Strehl %1.1f: %3.1f [deg^2]' %(thresholds[j], 
+        print('Area above Strehl %1.2f: %3.1f [deg^2]' %(thresholds[j], 
                                                          areas[j]))
 
     #now make the plot
@@ -234,7 +234,7 @@ def plot_img_qual_sky(db, thresholds=[0.7, 0.8, 0.9]):
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="3%", pad=0.05)
 
-    cbar = plt.colorbar(hb, cax=cax, ticks=np.arange(0, 1.1, 0.1))
+    cbar = plt.colorbar(hb, cax=cax, ticks=np.array([0.7, 0.8, 0.9, 0.95, 0.99]))
     cbar.set_label('Strehl ratio [-]')
 
     cs = ax.contour(x_bin, y_bin, res.statistic.T, thresholds,
@@ -254,13 +254,13 @@ def plot_img_qual_sky(db, thresholds=[0.7, 0.8, 0.9]):
     ax.grid(alpha=0.3)
 
 #    bubble
-    texts = ['$\Omega_{Strehl > %1.1f}$: %1.1f deg$^2$' %(thresholds[j], 
+    texts = ['$\Omega_{Strehl > %1.1f}$: %1.2f deg$^2$' %(thresholds[j], 
                                                          areas[j])
              for j in range(len(thresholds))]
     textstr = '\n'.join(texts)
     props = dict(boxstyle='round', facecolor='white', alpha=0.7)
     plt.figtext(0.63, 0.83, textstr, bbox=props, fontsize=8)
-    plt.figtext(0.9, 0.05, projectName + '.zmx', fontsize=5, ha='right')
+    plt.figtext(0.9, 0.05, projectName, fontsize=5, ha='right')
     if not os.path.exists('./strehls'):
         os.mkdir('./strehls')
     fig.tight_layout()

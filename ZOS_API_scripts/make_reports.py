@@ -5,14 +5,20 @@ directory = ['layout',
              'fNumbers',
              'chief_ray',
              'plate_scale',
-             'distortion']
+             'distortion',
+             'ellipticity',
+             'footprints',
+             'sag']
 
 name = ['Layout', 
         'Strehl Ratios',
         'f/#',
         'Chief Ray Angles',
         'Plate Scale',
-        'Distortion']
+        'Distortion',
+        'Ellipticity',
+        'Footprints',
+        'Mirror Sag']
 
 def list_images_in_dir(dir):
     fnames = glob.glob(dir)
@@ -29,7 +35,8 @@ text = ['# %s\n' %project_name]
 
 for j in range(len(name)):
     text.append('## %s\n' %name[j])
-    fnames = list_images_in_dir(directory[j]+'/*.png')
+    fnames = list_images_in_dir(directory[j] + '/*.png')
+    fnames += list_images_in_dir(directory[j] + '/*.JPG')
     for fname in fnames:
         text.append('![](%s)\n' %fname)
 

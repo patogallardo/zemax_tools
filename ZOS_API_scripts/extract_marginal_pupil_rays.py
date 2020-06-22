@@ -1,6 +1,7 @@
 ''' From TMA design, export rays from pupil plane.
 
-This script will use field position 1 to get Hx, Hy.
+This script will use the fields in the field editor and extract 
+a circle in the pupil. Will save everything in a zdf file.
 '''
 
 from win32com.client.gencache import EnsureDispatch, EnsureModule
@@ -28,13 +29,10 @@ fname = os.path.abspath(fname)
 
 print("opening %s" %fname)
 
-delta_xy_deg = 7 # center field plus minus delta
-N_points = 300
-
 # list of pupil positions to sample
 Nsamples = 20 # use Nsamples for the ring and one for the chief ray
 theta = np.linspace(0, 2*np.pi, Nsamples)
-pxpys = list(zip(np.cos(theta), np.sin(theta))) + [(0,0)]
+pxpys = list(zip(np.cos(theta), np.sin(theta)))
 
 
 
@@ -146,6 +144,7 @@ if __name__ == '__main__':
         if 'Pupil' in TheLDE.GetSurfaceAt(j).Comment:
             nPupil = j
             print("Pupil in surface %i" % nPupil)
+    assert nPupil is not None #check that we actually found the pupil
     
     #! [e22s01_py]
     # Set up Batch Ray Trace
@@ -164,23 +163,22 @@ if __name__ == '__main__':
                           TheSystem.SystemData.Fields.GetField(i).X**2)
         if (r_field > max_field):
             max_field = r_field
+
+    #now get the fields from the field editor
+    Hx, Hy = np.empty(num_fields), np.empty(num_fields)
+    for i in range(1, num_fields+1):
+        Hx[i-1] = TheSystem.SystemData.Fields.GetField(i).X/max_field
+        Hy[i-1] = TheSystem.SystemData.Fields.GetField(i).Y/max_field
+    
 #center around first field
     center_field_x_deg = TheSystem.SystemData.Fields.GetField(1).X
     center_field_y_deg = TheSystem.SystemData.Fields.GetField(1).Y
 
 #define field positions
 #    assert delta_xy_deg < max_field # check that deltaxydeg is within maxfield
-    hx_min, hx_max = [(center_field_x_deg - delta_xy_deg)/max_field,
-                      (center_field_x_deg + delta_xy_deg)/max_field]
 
-    hy_min, hy_max = [(center_field_y_deg - delta_xy_deg)/max_field,
-                      (center_field_y_deg + delta_xy_deg)/max_field]
-
-    meshgrid = np.meshgrid(np.linspace(hx_min, hx_max, N_points), 
-                           np.linspace(hy_min, hy_max, N_points))
-
-    hx_arr = meshgrid[0].flatten()
-    hy_arr = meshgrid[1].flatten()
+    hx_arr = Hx
+    hy_arr = Hy
     assert len(hx_arr) == len(hy_arr)
 #end define field positions
 
@@ -277,10 +275,8 @@ if __name__ == '__main__':
     df_variables = pd.Series(system_variables)
     df_variables.to_hdf(fname_out, key='system_variables')
 
-    mirror_data = {'mirror_name': mirror_names,
-                   'mirror_surface': mirrors }
-    df_mirror_data = pd.DataFrame(mirror_data)
-    df_mirror_data.to_hdf(fname_out, key='mirror_data')
+#    df_mirror_data = pd.DataFrame(mirror_data)
+#    df_mirror_data.to_hdf(fname_out, key='mirror_data')
     # This will clean up the connection to OpticStudio.
     # Note that it closes down the server instance of OpticStudio, so you for maximum performance do not do
     # this until you need to.

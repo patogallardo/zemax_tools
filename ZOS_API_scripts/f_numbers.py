@@ -114,7 +114,7 @@ def make_fnumber_hists(df_fn, show=True):
 
 
 def make_fnumber_maps(df_fn, show=True):
-    fig, ax = plt.subplots(2, 2, sharex='col', sharey='row', figsize=[16,9])
+    fig, ax = plt.subplots(2, 2, sharex='col', sharey='row', figsize=[10,8])
     data_id = [['fn_xp', 'fn_xm'], ['fn_yp', 'fn_ym']]
 
     for i in range(2):
@@ -127,6 +127,7 @@ def make_fnumber_maps(df_fn, show=True):
                 ax[i,j].set_xlabel('x$_{focal plane}$ [mm]')
             if j==0:
                 ax[i,j].set_ylabel('y$_{focal plane}$ [mm]')
+            ax[i,j].set_aspect('equal')
     fig.tight_layout()
     if show:
         plt.show()
@@ -135,7 +136,7 @@ def make_fnumber_maps(df_fn, show=True):
                     dpi=150)
     plt.close()
     
-    plt.figure(figsize=[8, 4.5])
+    plt.figure(figsize=[5.5, 4])
     plt.hexbin(df_fn.x_pos, df_fn.y_pos, df_fn['fn_av'])
     plt.title('Average f/$\#$ (in x, y directions)')
     plt.xlabel('x$_{focal plane}$ [mm]')
@@ -151,7 +152,7 @@ def make_fnumber_maps(df_fn, show=True):
 
 
 def make_chief_angle_map(df_fn, show=False):
-    plt.figure(figsize=[8, 4.5])
+    plt.figure(figsize=[5.5, 4])
     plt.hexbin(df_fn.x_pos, df_fn.y_pos, df_fn['chief_ray_angle_deg'])
     plt.title('Focal plane chief ray angle (90-$\\theta$)')
     plt.xlabel('x$_{focal plane}$ [mm]')
