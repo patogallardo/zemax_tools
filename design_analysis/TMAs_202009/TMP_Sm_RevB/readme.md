@@ -3,7 +3,7 @@
 ![](layout/3DLayout.png)
 ## Strehl Ratios
 ![](strehls/RMSFieldMap.png)
-![](strehls/RMSFieldMap_contours.png)
+![](strehls/RMSFieldMap_contour.png)
 ## Footprints
 ![](footprints/footprints_prime.JPG)
 ![](footprints/footprints_second.JPG)
