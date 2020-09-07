@@ -1,5 +1,6 @@
 # TMP_Sm_FixA.zmx
 ## Layout
+![](layout/3DLayout.png)
 ## Strehl Ratios
 ![](strehls/focal_plane_strehls.png)
 ![](strehls/sky_strehls.png)
