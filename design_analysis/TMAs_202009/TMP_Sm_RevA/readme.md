@@ -1,16 +1,9 @@
 # TMP_Sm_RevA.zmx
 ## Layout
+![](layout/3DLayout.png)
 ## Strehl Ratios
-![](strehls/focal_plane_strehls.png)
-![](strehls/sky_strehls.png)
-## f/#
-## Chief Ray Angles
-## Plate Scale
-![](plate_scale/plate_scale.png)
-## Distortion
-![](distortion/distortion.png)
-## Ellipticity
-![](ellipticity/ellipticity.png)
+![](strehls/RMSFieldMap.png)
+![](strehls/RMSFieldMap_contours.png)
 ## Footprints
 ![](footprints/footprints_prime.JPG)
 ![](footprints/footprints_second.JPG)
