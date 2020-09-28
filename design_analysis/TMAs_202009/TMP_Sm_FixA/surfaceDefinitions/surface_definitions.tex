@@ -1,0 +1,62 @@
+\documentclass[12pt, letterpaper, twoside]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{booktabs}
+\usepackage{graphicx}
+
+\title{TMP mirror definitions}
+\author{Patricio Gallardo}
+%\date{February 2014}
+
+\begin{document}
+
+
+\maketitle
+
+
+\section{Mirror Sag}
+
+Mirror Sag is implemented in Zemax as extended polynomials (from a flat surface) of 14 or 20 terms. From these 20 terms most of them are zero. The sag of the mirror is defined following 
+\begin{equation}
+\label{eq:1}
+z(x,y) = \sum_{i=0}^5 \sum_{j=0}^{5} p_{i,j} \left( \frac{x}{R_{max}}\right )^i \left(\frac{y}{R_{max}}\right)^j [\rm{mm}]. 
+\end{equation}
+
+Here the sum covers 36 elements which define a general order 5 polynomial. This polynomial expansion can be evaluated using the terms shown in tables \ref{tab_prime}, \ref{tab_second} and \ref{tab_tert}. The term $R_{max}$ is a normalization length-scale which equals 2500mm.
+
+\begin{table}
+	\input{./prime.tex}
+	\caption{Primary mirror definition according to \ref{eq:1}. Mirror rim has a semiwidth of 2520mm in the x direction and 2850mm in the y direction with a decenter of 65mm in the y direction.}
+		\label{tab_prime}
+\end{table}
+
+\begin{table}
+
+	\input{./second.tex}
+	\caption{Secondary mirror definition according to \ref{eq:1}. Mirror rim has a semiwidth of 1780mm in the x direction and 2430mm in the y direction with a decenter of 150mm in the y direction.}
+	\label{tab_second}
+\end{table}
+
+\begin{table}
+	\input{./tert.tex}
+	\caption{Tertiary mirror definition according to \ref{eq:1}. Mirror rim has a semiwidth of 2690 mm in the x direction and 2780 mm in the y direction with a decenter of 110 mm in the y direction.}
+	\label{tab_tert}
+\end{table}
+
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.5\textwidth]{./prime.png}\hfill
+	\includegraphics[width=0.5\textwidth]{./second.png}
+	
+	\includegraphics[width=0.5\textwidth]{./tert.png}
+	\label{fig:mirrorshape}
+	\caption{Mirror sag defined with matrix elements accodring to tables 1-3.}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.9\textwidth]{mirror_fp_rays.PNG}
+	\caption{TMP ray trace}
+\end{figure}
+
+\end{document}
