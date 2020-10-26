@@ -12,7 +12,7 @@ s = pd.read_hdf('ray_db.hdf', 'system_variables')
 center_field_deg = [s.center_field_x, s.center_field_y]
 
 overlay_circle = True
-rs = [2200/2, 3200/2] # radii for circles overlay
+rs = [2200/2, 3000/2] # radii for circles overlay
 
 
 def get_field_positions_and_strehl_map_fname():
@@ -188,7 +188,7 @@ def plotArea_focal_plane(x_mm, y_mm, z_strehl, thresholds=[0.7, 0.8, 0.9, 0.95],
     ax.grid(alpha=0.3)
 
     #bubble
-    texts = ['Area Strehl > %1.2f: %1.1fm$^2$' %(thresholds[j], areas[j]/1e6)
+    texts = ['Area$_{Strehl > %1.2f}$: %1.1fm$^2$' %(thresholds[j], areas[j]/1e6)
              for j in range(len(thresholds))]
     textstr = '\n'.join(texts)
     props = dict(boxstyle='round', facecolor='white', alpha=1)
@@ -254,7 +254,7 @@ def plot_img_qual_sky(db, thresholds=[0.7, 0.8, 0.9, 0.95]):
     ax.grid(alpha=0.3)
 
 #    bubble
-    texts = ['$\Omega_{Strehl > %1.1f}$: %1.2f deg$^2$' %(thresholds[j], 
+    texts = ['$\Omega_{Strehl > %1.2f}$: %1.2f deg$^2$' %(thresholds[j], 
                                                          areas[j])
              for j in range(len(thresholds))]
     textstr = '\n'.join(texts)

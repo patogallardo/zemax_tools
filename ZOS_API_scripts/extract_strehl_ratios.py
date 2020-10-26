@@ -29,7 +29,7 @@ print("opening %s" %fname)
 
 #parameters of the extraction
 
-sampling = 200 #number of samples to be extracted
+sampling = 400 #number of samples to be extracted
 field_semi_width = 7
 
 

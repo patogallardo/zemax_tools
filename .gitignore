@@ -1,2 +1,7 @@
 *.hdf
 *.swp
+*.pyc
+*.pck
+*.aux
+*.log
+*.synctex.gz
