@@ -7,3 +7,21 @@ This file was optimized camera by camera, because of compatibility issues I had 
 I am using a very similar merit function to optimize these, trying to keep the camera length at 610 mm, and optimizing for image quality. The camera first lens is 2 inches from the focal "plane". There is a big caveat here, that the TMP design has a more curved focal plane, which means that if we force the cameras to be coplanar at the first lens, then the beam will be entering the cameras at different sections of the cone, which we will have to assess at some point.
 
 ![85camTMP](3DLayout/full_layout.png)
+
+# Wedges
+
+## Center tube
+
+![centertube](wedges/3DLyout_cam01.png)
+![centertube](wedges/sag_cam01.png)
+
+## top tube
+![centertube](wedges/3DLyout_cam32.png)
+![centertube](wedges/sag_cam32.png)
+
+## bottom tube
+![centertube](wedges/3DLyout_cam64.png)
+![centertube](wedges/sag_cam64.png)
+
+## tube numbering
+![tube_numbering](camera_groups.png)
