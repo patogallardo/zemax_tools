@@ -12,15 +12,15 @@ I am using a very similar merit function to optimize these, trying to keep the c
 
 ## Center tube
 
-![centertube](wedges/3DLyout_cam01.png)
+![centertube](wedges/3DLayout_cam01.png)
 ![centertube](wedges/sag_cam01.png)
 
 ## top tube
-![centertube](wedges/3DLyout_cam32.png)
+![centertube](wedges/3DLayout_cam32.png)
 ![centertube](wedges/sag_cam32.png)
 
 ## bottom tube
-![centertube](wedges/3DLyout_cam64.png)
+![centertube](wedges/3DLayout_cam64.png)
 ![centertube](wedges/sag_cam64.png)
 
 ## tube numbering
