@@ -4,6 +4,9 @@ from hexlattice import *
 import time
 import shutil
 import pandas as pd
+import sys
+
+assert len(sys.argv) == 2 # need to specify a center cam filename
 
 t1 = time.time()
 CAMPOS_FNAME = './85cam_groups.csv'
@@ -108,7 +111,9 @@ print('Connected to OpticStudio')
 print('Serial #: ', TheApplication.SerialCode)
 
 #fname = r'C:\Users\pgall\Documents\wilson\code\zemax_tools\S4cam\gen85cams\ID12_onecam_togenerate85.zmx'
-fname = r'C:\Users\pgall\Documents\wilson\code\zemax_tools\S4cam\gen85cams\ID12_onecam_togenerate85_130mm_focalplane.zmx'
+#fname = r'C:\Users\pgall\Documents\wilson\code\zemax_tools\S4cam\gen85cams\ID12_onecam_togenerate85_130mm_focalplane.zmx'
+fname = sys.argv[1]
+fname = os.path.abspath(fname)
 #fname = r'C:\Users\pgall\Documents\wilson\code\zemax_tools\S4cam\gen85cams\TMP_Sm_FixA_centercam.zmx'
 print("Opening file: %s" %fname)
 TheSystem.LoadFile(fname, False)

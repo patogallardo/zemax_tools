@@ -56,13 +56,18 @@ def plot_df(df, scale, show=True):
     ax.add_collection(collection)
     
     for j in range(len(df)):
-        s = "[%01i, %01i]" % (df.hex_x.values[j], df.hex_y.values[j])
+        s_hex = "[%01i, %01i]" % (df.hex_x.values[j], df.hex_y.values[j])
+        s_conf = "%i" % (df.index.values[j] + 1) # configs start at 1
         x, y = df.x.values[j], df.y.values[j]
-        plt.text(x, y+10, s, fontsize=8, color='white', ha='center')
+        plt.text(x, y+20, s_conf, fontsize=8, color='white', ha='center', 
+                 va='bottom')
     
     ax.set_aspect('equal')
     plt.scatter(df.x, df.y, color='white')
-    
+    plt.title('Camera Layout')
+    plt.xlabel('x [mm]')
+    plt.ylabel('y [mm]')    
+
     if show:
         plt.show()
     else:
