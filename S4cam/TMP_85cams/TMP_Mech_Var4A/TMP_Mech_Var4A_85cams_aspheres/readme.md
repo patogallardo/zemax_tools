@@ -14,14 +14,17 @@ The camera first lens is 2 inches from the focal "plane". There is a big caveat 
 
 ![centertube](3DLayout/strehls_cam_01.JPG)
 ![centertube](sag/SurfaceSag_conf1.png)
+![centertube](img_qual_1mm/strehls_cam_01.JPG)
 
 ## top tube
 ![centertube](3DLayout/strehls_cam_32.JPG)
 ![centertube](sag/SurfaceSag_conf32.png)
+![centertube](img_qual_1mm/strehls_cam_32.JPG)
 
 ## bottom tube
 ![centertube](3DLayout/strehls_cam_64.JPG)
 ![centertube](sag/SurfaceSag_conf64.png)
+![centertube](img_qual_1mm/strehls_cam_64.JPG)
 
 ## tube numbering
 ![tube_numbering](camera_groups.png)
