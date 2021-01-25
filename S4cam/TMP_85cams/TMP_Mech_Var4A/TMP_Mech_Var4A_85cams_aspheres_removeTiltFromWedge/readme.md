@@ -14,10 +14,12 @@ In an attempt to split the wedge sag between the upper and lower half of the cam
 ## top tube
 ![centertube](3DLayout/strehls_cam_32.JPG)
 ![centertube](sags/wedge/sag_cam_32.JPG)
+![centertube](img_qual_1mm/strehls_cam_32.JPG)
 
 ## bottom tube
 ![centertube](3DLayout/strehls_cam_65.JPG)
 ![centertube](sags/wedge/sag_cam_65.JPG)
+![centertube](img_qual_1mm/strehls_cam_65.JPG)
 
 ## tube numbering
 ![tube_numbering](camera_groups.png)
