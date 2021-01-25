@@ -4,7 +4,7 @@ In an attempt to split the wedge sag between the upper and lower half of the cam
 
 The down side is that for the lower cameras, now the tertiary focus falls after the first lens, this makes it difficult to compare apples to apples.
 
-As a consequence of tilting the camera entrance plane, the fov is reduced due to vignetting. For example, without this tilt, this design yields r=0.38 deg unvignetted at L1, while now with this tilt implemented, the fov is reduced to 0.32 deg in radius. In solid angle this is pi r^2 deg^2 -> 0.45 deg^2 to 0.32deg^2 or 30% decrease in solid angle.
+As a consequence of tilting the camera entrance plane, the fov is reduced due to vignetting. For example, without this tilt, this design yields r=0.38 deg unvignetted at L1, while now with this tilt implemented, the fov is reduced to 0.36 deg in radius. In solid angle this is pi r^2 deg^2 -> 0.454 deg^2 to 0.407deg^2 or 10% decrease in solid angle.
 
 ![](3DLayout/3DLayout_chiefray.png)
 
