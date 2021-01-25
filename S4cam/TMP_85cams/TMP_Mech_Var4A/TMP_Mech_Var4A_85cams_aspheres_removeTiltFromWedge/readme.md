@@ -11,8 +11,8 @@ In an attempt to split the wedge sag between the upper and lower half of the cam
 ![centertube](sags/wedge/sag_cam_01.JPG)
 
 ## top tube
-![centertube](3DLayout/strehls_cam_31.JPG)
-![centertube](sags/wedge/sag_cam_31.JPG)
+![centertube](3DLayout/strehls_cam_32.JPG)
+![centertube](sags/wedge/sag_cam_32.JPG)
 
 ## bottom tube
 ![centertube](3DLayout/strehls_cam_65.JPG)
