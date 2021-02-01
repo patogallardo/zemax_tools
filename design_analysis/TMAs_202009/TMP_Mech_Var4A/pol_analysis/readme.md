@@ -8,6 +8,8 @@ Then a polarizer (Jones matrix) was added right at the focal plane. The idea her
 
 Finally, we use the tool "Polarization Transmission" in the graphical interface, which gives a transmission for each field in the system.
 
+![](fields.PNG)
+
 Evaluating the system in 32 radial fields, I get an average cross pol transmisison of order -32dB (-32.7 vs -32.1 dB). Numbers are in pol_transmission.xlsx.
 
 # Validation against SP design
