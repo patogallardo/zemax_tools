@@ -2,10 +2,14 @@
 
 All inter-mirror distances are varied, plus x/y decenters, plus x/y tilts totaling 15 variables, see zmx file tolerance data editor for detail on what each variable is doing.
 
+The merit function is such that for the edge fields, evaluated in a circle of radius 4.6 deg in 8 points we compute the average Stehl. Fields used are the outermost points in the following figure:
+
 ![](./fields.PNG)
 
+
+
 ## Sensitivity analysis
-I ran first a reverse sensitivity analysis, the merit function is such that for the edge fields (evaluated in a circle of radius 4.6 deg in 8 points). The reverse sensitivity yields:
+I ran first a reverse sensitivity analysis using the merit function defined above. The reverse sensitivity yields:
 * Mirror ditances better than 7mm
 * Decenters better than 10mm
 * Tilts better than 0.1 deg
