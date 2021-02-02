@@ -10,7 +10,7 @@ Finally, we use the tool "Polarization Transmission" in the graphical interface,
 
 ![](fields.PNG)
 
-Evaluating the system in 32 radial fields, I get an average cross pol transmisison of order **-32dB** (-32.7 vs -32.1 dB). Numbers are in pol_transmission.xlsx.
+Evaluating the system in 32 radial fields, I get an average cross pol transmisison of order **-32dB** (-32.7 vs -32.1 dB and rotating the polarizer 45 degrees I get -32.4dB). Numbers are in pol_transmission.xlsx.
 
 # Validation against SP design
 
