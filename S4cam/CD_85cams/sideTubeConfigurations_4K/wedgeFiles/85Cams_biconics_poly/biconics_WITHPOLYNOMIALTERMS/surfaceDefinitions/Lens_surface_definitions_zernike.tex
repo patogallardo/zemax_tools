@@ -1,0 +1,77 @@
+\documentclass{article}
+\usepackage[a4paper,margin=0.5in,landscape]{geometry}
+\usepackage{booktabs}
+
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{2}
+
+\begin{document}
+
+\newcommand{\zernikeeq}{\begin{equation}
+	z_{zernike} = \frac{c_x x^2 + c_y y^2}{1+ \sqrt{1-(1-k_x)c_x^2 x^2-(1+k_y)c_y^2y^2}} + \sum_{i=1}^{16} \alpha_i x^i + \sum_{j=1}^{16} \beta_j y^j \qquad \rm{,with\ }  c_x=\frac{1}{R_x} \qquad{and\ } c_y=\frac{1}{R_y}
+\end{equation}
+}
+
+
+\section*{Lens 1}
+
+\begin{table}[h]
+\tiny
+	\input{lensDef_L1/lens_definitions_L1_row1.tex}
+\end{table}
+\begin{table}[h]
+	\tiny
+	\input{lensDef_L1/lens_definitions_L1_row2.tex}
+\end{table}
+\begin{table}[h]
+	\tiny
+	\input{lensDef_L1/lens_definitions_L1_row3.tex}
+\end{table}
+
+
+Biconic Zernike polynomial
+
+\zernikeeq
+
+\newpage
+\section*{Lens 2}
+
+\begin{table}[h]
+	\tiny
+	\input{lensDef_L2/lens_definitions_L2_row1.tex}
+\end{table}
+\begin{table}[h]
+	\tiny
+	\input{lensDef_L2/lens_definitions_L2_row2.tex}
+\end{table}
+\begin{table}[h]
+	\tiny
+	\input{lensDef_L2/lens_definitions_L2_row3.tex}
+\end{table}
+
+Biconic Zernike polynomial
+
+\zernikeeq
+
+
+\newpage
+\section*{Lens 3}
+\begin{table}[h]
+	\tiny
+	\input{lensDef_L3/lens_definitions_L3_row1.tex}
+\end{table}
+\begin{table}[h]
+	\tiny
+	\input{lensDef_L3/lens_definitions_L3_row2.tex}
+\end{table}
+\begin{table}[h]
+	\tiny
+	\input{lensDef_L3/lens_definitions_L3_row3.tex}
+\end{table}
+
+Biconic Zernike polynomial
+
+\zernikeeq
+
+
+\end{document}
