@@ -16,6 +16,11 @@ camera number in the following diagram.
 For example, the camera leader for the blue group is camera 1 and the camera
 group for the purple group is camera 68.
 
+## Optimization
+
+In practice, I copy the camera leader's lens 30 parameters and then optimize
+the distances between lenses to try to find a refocused system.
+
 # Center camera
 
 ![](3DLayout/strehls_cam_01.JPG)
