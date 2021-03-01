@@ -5,14 +5,13 @@ import matplotlib.pyplot as plt
 import scipy.interpolate as interp
 from scipy import stats
 import os
-import sys
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 s = pd.read_hdf('ray_db.hdf', 'system_variables')
 center_field_deg = [s.center_field_x, s.center_field_y]
 
 overlay_circle = True
-rs = [2200/2, 3000/2] # radii for circles overlay
+rs = [2200/2]  # radii for circles overlay
 
 
 def get_field_positions_and_strehl_map_fname():
@@ -36,9 +35,9 @@ def get_field_positions_and_strehl_map_fname():
     print("Strehl maps: ", strehl_fname)
 
     s = pd.read_hdf('ray_db.hdf', 'system_variables')
-    
+
     projectName = s.project_name
-    print('project name: %s' %projectName)
+    print('project name: %s' % projectName)
 
     return pos_fname, strehl_fname, projectName
 
@@ -53,7 +52,7 @@ def interpolate_vignetting_for_strehls(xx, yy, vig):
     x = np.reshape(xx, (dim, dim))[0, :]
     y = np.reshape(yy, (dim, dim))[:, 0]
     z = vig.reshape([dim, dim]) * 1.0 # float conversion
-    u = interp.RegularGridInterpolator(points=(x, y), 
+    u = interp.RegularGridInterpolator(points=(x, y),
                                        values=z.swapaxes(0,1),
                                        method='linear',
                                        bounds_error=False)
@@ -78,7 +77,7 @@ class open_databases:
         df_yp = df_rays.query('px==0 and py==1')
         df_xm = df_rays.query('px==-1 and py==0')
         df_ym = df_rays.query('px==0 and py==-1')
-        
+
         vig1 = df_xp.vignette_code.values != 0
         vig2 = df_yp.vignette_code.values != 0
         vig3 = df_xm.vignette_code.values != 0
@@ -87,16 +86,16 @@ class open_databases:
         vig_m = np.logical_or(vig3, vig4)
         vig = np.logical_or(vig_p, vig_m)
         self.vig = vig
-        
+
         df_pos.x_pos.values[vig] = np.nan
         df_pos.y_pos.values[vig] = np.nan
 
         u = interpolate_vignetting_for_strehls(df_pos.hx_deg.values,
-                                               df_pos.hy_deg.values, 
+                                               df_pos.hy_deg.values,
                                                vig)
-        
+
         df_strh = pd.read_hdf(strehl_fname, key='df')
-        df_strh['vignetted'] = u((df_strh.xx_deg.values, 
+        df_strh['vignetted'] = u((df_strh.xx_deg.values,
                                  df_strh.yy_deg.values))
 
         self.df_pos = df_pos
@@ -109,29 +108,31 @@ class open_databases:
 
 db = open_databases()
 
+
 def interpolate_grid(df_pos):
-    dim = int(np.sqrt(len(df_pos))) # requires square grid
+    dim = int(np.sqrt(len(df_pos)))  # requires square grid
     xx = df_pos.hx_deg.values
     yy = df_pos.hy_deg.values
     x = np.reshape(xx, (dim, dim))[0, :]
     y = np.reshape(yy, (dim, dim))[:, 0]
-    
+
     zx = df_pos.x_pos.values.reshape([dim, dim])
     zy = df_pos.y_pos.values.reshape([dim, dim])
-    u = interp.RegularGridInterpolator((x, y), zx.swapaxes(0,1),
+    u = interp.RegularGridInterpolator((x, y), zx.swapaxes(0, 1),
                                        bounds_error=False)
-    v = interp.RegularGridInterpolator((x, y), zy.swapaxes(0,1), 
+    v = interp.RegularGridInterpolator((x, y), zy.swapaxes(0, 1),
                                        bounds_error=False)
     return u, v
 
 
-
-def plotArea_focal_plane(x_mm, y_mm, z_strehl, thresholds=[0.7, 0.8, 0.9, 0.95],
-             overlay_circle=False, rs = [2000, 3000]):
+def plotArea_focal_plane(x_mm, y_mm, z_strehl,
+                         thresholds=[0.95],
+                         overlay_circle=False,
+                         rs=[2000, 3000]):
     sel = np.logical_not(np.isnan(x_mm))
     x, y, z = x_mm[sel], y_mm[sel], z_strehl[sel]
     res = stats.binned_statistic_2d(x, y, z, statistic='mean',
-                                    range=[[-2000, 2000],[-2000, 2000]],
+                                    range=[[-2000, 2000], [-2000, 2000]],
                                     bins=[100, 100])
     x_bin = 0.5*(res.x_edge[:-1] + res.x_edge[1:])
     y_bin = 0.5*(res.y_edge[:-1] + res.y_edge[1:])
@@ -139,23 +140,24 @@ def plotArea_focal_plane(x_mm, y_mm, z_strehl, thresholds=[0.7, 0.8, 0.9, 0.95],
     x_increment, y_increment = np.diff(res.x_edge)[0], np.diff(res.y_edge)[0]
     pixel_area = x_increment * y_increment
 
-    above_thresholds = [res.statistic > threshold 
+    above_thresholds = [res.statistic > threshold
                         for threshold in thresholds]
-    areas = [np.sum(above_threshold) * pixel_area 
+    areas = [np.sum(above_threshold) * pixel_area
              for above_threshold in above_thresholds]
 
-    for j in range(len(thresholds)): 
-        print('Area above Strehl %1.2f: %3.1f [m^2]' %(thresholds[j], 
-                                                       areas[j]/1e6))
+    for j in range(len(thresholds)):
+        print('Area above Strehl %1.2f: %3.1f [m^2]' % (thresholds[j],
+                                                        areas[j]/1e6))
 
-    #now make the plot
+#   now make the plot
     fig, ax = plt.subplots(figsize=[6,5])
     hb = ax.hexbin(x_mm, y_mm, z_strehl)
 
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="3%", pad=0.05)
 
-    cbar = plt.colorbar(hb, cax=cax, ticks=np.array([0.7, 0.8, 0.9, 0.95, 0.99]))
+    cbar = plt.colorbar(hb, cax=cax,
+                        ticks=np.array([0.97, 0.98, 0.99, 1.00]))
     cbar.set_label('Strehl ratio [-]')
 
     cs = ax.contour(x_bin, y_bin, res.statistic.T, thresholds,
@@ -167,66 +169,66 @@ def plotArea_focal_plane(x_mm, y_mm, z_strehl, thresholds=[0.7, 0.8, 0.9, 0.95],
             x = r * np.cos(theta)
             y = r * np.sin(theta)
             circle_area = np.pi * r**2/1e6 # in m^2
-            ax.plot(x, y, 
-                 label='circle with r= %1.2f m\nA=%1.3f$m^2$'% (r/1000, circle_area),
-                 color='C%i' %j)
+            ax.plot(x, y,
+                 label='circle with r= %1.2f m\nA=%1.2f$m^2$'% (r/1000, circle_area),
+                 color='C%i' %(j+1))
         ax.legend(loc='lower left', fontsize=8)
     ax.clabel(cs, inline=1, fontsize=15)
     ax.set_aspect('equal')
-    
+
     ax.set_xlabel('$x_{focalPlane}$ [mm]')
     ax.set_ylabel('$y_{focalPlane}$ [mm]')
 
-    x_min, x_max = np.min(x_mm[sel]), np.max(x_mm[sel])
-    y_min, y_max = np.min(y_mm[sel]), np.max(y_mm[sel])
+    x_min, x_max = np.min(x_mm[sel])*1.05, np.max(x_mm[sel])*1.05
+    y_min, y_max = np.min(y_mm[sel])*1.05, np.max(y_mm[sel])*1.05
 
     ax.set_xlim([x_min, x_max])
     ax.set_ylim([y_min, y_max])
 
-    ax.set_title('Focal plane Strehl ratio at $\lambda=1mm$')
+    ax.set_title('Focal plane Strehl ratio at $\\lambda=1mm$')
 #    plt.colorbar()
     ax.grid(alpha=0.3)
 
-    #bubble
-    texts = ['Area$_{Strehl > %1.2f}$: %1.1fm$^2$' %(thresholds[j], areas[j]/1e6)
+#   bubble
+    texts = ['Area$_{Strehl > %1.2f}$: %1.1fm$^2$' % (thresholds[j], areas[j]/1e6)
              for j in range(len(thresholds))]
     textstr = '\n'.join(texts)
     props = dict(boxstyle='round', facecolor='white', alpha=1)
-    plt.figtext(0.57, 0.78, textstr, bbox=props, fontsize=8, alpha=0.7)
+    plt.figtext(0.63, 0.84, textstr, bbox=props, fontsize=8, alpha=1.0)
     plt.figtext(0.9, 0.05, projectName, fontsize=5, ha='right')
     if not os.path.exists('./strehls'):
         os.mkdir('./strehls')
 #    fig.tight_layout()
     plt.savefig('./strehls/focal_plane_strehls.png', dpi=150)
     plt.close()
-    
+
 
 def plot_img_qual_sky(db, thresholds=[0.7, 0.8, 0.9, 0.95]):
     df_strh = db.df_strh
     sel = df_strh.vignetted == 0
-    
+
     x, y = df_strh.xx_deg.values[sel], df_strh.yy_deg.values[sel]
     z = df_strh.z_strehl.values[sel]
     res = stats.binned_statistic_2d(x, y, z, statistic='mean',
-                                    range=[[-7, 7],[-7, 7]],
+                                    range=[[-7, 7], [-7, 7]],
                                     bins=[100, 100])
     # compute area over thresholds
     x_bin = 0.5*(res.x_edge[:-1] + res.x_edge[1:])
     y_bin = 0.5*(res.y_edge[:-1] + res.y_edge[1:])
 
     x_increment, y_increment = np.diff(res.x_edge)[0], np.diff(res.y_edge)[0]
-    pixel_area = x_increment * y_increment#
+    pixel_area = x_increment * y_increment  #
 
-    above_thresholds = [res.statistic > threshold 
+    above_thresholds = [res.statistic > threshold
                         for threshold in thresholds]
-    areas = [np.sum(above_threshold) * pixel_area 
+    areas = [np.sum(above_threshold) * pixel_area
              for above_threshold in above_thresholds]
 
-    for j in range(len(thresholds)): 
-        print('Area above Strehl %1.2f: %3.1f [deg^2]' %(thresholds[j], 
-                                                         areas[j]))
+    for j in range(len(thresholds)):
+        print('Area above Strehl %1.2f: %3.1f [deg^2]' % (thresholds[j],
+                                                          areas[j]))
 
-    #now make the plot
+#   now make the plot
     fig, ax = plt.subplots(figsize=[6,5])
 
     hb = ax.hexbin(x, y, z)
@@ -234,11 +236,12 @@ def plot_img_qual_sky(db, thresholds=[0.7, 0.8, 0.9, 0.95]):
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="3%", pad=0.05)
 
-    cbar = plt.colorbar(hb, cax=cax, ticks=np.array([0.7, 0.8, 0.9, 0.95, 0.99]))
+    cbar = plt.colorbar(hb, cax=cax,
+                        ticks=np.array([0.7, 0.8, 0.9, 0.95, 0.99]))
     cbar.set_label('Strehl ratio [-]')
 
     cs = ax.contour(x_bin, y_bin, res.statistic.T, thresholds,
-                    cmap='inferno' )
+                    cmap='inferno')
     ax.clabel(cs, inline=1, fontsize=15)
 
     ax.set_xlabel('$x_{sky}$ [deg]')
@@ -250,12 +253,12 @@ def plot_img_qual_sky(db, thresholds=[0.7, 0.8, 0.9, 0.95]):
 #    plt.xlim([1.1*x_min, 1.1*x_max])
 #    plt.ylim([1.1*y_min, 1.1*y_max])
 
-    ax.set_title('Sky Strehl ratio at $\lambda=1mm$')
+    ax.set_title('Sky Strehl ratio at $\\lambda=1mm$')
     ax.grid(alpha=0.3)
 
 #    bubble
-    texts = ['$\Omega_{Strehl > %1.2f}$: %1.2f deg$^2$' %(thresholds[j], 
-                                                         areas[j])
+    texts = ['$\\Omega_{Strehl > %1.2f}$: %1.2f deg$^2$' % (thresholds[j],
+                                                            areas[j])
              for j in range(len(thresholds))]
     textstr = '\n'.join(texts)
     props = dict(boxstyle='round', facecolor='white', alpha=0.7)
@@ -267,7 +270,6 @@ def plot_img_qual_sky(db, thresholds=[0.7, 0.8, 0.9, 0.95]):
     plt.savefig('./strehls/sky_strehls.png', dpi=150)
     plt.close()
 
-   
 
 u, v = interpolate_grid(db.df_pos)
 
@@ -279,8 +281,8 @@ x_mm = u(positions_to_eval)
 y_mm = v(positions_to_eval)
 
 
-plotArea_focal_plane(x_mm, y_mm, db.df_strh.z_strehl.values, 
-                     overlay_circle=overlay_circle, 
+plotArea_focal_plane(x_mm, y_mm, db.df_strh.z_strehl.values,
+                     overlay_circle=overlay_circle,
                      rs=rs)
 
 plot_img_qual_sky(db)
