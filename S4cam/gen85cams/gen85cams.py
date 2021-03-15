@@ -1,3 +1,5 @@
+# to generate a zemax file with multiconfigurations and cameras, use the
+# script gen85groupedCams.py
 import clr, os, winreg
 from itertools import islice
 from hexlattice import *

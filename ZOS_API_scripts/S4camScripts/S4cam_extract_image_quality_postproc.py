@@ -109,13 +109,12 @@ def make_plots_and_pack_results(fname):
         plt.savefig('%s/%02i.png' % (folder, conf+1), dpi=150)
         plt.close()
 
-    df_coords = pd.read_csv("C:\\Users\\pgall\\Documents\\wilson\\"
-                            "code\\zemax_tools\\S4cam\\groupCameras\\"
-                            "85cam_groups.csv")
+    df_coords = pd.read_csv("./groups_info/85cam_groups.csv")
+    df_coords.sort_values('config', inplace=True)
     x = df_coords.x.values
     y = df_coords.y.values
     df = pd.DataFrame(df_columns, columns=df_column_names)
-    df['configuration'] = df.index + 1
+    df['configuration'] = df_coords.config.values
     df['x_mm'] = x
     df['y_mm'] = y
     df.to_csv('%s/img_qual_coverage.csv' % folder)

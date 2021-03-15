@@ -1,4 +1,5 @@
-'''This script takes one zmx file with 85 configurations and one csv file
+'''Interactive extension script.
+This script takes one zmx file with 85 configurations and one csv file
 wich contains the grouping information.
 
 It sets the pickups that tie the first configuration in the group with
@@ -17,10 +18,8 @@ import progressbar
 # rows to miror: number of configuration row to pickup from the first
 # configuration in the group. Use this to set which configurations
 # pickup the value in the only configuration that is being optimized.
-rows_to_mirror = [20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
-                  51, 52, 53, 54, 55, 56, 57, 58, 59, 60,
-                  83, 84, 85, 86, 87, 88, 89, 90, 91, 92]
-
+df_variables = pd.read_csv('groups_info/variables.csv')
+rows_to_mirror = df_variables.mcerow_variable.values
 # This boilerplate requires the 'pythonnet' module.
 # The following instructions are for installing the 'pythonnet' module via pip:
 #    1. Ensure you are running Python 3.4, 3.5, 3.6, or 3.7. PythonNET does not work with Python 3.8 yet.  # noqa
@@ -101,6 +100,25 @@ def setpickup(conf_row, conf_col, target_conf, TheMCE=TheMCE):
     mce_cell.SetSolveData(ConfigPickupSolve)
 
 
+def setconstant(row_to_mirror, target_conf, TheMCE=TheMCE):
+    '''Sets to constant the first configuration in the group.
+    NOTE: in zemax, pickups need to go from a high number to a low conf
+    number, this means that all the followers in a group need to refer to
+    the lowest configuration number in that group.
+    '''
+    mce_row = TheMCE.GetOperandAt(row_to_mirror)
+    mce_cell = mce_row.GetOperandCell(target_conf)
+    ConfigFixedSolve = mce_cell.CreateSolveType(
+                ZOSAPI.Editors.SolveType.Fixed)  # noqa
+    mce_cell.SetSolveData(ConfigFixedSolve)
+
+
+def set_constants(target_conf, rows_to_mirror=rows_to_mirror):
+    '''Sets one configuration operand to a constant value.'''
+    for row_to_mirror in rows_to_mirror:
+        setconstant(row_to_mirror, target_conf)
+
+
 def set_pickups(confs_to_set_pickup, target_conf,
                 rows_to_mirror=rows_to_mirror):
     for conf_to_set_pickup in progressbar.progressbar(confs_to_set_pickup):
@@ -109,12 +127,15 @@ def set_pickups(confs_to_set_pickup, target_conf,
                       target_conf)
 
 
-df = pd.read_csv('C:/Users/pgall/Documents/wilson/code/'
-                 'zemax_tools/S4cam/groupCameras/85cam_groups.csv')
+df = pd.read_csv('./groups_info/85cam_groups.csv')
 groups = df.group.unique()
 
-for groupnumber in groups:
+for groupnumber in groups:  # set group leader fixed
     df_currentgroup = df.query('group==%i' % groups[groupnumber])
-    # conf number is index + 1
-    set_pickups(confs_to_set_pickup=df_currentgroup.index.values[1:] + 1,
-                target_conf=df_currentgroup.index.values[0] + 1)
+    set_constants(target_conf=df_currentgroup.config.values[0],
+                  rows_to_mirror=rows_to_mirror)
+
+for j, groupnumber in enumerate(groups):  # set pickups
+    df_currentgroup = df.query('group==%i' % groups[groupnumber])
+    set_pickups(confs_to_set_pickup=df_currentgroup.config.values[1:],
+                target_conf=df_currentgroup.config.values[0])
