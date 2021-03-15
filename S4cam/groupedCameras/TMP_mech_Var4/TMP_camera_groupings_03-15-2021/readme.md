@@ -29,11 +29,15 @@ the asterisk marks the group leader with the numbering shown above.
 
 ## Next steps
 
-1. Adapt these scripts to work on the CD design (which is somewhat incompatible with the TMA, so some work will have to be redone)
+1. Adapt these scripts to work on the CD design (which is somewhat incompatible
+   with the TMA, so some work will have to be redone)
 2. Evaluate the design with more detail (f/#, clearences, field of view, etc)
 3. Implement the filtering in the optical design
 
 ## Technical note:
+The design on the right can be accessed under:
+    zemax_tools\S4cam\groupedCameras\TMP_mech_Var4\xy_symmetric_alternative
+
 Work shown here was implemented in scripts:
 
     zemax_tools\ZOS_API_scripts\S4camScripts\S4cam_TMP__set_camera_groups.py
