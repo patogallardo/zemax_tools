@@ -5,6 +5,7 @@ import pandas as pd  # noqa
 import numpy as np
 import matplotlib.pyplot as plt
 import subprocess
+import glob
 
 #  plt.rcParams.update({"text.usetex": True})
 
@@ -79,6 +80,11 @@ def mk_tex(tex_table, label, targetdir):
                    cwd=targetdir)
 
 
+fnames = glob.glob('./*.zmx')
+assert len(fnames) == 1
+fname = os.path.abspath(fnames[0])
+print("Opening: %s" % fname)
+
 show = False
 lde = TheSystem.LDE
 mce = TheSystem.MCE
@@ -137,5 +143,5 @@ for j in range(len(surfaces_to_evaluate)):
     else:
         plt.savefig(os.path.join(targetdirs[1],
                                  './%s_lens_shape.png' % labels[j]),
-                    dpi=120)
+                    dpi=300)
         plt.close()
