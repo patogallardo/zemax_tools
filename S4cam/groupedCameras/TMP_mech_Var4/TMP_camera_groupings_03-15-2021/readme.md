@@ -36,6 +36,7 @@ the asterisk marks the group leader with the numbering shown above.
 
 ## Technical note:
 The design on the right can be accessed under:
+
     zemax_tools\S4cam\groupedCameras\TMP_mech_Var4\xy_symmetric_alternative
 
 Work shown here was implemented in scripts:
