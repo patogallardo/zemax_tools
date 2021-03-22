@@ -1,7 +1,7 @@
 # TMP mech var6D 85 cameras beta 1
 
 Preliminary prototype of 85 cameras for the TMP var6D.
-
+![](3DLayout/3dLayout_all.png)
 ![](3DLayout/3DLayout1.png)
 
 ## Tilt determination:
