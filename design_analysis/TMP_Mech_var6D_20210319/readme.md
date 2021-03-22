@@ -26,3 +26,8 @@
 ![](sag/surface_sag_surf_prime.JPG)
 ![](sag/surface_sag_surf_second.JPG)
 ![](sag/surface_sag_surf_tert.JPG)
+## CAD
+### [No rays](CAD)
+![](CAD/TMP_Mech_Var6D_norays.png)
+### [With Rays](CAD)
+![](CAD/TMP_Mech_Var6D_withrays.png)
