@@ -28,6 +28,6 @@
 ![](sag/surface_sag_surf_tert.JPG)
 ## CAD
 ### [No rays](CAD)
-![](CAD/TMP_Mech_Var6D_norays.png)
+![](CAD/TMP_Mech_Var7A_norays.png)
 ### [With Rays](CAD)
-![](CAD/TMP_Mech_Var6D_withrays.png)
+![](CAD/TMP_Mech_Var7A_rays.png)
