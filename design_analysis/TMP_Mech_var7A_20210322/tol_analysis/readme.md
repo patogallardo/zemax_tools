@@ -77,7 +77,7 @@ TETX 	 25 	 25 	   -0.05804842 	    0.03432998 	    0.00800000 	    0.06661772 	
 TETY 	 25 	 25 	   -0.06139764 	    0.03432998 	    0.00800000 	    0.06139764 	    0.03432998 	    0.00800000
 ```
 
-![](MC/MC_results.PNG)
+![](MC/MC_results.png)
 
 ## Stats
 For 1000 MC realizations with these variations, we get a mean strehl = 1 - 0.047, which is ~2 % worse than the nominal. The worst run gives a Strehl of 1-0.13, which is roughly 10% worse than the nominal. 90% of the MC realizations are better than 1-0.067, or 4% degradation in Strehl.
