@@ -5,7 +5,7 @@ All inter-mirror distances are varied, plus x/y decenters, plus x/y tilts totali
 
 The merit function is such that for the edge fields, evaluated in a circle of radius 4.7 deg in 8 points we compute the average Stehl. Fields used are the outermost points in the following figure:
 
-![](img/fields.PNG)
+![](img/fields.png)
 
 
 ## Sensitivity analysis
