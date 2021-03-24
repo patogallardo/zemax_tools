@@ -51,9 +51,9 @@ To find this values, an inverse sensitivity analysis was run, with a target degr
 
 This criterion gives the following values:
 
-* Mirror ditances better than: 2.5 mm
+* Mirror distances better than: 2.5 mm
 * Decenters better than: 4 mm
-* Tilts better than: 0.02
+* Tilts better than: 0.02 deg
 
 This yields the following:
 ```Sensitivity Analysis:

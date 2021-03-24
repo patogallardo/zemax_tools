@@ -8,8 +8,14 @@ import winreg
 import time
 import pandas as pd
 import sys
+import glob
 
-assert len(sys.argv) == 2  # need to specify a center cam filename
+if len(sys.argv) != 2:  # need to specify a center cam filename
+    fnames = glob.glob("./*.zmx")
+    fname = fnames[0]
+else:
+    fname = sys.argv[1]
+fname = os.path.abspath(fname)
 
 t1 = time.time()
 CAMPOS_FNAME = './groups_info/85cam_groups.csv'  # this file needs to be
@@ -61,7 +67,6 @@ print('Connected to OpticStudio')
 # The connection should now be ready to use.  For example:
 print('Serial #: ', TheApplication.SerialCode)
 
-fname = sys.argv[1]
 fname = os.path.abspath(fname)
 #fname = r'C:\Users\pgall\Documents\wilson\code\zemax_tools\S4cam\gen85cams\TMP_Sm_FixA_centercam.zmx'  # noqa
 print("Opening file: %s" % fname)

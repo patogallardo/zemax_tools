@@ -4,6 +4,7 @@ import winreg
 import pandas as pd
 import numpy as np
 import sys
+import glob
 
 CyclesAuto = True  # how many cycles True takes the most time
 RUN_OPTIMIZER = True
@@ -94,14 +95,12 @@ print('Serial #: ', TheApplication.SerialCode)
 mce = TheSystem.MCE
 mfe = TheSystem.MFE
 
-assert len(sys.argv) == 2
 if len(sys.argv) == 2:
     mf_path = sys.argv[1]
 else:
-    mf_path = ('C:\\Users\\pgall\\Documents\\Zemax\\MeritFunction\\'
-               'S4CAM_TMP_130mmFocalPlane_20cm_camera_tocycletr'
-               'hough_uniform_focalplane.MF')
-print("using merit function:\n%s" % mf_path)
+    mf_path = glob.glob('groups_info/*.MF')
+    mf_path = os.path.abspath(mf_path[0])
+print("using merit function in:\n%s" % mf_path)
 #
 group_leaders = pd.read_csv('./groups_info/group_leaders.csv').leader.values
 groups = pd.read_csv('./groups_info/group_leaders.csv').group.values
