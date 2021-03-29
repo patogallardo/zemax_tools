@@ -1,7 +1,7 @@
-# TMP_Mech_Var7A.zmx
+# TMP_Mech_Var8A.zmx
 ## Layout
 ![](layout/3DLayout.png)
-## Strehl Ratios 
+## Strehl Ratios
 ![](strehls/focal_plane_strehls.png)
 ![](strehls/sky_strehls.png)
 ## f/\#
