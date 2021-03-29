@@ -5,8 +5,9 @@ import pandas as pd
 import numpy as np
 import sys
 import glob
+from progressbar import progressbar
 
-CyclesAuto = True  # how many cycles True takes the most time
+CyclesAuto = False  # how many cycles True takes the most time
 RUN_OPTIMIZER = True
 START_FROM_ZEROS = True
 
@@ -19,7 +20,7 @@ def zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=True):
     if CyclesAuto:
         LocalOpt.Cycles = OptCycles.Automatic
     else:
-        LocalOpt.Cycles = OptCycles.Fixed_10_Cycles
+        LocalOpt.Cycles = OptCycles.Fixed_5_Cycles
     LocalOpt.NumberOfCores = 8
     LocalOpt.RunAndWaitForCompletion()
     LocalOpt.Close()
@@ -111,7 +112,7 @@ mcerow_zeros = df_variables.mcerow_zero.values[np.isfinite(df_variables.mcerow_z
 
 
 #  swap configuration, load merit function and set it to evaluate the leader
-for j, group_leader in enumerate(group_leaders):
+for j, group_leader in progressbar(enumerate(group_leaders)):
     group_leader = group_leaders[j]  # evaluate this configuration
     current_group = df_group_info.query(
                         'config == %i' % group_leader).group.values[0]  # noqa
@@ -141,4 +142,4 @@ for j, group_leader in enumerate(group_leaders):
                            mce, ZOSAPI, vars=True)
 
     if RUN_OPTIMIZER:
-        zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=True)
+        zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=CyclesAuto)
