@@ -89,6 +89,7 @@ if columnNumbersToExportMultiline != []:
         os.makedirs(os.path.split(fname_out)[0], exist_ok=True)
         s = []
         s.append('\\documentclass[varwidth=\\maxdimen, convert={convertexe={magick.exe}}]{standalone}')  # noqa
+        s.append('\\usepackage{cmbright}')
         s.append('\\usepackage{booktabs}')
         s.append('\\begin{document}')
         s.append(text)

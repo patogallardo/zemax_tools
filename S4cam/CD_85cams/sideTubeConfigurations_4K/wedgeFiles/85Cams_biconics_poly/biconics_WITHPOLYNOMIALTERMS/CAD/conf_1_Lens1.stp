@@ -1,7 +1,7 @@
 ISO-10303-21;
 HEADER;
 FILE_DESCRIPTION(('STEP AP214'),'1');
-FILE_NAME('conf_1_Lens1.stp','2021-03-18T03:17:56',(' '),('ZEMAX'),'Spatial InterOp 3D',' ',' ');
+FILE_NAME('conf_1_Lens1.stp','2021-03-29T18:20:57',(' '),('ZEMAX'),'Spatial InterOp 3D',' ',' ');
 FILE_SCHEMA(('AUTOMOTIVE_DESIGN { 1 0 10303 214 1 1 1 1 }'));
 ENDSEC;
 DATA;
