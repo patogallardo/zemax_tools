@@ -29,7 +29,7 @@ def zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=True):
 def set_variables_or_const(mcerow_variables, conf, mce, ZOSAPI, vars=True):
     for mcerow_variable in mcerow_variables:
         mcerow = mce.GetOperandAt(mcerow_variable)  # set variables
-        mcecell = mcerow.GetOperandCell(conf_to_vary)
+        mcecell = mcerow.GetOperandCell(conf)
         if vars:
             solve = mcecell.CreateSolveType(ZOSAPI.Editors.SolveType.Variable)  # noqa
         else:
@@ -42,6 +42,16 @@ def set_rows_zero(mcerow_zeros, conf, mce, ZOSAPI):
         mcerow = mce.GetOperandAt(mce_row)
         mcecell = mcerow.GetOperandCell(conf)
         mcecell.DoubleValue = 0.0
+
+
+def set_rows_constant(df, conf, mce, ZOSAPI):
+    mcerows = df.mcerow.values
+    initial_values = df.initial_value.values
+
+    for j, mce_row in enumerate(mcerows):
+        zmx_mce_row = mce.GetOperandAt(mce_row)
+        mcecell = zmx_mce_row.GetOperandCell(conf)
+        mcecell.DoubleValue = initial_values[j]
 
 
 aKey = winreg.OpenKey(winreg.ConnectRegistry(None, winreg.HKEY_CURRENT_USER),
@@ -101,6 +111,12 @@ if len(sys.argv) == 2:
 else:
     mf_path = glob.glob('groups_info/*.MF')
     mf_path = os.path.abspath(mf_path[0])
+
+set_initial_values = False
+if len(glob.glob('groups_info/initial_values.csv')) == 1:
+    set_initial_values = True
+    print("setting initial values to initial_values.csv")
+
 print("using merit function in:\n%s" % mf_path)
 #
 group_leaders = pd.read_csv('./groups_info/group_leaders.csv').leader.values
@@ -129,6 +145,10 @@ for j, group_leader in progressbar(enumerate(group_leaders)):
     # iterate over mcerow_variables to set the list to variables
     set_variables_or_const(mcerow_variables, conf_to_vary,
                            mce, ZOSAPI, vars=True)
+
+    if set_initial_values:
+        df_initial_values = pd.read_csv('groups_info/initial_values.csv')
+        set_rows_constant(df_initial_values, conf_to_vary, mce, ZOSAPI)
 
     if START_FROM_ZEROS:
         set_variables_or_const(mcerow_zeros, conf_to_vary,
