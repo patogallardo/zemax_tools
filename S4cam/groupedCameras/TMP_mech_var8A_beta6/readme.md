@@ -1,7 +1,7 @@
 # TMPcam beta ver 6
 
  Changes:
-1. Added pressure in the merit function to *try* to circularize f/#
+1. Added pressure in the merit function to **try** to circularize f/#
 2. Added surfaces at the camera entrance according to last meeting's document.
 
 ## f/#
@@ -59,3 +59,5 @@ I used a sketch from this slide to enter filter distances:
 ![](img/filter_stack1.png)
 
 ![](Footprints/window_front.png)
+
+![](Footprints/focal_plane.png)
