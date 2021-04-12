@@ -11,7 +11,7 @@ edge fields. Then we evaluate the max and min, divide both to get an ellipticity
 Optimize to target an arbitrary number. For this the total length of the
 camera needs to be able to float.
 
-![](3DLayout/layout_cam_01.jpg)
+![](3DLayout/layout_cam_01.JPG)
 
 This tends to put the stop closer to L2, which makes sense from a projection
 perspective.
