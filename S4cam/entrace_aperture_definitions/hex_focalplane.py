@@ -11,7 +11,7 @@ center = [0, 0]
 r_mech = 65.0
 r_det_center = 61.4
 
-zmx_txt = "POL 0 0 %3.3f 6 30" % r_det_center
+zmx_txt = "POL 0 0 %3.3f 6 30" % r_mech
 
 fig, ax = plt.subplots(figsize=[8, 8.5])
 ax.axis('equal')
