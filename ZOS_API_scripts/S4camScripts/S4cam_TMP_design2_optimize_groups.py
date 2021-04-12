@@ -2,14 +2,13 @@ import clr
 import os
 import winreg
 import pandas as pd
-import numpy as np
 import sys
 import glob
 from progressbar import progressbar
+import numpy as np
 
-CyclesAuto = False  # how many cycles True takes the most time
+CyclesAuto = True  # how many cycles True takes the most time
 RUN_OPTIMIZER = True
-START_FROM_ZEROS = True
 
 
 def zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=True):
@@ -112,10 +111,8 @@ else:
     mf_path = glob.glob('groups_info/*.MF')
     mf_path = os.path.abspath(mf_path[0])
 
-set_initial_values = False
-if len(glob.glob('groups_info/initial_values.csv')) == 1:
-    set_initial_values = True
-    print("setting initial values to initial_values.csv")
+assert len(glob.glob('groups_info/initial_values_it1.csv')) == 1
+assert len(glob.glob('groups_info/initial_values_it2.csv')) == 1
 
 print("using merit function in:\n%s" % mf_path)
 #
@@ -123,9 +120,12 @@ group_leaders = pd.read_csv('./groups_info/group_leaders.csv').leader.values
 groups = pd.read_csv('./groups_info/group_leaders.csv').group.values
 df_variables = pd.read_csv('groups_info/variables.csv')
 df_group_info = pd.read_csv('groups_info/85cam_groups.csv')
-mcerow_variables = df_variables.mcerow_variable.values  # noqa
-mcerow_zeros = df_variables.mcerow_zero.values[np.isfinite(df_variables.mcerow_zero.values)].astype(int)  # noqa
-
+mcerow_variables_first_it = df_variables.mcerow_variable_first_it.values
+mcerow_variables_second_it = df_variables.mcerow_variable_second_it.values
+mcerow_variables_first_it = mcerow_variables_first_it[np.isfinite(mcerow_variables_first_it)].astype(int)  # noqa
+mcerow_variables_second_it = mcerow_variables_second_it[np.isfinite(mcerow_variables_second_it)].astype(int)  # noqa
+df_initial_values_it1 = pd.read_csv('groups_info/initial_values_it1.csv')
+df_initial_values_it2 = pd.read_csv('groups_info/initial_values_it2.csv')
 
 #  swap configuration, load merit function and set it to evaluate the leader
 for j, group_leader in progressbar(enumerate(group_leaders)):
@@ -142,24 +142,19 @@ for j, group_leader in progressbar(enumerate(group_leaders)):
     TheSystem.Tools.RemoveAllVariables()
     conf_to_vary = df_group_info.query('group == %i' % current_group).config.min()  # noqa
 
-    # iterate over mcerow_variables to set the list to variables
-    set_variables_or_const(mcerow_variables, conf_to_vary,
+    # First iteration set variables to optimize and initial values
+    set_variables_or_const(mcerow_variables_first_it, conf_to_vary,
                            mce, ZOSAPI, vars=True)
-
-    if set_initial_values:
-        df_initial_values = pd.read_csv('groups_info/initial_values.csv')
-        set_rows_constant(df_initial_values, conf_to_vary, mce, ZOSAPI)
-
-    if START_FROM_ZEROS:
-        set_variables_or_const(mcerow_zeros, conf_to_vary,
-                               mce, ZOSAPI, vars=False)
-        set_rows_zero(mcerow_zeros, conf_to_vary, mce, ZOSAPI)
+    set_rows_constant(df_initial_values_it1, conf_to_vary, mce, ZOSAPI)
 
     if RUN_OPTIMIZER:
         zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=False)
 
-    set_variables_or_const(mcerow_variables, conf_to_vary,
+    TheSystem.Tools.RemoveAllVariables()
+    set_variables_or_const(mcerow_variables_second_it, conf_to_vary,
                            mce, ZOSAPI, vars=True)
+    set_rows_constant(df_initial_values_it2, conf_to_vary, mce, ZOSAPI)
 
     if RUN_OPTIMIZER:
         zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=CyclesAuto)
+TheSystem.Save()
