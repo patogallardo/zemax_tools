@@ -75,23 +75,33 @@ def make_plots_and_pack_results(fname):
     for conf in progressbar(range(nconf)):
         #  plot contours
         z = zs[conf, :, :]
-        pc = plt.pcolor(xx, yy, z, shading='nearest')
+        z_in = np.ma.masked_where(np.sqrt(xx**2+yy**2) > radii_array[conf], z)
+        z_out = np.ma.masked_where(np.sqrt(xx**2+yy**2) < radii_array[conf], z)
+        z_in.fill_value, z_out.fill_value = np.nan, np.nan
+
+        pc = plt.pcolor(xx, yy, z_out, shading='nearest',
+                        cmap='gray')
+        pc = plt.pcolor(xx, yy, z_in, shading='nearest',
+                        vmin=0.7, vmax=1.0)
+
         cs = plt.contour(x, y, z, extent=[-field_size, field_size,
                                           -field_size, field_size],
                          origin='upper',
-                         levels=contour_levels)
+                         levels=contour_levels,
+                         vmin=0.7, vmax=1.0,
+                         colors='gray')
         plt.clabel(cs, inline=1, fontsize=15)
         plt.colorbar(pc, label='Strehl ratio [-]')
 
         #  make array circle
         x_circ, y_circ, a_circ = make_circle(radii_array[conf])
-        plt.plot(x_circ, y_circ, label='130 mm $\\phi$', color='black')
+        plt.plot(x_circ, y_circ, label='130 mm $\\phi$', color='C1')
         plt.axis('equal')
 
         # compute areas
-        areas = [np.sum(z > strehl) * dx**2 for strehl in strehls_above]
+        areas = [np.sum(z_in > strehl) * dx**2 for strehl in strehls_above]
         areas = np.array(areas)
-        fraction_of_array_above_threshold = np.minimum(areas/a_circ, 1.0)
+        fraction_of_array_above_threshold = areas/a_circ
 
         # save areas
         df_columns[conf] = fraction_of_array_above_threshold
@@ -99,7 +109,12 @@ def make_plots_and_pack_results(fname):
         summary_text = make_summary(fraction_of_array_above_threshold,
                                     strehls_above)
         plt.text(-field_size, -field_size, summary_text,
-                 horizontalalignment='left', verticalalignment='bottom')
+                 horizontalalignment='left',
+                 verticalalignment='bottom',
+                 bbox=dict(boxstyle="round",
+                           ec=(0.1, 0.1, 0.1, 0.5),
+                           fc=(0.5, 0.5, 0.5, 0.5),),
+                 zorder=10)
 
         plt.title('conf: %i wavelength: %1.1f' % (conf+1, wavelength))
 

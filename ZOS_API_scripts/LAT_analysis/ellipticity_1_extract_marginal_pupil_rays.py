@@ -122,11 +122,10 @@ if __name__ == '__main__':
     TheApplication = zosapi.TheApplication
 
     # Set up primary optical system
-    sampleDir = TheApplication.SamplesDir
     testFile = fname
     TheSystem.LoadFile(testFile, False)
 
-    TheSystem.SystemData.Fields.Normalization = 0 #force circular norm
+    TheSystem.SystemData.Fields.Normalization = 0  # force circular norm
 
     nsur = TheSystem.LDE.NumberOfSurfaces
     

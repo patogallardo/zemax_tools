@@ -15,11 +15,19 @@ TMP multiconfiguration file.
 import clr, os, winreg  # noqa
 import pandas as pd
 import progressbar
+import numpy as np
 # rows to miror: number of configuration row to pickup from the first
 # configuration in the group. Use this to set which configurations
 # pickup the value in the only configuration that is being optimized.
 df_variables = pd.read_csv('groups_info/variables.csv')
-rows_to_mirror = df_variables.mcerow_variable.values
+mce_row_vars_1it = df_variables.mcerow_variable_first_it.values
+mce_row_vars_2it = df_variables.mcerow_variable_second_it.values
+mce_row_vars_1it = mce_row_vars_1it[np.isfinite(mce_row_vars_1it)]
+mce_row_vars_1it = mce_row_vars_1it.astype(int)
+mce_row_vars_2it = mce_row_vars_2it.astype(int)
+
+rows_to_mirror = np.sort(np.append(mce_row_vars_1it, mce_row_vars_2it))
+
 # This boilerplate requires the 'pythonnet' module.
 # The following instructions are for installing the 'pythonnet' module via pip:
 #    1. Ensure you are running Python 3.4, 3.5, 3.6, or 3.7. PythonNET does not work with Python 3.8 yet.  # noqa

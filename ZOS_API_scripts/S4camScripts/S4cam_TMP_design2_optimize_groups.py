@@ -9,6 +9,7 @@ import numpy as np
 
 CyclesAuto = True  # how many cycles True takes the most time
 RUN_OPTIMIZER = True
+RUN_OPTIMIZER2ndRound = True
 
 
 def zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=True):
@@ -19,7 +20,9 @@ def zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=True):
     if CyclesAuto:
         LocalOpt.Cycles = OptCycles.Automatic
     else:
-        LocalOpt.Cycles = OptCycles.Fixed_5_Cycles
+        LocalOpt.Cycles = OptCycles.Fixed_5_Cycles  # noqa
+#        LocalOpt.Cycles = OptCycles.Fixed_50_Cycles  # noqa
+#        LocalOpt.Cycles = OptCycles.Fixed_10_Cycles
     LocalOpt.NumberOfCores = 8
     LocalOpt.RunAndWaitForCompletion()
     LocalOpt.Close()
@@ -151,10 +154,12 @@ for j, group_leader in progressbar(enumerate(group_leaders)):
         zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=False)
 
     TheSystem.Tools.RemoveAllVariables()
-    set_variables_or_const(mcerow_variables_second_it, conf_to_vary,
-                           mce, ZOSAPI, vars=True)
-    set_rows_constant(df_initial_values_it2, conf_to_vary, mce, ZOSAPI)
 
-    if RUN_OPTIMIZER:
+    if RUN_OPTIMIZER and RUN_OPTIMIZER2ndRound:
+        set_variables_or_const(mcerow_variables_second_it, conf_to_vary,
+                               mce, ZOSAPI, vars=True)
+        set_rows_constant(df_initial_values_it2, conf_to_vary, mce, ZOSAPI)
+
         zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=CyclesAuto)
+    TheSystem.Tools.RemoveAllVariables()
 TheSystem.Save()
