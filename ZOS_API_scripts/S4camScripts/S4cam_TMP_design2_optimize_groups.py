@@ -151,7 +151,7 @@ for j, group_leader in progressbar(enumerate(group_leaders)):
     set_rows_constant(df_initial_values_it1, conf_to_vary, mce, ZOSAPI)
 
     if RUN_OPTIMIZER:
-        zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=False)
+        zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=CyclesAuto)
 
     TheSystem.Tools.RemoveAllVariables()
 

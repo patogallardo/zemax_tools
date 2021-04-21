@@ -1,6 +1,28 @@
 import numpy as np
 
 
+def get_mirror_surfaces(TheSystem, material="MIRROR"):
+    '''Gets mirror surfaces'''
+    lde = TheSystem.LDE
+    mce = TheSystem.MCE
+
+    configuration = 1
+    mce.SetCurrentConfiguration(configuration)
+
+    nsurf = lde.NumberOfSurfaces
+
+    mirror_surfaces = []
+    mirror_names = []
+
+    for surface in range(1, nsurf):
+        s = lde.GetSurfaceAt(surface)
+        if material.lower() in s.Material.lower():
+            mirror_names.append(s.Comment)
+            mirror_surfaces.append(surface)
+
+    return mirror_names, mirror_surfaces
+
+
 def get_lens_surfaces(TheSystem, material="silicon_cold"):
     '''Gets TheSystem and returns a list of the surface numbers
     containing a lens with curvature in it.'''
