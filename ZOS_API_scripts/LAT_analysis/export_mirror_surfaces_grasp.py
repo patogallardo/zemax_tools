@@ -177,7 +177,7 @@ def save_srf_file(x, y, zs, name):
 
 
 r_mirror = 3000
-Nsamp = 100
+Nsamp = 25
 if __name__ == '__main__':
     zos = PythonStandaloneApplication()
     # use http://matplotlib.org/ to plot 2D graph
