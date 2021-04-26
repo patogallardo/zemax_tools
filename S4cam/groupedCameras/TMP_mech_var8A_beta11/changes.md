@@ -37,3 +37,7 @@ wafer plane.
 1. Modify the grouping to improve cameras 33, 34 (bottom center), 21, 22 (upper right) and 27, 28 (upper left). Test if making a small change in the grouping (for example adding it a neighbour group) can improve Strehls.
 
 2. Work on vignetting (see next post)
+
+## Caveats
+
+I am letting the total length of the camera float, need to look into setting it constant and see if this degrades performance.
