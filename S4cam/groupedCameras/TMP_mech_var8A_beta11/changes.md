@@ -1,4 +1,4 @@
-# TMP cam with lenses
+# TMP cam ver 11
 
 Some of the restrictions implemented to constrain the chief ray angle were not
 active for the system shown last week. I made a few changes to better search
