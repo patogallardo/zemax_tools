@@ -10,6 +10,7 @@ import numpy as np
 CyclesAuto = True  # how many cycles True takes the most time
 RUN_OPTIMIZER = True
 RUN_OPTIMIZER2ndRound = True
+RUN_OPTIMIZER3rdRound = True
 
 
 def zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=True):
@@ -26,6 +27,15 @@ def zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=True):
     LocalOpt.NumberOfCores = 8
     LocalOpt.RunAndWaitForCompletion()
     LocalOpt.Close()
+
+
+def zemax_run_hammer(TheSystem, time_s=120):
+    print('Running Hammer Optimization')
+    HammerOpt = TheSystem.Tools.OpenHammerOptimization()
+    HammerOpt.RunAndWaitWithTimeout(time_s)
+    HammerOpt.Cancel()
+    HammerOpt.WaitForCompletion()
+    HammerOpt.Close()
 
 
 def set_variables_or_const(mcerow_variables, conf, mce, ZOSAPI, vars=True):
@@ -125,8 +135,11 @@ df_variables = pd.read_csv('groups_info/variables.csv')
 df_group_info = pd.read_csv('groups_info/85cam_groups.csv')
 mcerow_variables_first_it = df_variables.mcerow_variable_first_it.values
 mcerow_variables_second_it = df_variables.mcerow_variable_second_it.values
+mcerow_variables_third_it = df_variables.mcerow_variable_third_it.values
+
 mcerow_variables_first_it = mcerow_variables_first_it[np.isfinite(mcerow_variables_first_it)].astype(int)  # noqa
 mcerow_variables_second_it = mcerow_variables_second_it[np.isfinite(mcerow_variables_second_it)].astype(int)  # noqa
+mcerow_variables_third_it = mcerow_variables_third_it[np.isfinite(mcerow_variables_third_it)].astype(int)  # noqa
 df_initial_values_it1 = pd.read_csv('groups_info/initial_values_it1.csv')
 df_initial_values_it2 = pd.read_csv('groups_info/initial_values_it2.csv')
 
@@ -151,15 +164,25 @@ for j, group_leader in progressbar(enumerate(group_leaders)):
     set_rows_constant(df_initial_values_it1, conf_to_vary, mce, ZOSAPI)
 
     if RUN_OPTIMIZER:
+        print("First round of optimization")
+        zemax_run_hammer(TheSystem, time_s=120)  # hammer for 10 min
         zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=CyclesAuto)
-
+        zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=CyclesAuto)
     TheSystem.Tools.RemoveAllVariables()
 
     if RUN_OPTIMIZER and RUN_OPTIMIZER2ndRound:
+        print('Second round of optimization')
         set_variables_or_const(mcerow_variables_second_it, conf_to_vary,
                                mce, ZOSAPI, vars=True)
         set_rows_constant(df_initial_values_it2, conf_to_vary, mce, ZOSAPI)
-
         zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=CyclesAuto)
+
+    if RUN_OPTIMIZER and RUN_OPTIMIZER3rdRound:
+        print("Third round of optimization")
+        set_variables_or_const(mcerow_variables_third_it, conf_to_vary,
+                               mce, ZOSAPI, vars=True)
+        for j in range(10):
+            zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=CyclesAuto)
+
     TheSystem.Tools.RemoveAllVariables()
 TheSystem.Save()
