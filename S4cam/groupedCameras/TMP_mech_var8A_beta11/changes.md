@@ -1,4 +1,4 @@
-# TMP cam with biconic lenses
+# TMP cam with lenses
 
 Some of the restrictions implemented to constrain the chief ray angle were not
 active for the system shown last week. I made a few changes to better search
@@ -10,7 +10,7 @@ look for a better solution
 2. Run the local optimizer with automatic convergence a few times to let it
 slide into the solution.
 3. Added a restriction to better handle vignetting condition on lenses
-4. Added a restriction to better handle plate scale assymetry at the detector
+4. Added a restriction to better handle plate scale asymmetry at the detector
 wafer plane.
 
 
