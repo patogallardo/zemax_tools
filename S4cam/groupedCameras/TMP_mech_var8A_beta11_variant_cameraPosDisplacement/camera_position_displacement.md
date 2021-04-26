@@ -2,7 +2,7 @@
 
 Currently the camera is built following the foolowing recipe:
 
-1. Start at the center field focus
+1. Start at the focus at the center field of the TMP
 2. Go back 30mm and place the filter stack and front plate surfaces
 3. Use a center to center distance of 219mm and place cameras parallel and coplanar in a hexagonal lattice structure.
 4. Find the field angles on the sky that hit the wedge on the center and then find the angle that makes this ray stay on the camera axis (for all cameras).
@@ -28,15 +28,15 @@ For example camera 38, to the right and center clips rays
 
 While camera 41 looks better:
 
-![](Footprints/Window/Footprint_cam_41.JPG)
+![](Footprints/Window/footprint_cam_41.JPG)
 
 Something similar happens in the last ring, the rightmost camera clips at the edge
 
-![](Footprints/Window/Footprint_cam_62.JPG)
+![](Footprints/Window/footprint_cam_62.JPG)
 
 While the top right camera does not because field curvature helps here.
 
-![](Footprints/Window/Footprint_cam_66.JPG)
+![](Footprints/Window/footprint_cam_66.JPG)
 
 ## All camera footprint
 ![](Footprints/hex_windows.png)
