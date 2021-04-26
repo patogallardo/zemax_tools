@@ -13,7 +13,7 @@ For instance, camera 20 (on the third ring of cameras) will start seeing vignett
 
 ![](../TMP_mech_var8A_beta11/Footprints/Window/footprint_cam_20.JPG)
 
-To try to fix this, I tried allowing for a small displacement for each camera and optimized this offset such that the chief ray for the center field will pass through the center of the window entrance.
+To try to fix this, I tried allowing for a small displacement at the window entrance for each camera and optimized this offset such that the chief ray for the center field will pass through the center of the window entrance. Cameras continue to have a center-center distance of 219mm, but now the camera entrance deviates slightly from this depending on the camera.
 
 This requires a displacement < 10 mm for each camera, that is small at the center and larger to the edges.
 
