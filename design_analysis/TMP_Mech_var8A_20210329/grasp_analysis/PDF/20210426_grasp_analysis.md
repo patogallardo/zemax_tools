@@ -21,7 +21,7 @@ can query the coordinates of the axes in the local coordinate
 system and then use them to populate the rotation matrix for Grasp.
 
 Code that makes this translation possible is in
-```export_mirror_surfaces_grasp.py```
+``export_mirror_surfaces_grasp.py``
 
 ## Sampled mirror sag
 
