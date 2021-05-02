@@ -11,11 +11,13 @@ CyclesAuto = True  # how many cycles True takes the most time
 RUN_OPTIMIZER = True
 RUN_OPTIMIZER2ndRound = True
 RUN_OPTIMIZER3rdRound = True
+hammer_time_s = 600
 
 
 def zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=True):
-    print('Running Local Optimization')
+    print('\nRunning Local Optimization')
     LocalOpt = TheSystem.Tools.OpenLocalOptimization()
+    print("\t Initial Merit Function: %1.10f" % LocalOpt.InitialMeritFunction)
     LocalOpt.Algorithm = ZOSAPI.Tools.Optimization.OptimizationAlgorithm.DampedLeastSquares  # noqa
     OptCycles = ZOSAPI.Tools.Optimization.OptimizationCycles
     if CyclesAuto:
@@ -26,15 +28,18 @@ def zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=True):
 #        LocalOpt.Cycles = OptCycles.Fixed_10_Cycles
     LocalOpt.NumberOfCores = 8
     LocalOpt.RunAndWaitForCompletion()
+    print("\t Final Merit Function: %1.10f" % LocalOpt.CurrentMeritFunction)
     LocalOpt.Close()
 
 
 def zemax_run_hammer(TheSystem, time_s=120):
-    print('Running Hammer Optimization')
+    print('\nRunning Hammer Optimization')
     HammerOpt = TheSystem.Tools.OpenHammerOptimization()
+    print('\tInitial Merit Function: % 1.10f' % HammerOpt.InitialMeritFunction)
     HammerOpt.RunAndWaitWithTimeout(time_s)
     HammerOpt.Cancel()
     HammerOpt.WaitForCompletion()
+    print("Final Merit Function: %1.10f" % HammerOpt.CurrentMeritFunction)
     HammerOpt.Close()
 
 
@@ -148,6 +153,7 @@ for j, group_leader in progressbar(enumerate(group_leaders)):
     group_leader = group_leaders[j]  # evaluate this configuration
     current_group = df_group_info.query(
                         'config == %i' % group_leader).group.values[0]  # noqa
+    print("\n*************************************************************")
     print("Running on group %i" % current_group)
     mce.SetCurrentConfiguration(group_leader)
     mfe.LoadMeritFunction(mf_path)
@@ -165,8 +171,8 @@ for j, group_leader in progressbar(enumerate(group_leaders)):
 
     if RUN_OPTIMIZER:
         print("First round of optimization")
-        zemax_run_hammer(TheSystem, time_s=120)  # hammer for 10 min
         zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=CyclesAuto)
+        zemax_run_hammer(TheSystem, time_s=hammer_time_s)  # hammer for 10 min
         zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=CyclesAuto)
     TheSystem.Tools.RemoveAllVariables()
 
@@ -176,12 +182,14 @@ for j, group_leader in progressbar(enumerate(group_leaders)):
                                mce, ZOSAPI, vars=True)
         set_rows_constant(df_initial_values_it2, conf_to_vary, mce, ZOSAPI)
         zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=CyclesAuto)
+        for j in range(1):
+            zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=CyclesAuto)
 
     if RUN_OPTIMIZER and RUN_OPTIMIZER3rdRound:
         print("Third round of optimization")
         set_variables_or_const(mcerow_variables_third_it, conf_to_vary,
                                mce, ZOSAPI, vars=True)
-        for j in range(10):
+        for j in range(3):
             zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=CyclesAuto)
 
     TheSystem.Tools.RemoveAllVariables()

@@ -7,9 +7,12 @@ import matplotlib.pyplot as plt  # noqa
 import sys
 import numpy as np
 import glob
-import zmx
+# import zmx
 
 configuration = 1
+
+m_names = ["Entrance", "prime", "second", "tert", "img"]
+m_surfs = [1, 7, 16, 25, 37]
 
 if len(sys.argv) == 2:  # optional support for specifying filename
     fname = sys.argv[1]
@@ -198,9 +201,6 @@ if __name__ == '__main__':
 
     # explore surfaces and extract mirror names and surface numbers
     LDE = TheSystem.LDE
-
-#   identify mirror names and surface numbers
-    m_names, m_surfs = zmx.get_mirror_surfaces(TheSystem)
 
     for mirror_number in range(len(m_surfs)):
         surface = m_surfs[mirror_number]

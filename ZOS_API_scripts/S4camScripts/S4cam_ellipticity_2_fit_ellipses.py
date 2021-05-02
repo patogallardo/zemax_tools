@@ -16,12 +16,16 @@ if not os.path.exists('f_numbers/b'):
     os.mkdir('f_numbers/b')
 if not os.path.exists('f_numbers/solidangle'):
     os.mkdir('f_numbers/solidangle')
+if not os.path.exists('f_numbers/equivalent_f_number'):
+    os.mkdir('f_numbers/equivalent_f_number')
 
 
 fname = 'f_numbers/ray_db_pupil.hdf'
 
 configuration = 1
 distance = 1e5
+
+f_num, f_num_min, f_num_max = [], [], []
 
 for configuration in progressbar.progressbar(range(1, 86, 1)):
     ellipse_info = []
@@ -74,6 +78,14 @@ for configuration in progressbar.progressbar(range(1, 86, 1)):
                 dpi=120)
     plt.close()
 
+# plot semiaxis f/#
+    plt.scatter(df_ellipses.Hx, df_ellipses.Hy,
+                c=1.0/2.0/(np.tan(np.deg2rad(df_ellipses.angle_a)))
+                )
+    plt.colorbar(label='$f/\\#_{a}$')
+    plt.savefig('f_numbers/a/f_a_conf%02i.png' % configuration,
+                dpi=120)
+    plt.close()
 
 # plot semiaxis b
     plt.scatter(df_ellipses.Hx, df_ellipses.Hy,
@@ -83,6 +95,59 @@ for configuration in progressbar.progressbar(range(1, 86, 1)):
                 dpi=120)
     plt.close()
 
+
+# plot semiaxis f/# b
+
+    plt.scatter(df_ellipses.Hx, df_ellipses.Hy,
+                c=1.0/2.0/(np.tan(np.deg2rad(df_ellipses.angle_b)))
+                )
+    plt.colorbar(label='$f/\\#_{b}$')
+    plt.savefig('f_numbers/b/f_b_conf%02i.png' % configuration,
+                dpi=120)
+    plt.close()
+
+# plot equivalent f/#
+    plt.scatter(df_ellipses.Hx, df_ellipses.Hy,
+                c=1.0/2.0/np.tan(np.deg2rad(np.sqrt(df_ellipses.angle_a *
+                                                    df_ellipses.angle_b))))
+    plt.colorbar(label='$f/\\#_{eq}$')
+    cs = plt.tricontour(df_ellipses.Hx, df_ellipses.Hy,
+                     1.0/2.0/np.tan(np.deg2rad(np.sqrt(df_ellipses.angle_a *  # noqa
+                                                       df_ellipses.angle_b))),  # noqa
+                        levels=np.arange(1.7, 2.1, 0.05),
+                        vmin=1.8, vmax=2.1,
+                        colors='gray')
+    plt.clabel(cs, inline=1, fontsize=15)
+    plt.xlabel('x [deg]')
+    plt.ylabel('y [deg]')
+    xy_lim = [df_ellipses.Hy.min()*1.1, df_ellipses.Hy.max()*1.1]
+    plt.xlim(xy_lim)
+    plt.ylim(xy_lim)
+    plt.savefig('f_numbers/equivalent_f_number/'
+                'eq_f_n_%02i.png' % configuration,
+                dpi=120)
+    plt.close()
+
+
+# plot eq f/# histogram
+    plt.hist(1.0/2.0/np.tan(np.deg2rad(np.sqrt(df_ellipses.angle_a *
+                                               df_ellipses.angle_b))),
+             bins=5,
+             histtype='step',
+             label='conf:%02i' % configuration)
+    plt.xlabel('$f/\\#$')
+    plt.ylabel('count')
+    plt.legend()
+    plt.savefig('f_numbers/equivalent_f_number/'
+                'eq_fn_%02i_hist.png' % configuration,
+                dpi=120)
+    plt.close()
+
+    f_nums = 1.0/2.0/np.tan(np.deg2rad(np.sqrt(df_ellipses.angle_a *
+                                               df_ellipses.angle_b)))
+    f_num.append(np.mean(f_nums))
+    f_num_min.append(np.min(f_nums))
+    f_num_max.append(np.max(f_nums))
 
 # plot ellipticity a/b
     fig, [ax1, ax2] = plt.subplots(nrows=2, ncols=1, figsize=[6, 9])
@@ -115,3 +180,8 @@ for configuration in progressbar.progressbar(range(1, 86, 1)):
     plt.savefig('f_numbers/solidangle/solidangle_conf_%02i' % configuration,
                 dpi=120)
     plt.close()
+
+df_out = pd.DataFrame(np.array([range(1, 86, 1), f_num,
+                                f_num_min, f_num_max]).T,
+                      columns=['cam', 'f_num', 'f_num_min', 'f_num_max'])
+df_out.to_csv('./f_numbers/f_numbers.csv')

@@ -8,6 +8,8 @@ import numpy as np
 import glob
 import re
 import matplotlib.pyplot as plt
+import os
+import subprocess
 
 fnames = glob.glob('./surfaceDefinitions/polysurfaces.pck')
 assert len(fnames) == 1  # check number of files.
@@ -15,6 +17,23 @@ assert len(fnames) == 1  # check number of files.
 fname = fnames[0]
 with open(fname, 'rb') as f:
     [lens_surfaces, apertures] = pk.load(f)
+
+
+def mk_tex(tex_table, label, targetdir):
+    '''Write the tex file with the table and compile it'''
+    tex_out_fname = os.path.join(targetdir,
+                                 "%s_shape_table.tex" % label)
+
+    out_str = ("\\documentclass[convert={convertexe={magick.exe}}]{standalone}"  # noqa
+               "\n\\usepackage{booktabs}"
+               "\n\\usepackage{cmbright}"
+               "\n\\begin{document}")
+    out_str += tex_table + "\n\\end{document}"
+    with open(tex_out_fname, "w") as f:
+        f.write(out_str)
+    print(out_str)
+    subprocess.run('pdflatex --shell-escape %s_shape_table.tex' % label,
+                   cwd=targetdir)
 
 
 def getCoefficients(lens_surfaces, start_at=23):
@@ -95,6 +114,21 @@ class mirror():
         self.mask = (self.xx-self.row.decx) ** 2/self.row.xhalfwidth**2 + (self.yy - self.row.decy)**2/self.row.yhalfwidth**2 > 1  # noqa
         self.z[self.mask] = np.nan
 
+    def mkParam_tex_table(self):
+        params = self.row
+        nozero = params.values != 0.0
+        isnumber = np.isfinite(params.values.astype(float))
+        sel = nozero
+        sel[0] = False  # exclude max term #
+        sel[-1], sel[-2] = False, False  # exclude decx decy
+        sel = np.logical_and(isnumber, sel)
+        labels = params.index[sel]
+        values = params.values[sel]
+        df_ = pd.DataFrame([values], columns=labels,
+                           index=['Value'])
+        tex_table = df_.to_latex()
+        mk_tex(tex_table, m.name, 'surfaceDefinitions')
+
     def plotSurface(self, save=False):
         fig, ax = plt.subplots()
         sel_flatten = np.isfinite(self.z.flatten())
@@ -149,3 +183,4 @@ for j in range(3):
     m.plotSurface(save=True)
     m.matrix_df.to_latex('surfaceDefinitions/%s.tex' % m.name)
     m.matrix_df.to_html('surfaceDefinitions/%s.html' % m.name)
+    m.mkParam_tex_table()
