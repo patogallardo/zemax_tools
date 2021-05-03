@@ -1,6 +1,6 @@
 # TMP_Mech_Var10C.zmx
 ## Layout
-![](layout/3DLayout.png)
+![](layout/3DLayout.JPG)
 ## Strehl Ratios
 ![](strehls/focal_plane_strehls.png)
 ![](strehls/sky_strehls.png)
