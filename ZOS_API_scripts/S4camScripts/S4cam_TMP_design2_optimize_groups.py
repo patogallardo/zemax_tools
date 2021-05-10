@@ -9,9 +9,9 @@ import numpy as np
 
 CyclesAuto = True  # how many cycles True takes the most time
 RUN_OPTIMIZER = True
-RUN_OPTIMIZER2ndRound = True
-RUN_OPTIMIZER3rdRound = True
-hammer_time_s = 600
+RUN_OPTIMIZER2ndRound = False
+RUN_OPTIMIZER3rdRound = False
+hammer_time_s = 0
 
 
 def zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=True):
@@ -172,8 +172,9 @@ for j, group_leader in progressbar(enumerate(group_leaders)):
     if RUN_OPTIMIZER:
         print("First round of optimization")
         zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=CyclesAuto)
-        zemax_run_hammer(TheSystem, time_s=hammer_time_s)  # hammer for 10 min
-        zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=CyclesAuto)
+        if hammer_time_s > 0:
+            zemax_run_hammer(TheSystem, time_s=hammer_time_s)
+            zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=CyclesAuto)
     TheSystem.Tools.RemoveAllVariables()
 
     if RUN_OPTIMIZER and RUN_OPTIMIZER2ndRound:

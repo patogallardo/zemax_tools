@@ -76,8 +76,8 @@ TheMCE = TheSystem.MCE
 assert TheMCE.NumberOfConfigurations == 1
 
 #  these specify where to put the cameras in the mce
-row_cam_centerx = 10
-row_cam_centery = 11
+row_cam_centerx = 8
+row_cam_centery = 9
 
 row_field_centerx = 2
 row_field_centery = 3

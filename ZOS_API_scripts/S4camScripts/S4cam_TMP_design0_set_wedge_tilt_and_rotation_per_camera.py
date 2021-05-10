@@ -54,9 +54,9 @@ print('Connected to OpticStudio')
 print('Serial #: ', TheApplication.SerialCode)
 
 # constants
-lyot_surf = 68
-mce_row_wedge_rot = 8
-mce_row_wedge_tilt = 7
+lyot_surf = 62
+mce_row_wedge_rot = 6
+mce_row_wedge_tilt = 5
 
 initial_rot = 180
 initial_tilt = 1e-2

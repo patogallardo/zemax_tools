@@ -22,11 +22,17 @@ import numpy as np
 df_variables = pd.read_csv('groups_info/variables.csv')
 mce_row_vars_1it = df_variables.mcerow_variable_first_it.values
 mce_row_vars_2it = df_variables.mcerow_variable_second_it.values
+mce_row_vars_3it = df_variables.mcerow_variable_third_it.values
 mce_row_vars_1it = mce_row_vars_1it[np.isfinite(mce_row_vars_1it)]
+mce_row_vars_2it = mce_row_vars_2it[np.isfinite(mce_row_vars_2it)]
+mce_row_vars_3it = mce_row_vars_3it[np.isfinite(mce_row_vars_3it)]
 mce_row_vars_1it = mce_row_vars_1it.astype(int)
 mce_row_vars_2it = mce_row_vars_2it.astype(int)
+mce_row_vars_3it = mce_row_vars_3it.astype(int)
 
-rows_to_mirror = np.sort(np.append(mce_row_vars_1it, mce_row_vars_2it))
+rows_to_mirror = np.sort(np.append(np.append(mce_row_vars_1it,
+                                             mce_row_vars_2it),
+                                   mce_row_vars_3it))
 
 # This boilerplate requires the 'pythonnet' module.
 # The following instructions are for installing the 'pythonnet' module via pip:
@@ -123,7 +129,9 @@ def setconstant(row_to_mirror, target_conf, TheMCE=TheMCE):
 
 def set_constants(target_conf, rows_to_mirror=rows_to_mirror):
     '''Sets one configuration operand to a constant value.'''
+    print("setting constants")
     for row_to_mirror in rows_to_mirror:
+        print("row: %i, conf: %i" % (row_to_mirror, target_conf))
         setconstant(row_to_mirror, target_conf)
 
 
