@@ -96,7 +96,7 @@ mirror_names, mirror_surfaces = zmx.get_mirror_surfaces(TheSystem)  # noqa
 
 xlim = [-5000, 5000]
 ylim = [-5000, 5000]
-semiDia = 5000
+semiDia = 2500
 
 sags = [] * len(mirror_surfaces)
 
@@ -106,7 +106,7 @@ for j in range(len(mirror_surfaces)):
 
     s = lde.GetSurfaceAt(surface)
 
-    rs_coarse = np.arange(-semiDia, semiDia+10, 1000)
+    rs_coarse = np.arange(-semiDia, semiDia+10, 500)
     sag_x_coarse = np.array([lde.GetSag(surface, r, 0.0, 0, 0)[1]
                              for r in rs_coarse])
     sag_y_coarse = np.array([lde.GetSag(surface, 0.0, r, 0, 0)[1]
