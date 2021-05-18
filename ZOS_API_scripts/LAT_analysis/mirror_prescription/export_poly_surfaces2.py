@@ -11,12 +11,12 @@ import matplotlib.pyplot as plt
 import os
 import subprocess
 
-fnames = glob.glob('./surfaceDefinitions/polysurfaces.pck')
+fnames = glob.glob('./CAD/surfaceDefinitions/polysurfaces.pck')
 assert len(fnames) == 1  # check number of files.
 
 fname = fnames[0]
 with open(fname, 'rb') as f:
-    [lens_surfaces, apertures] = pk.load(f)
+    [lens_surfaces] = pk.load(f)
 
 
 def mk_tex(tex_table, label, targetdir):
@@ -24,7 +24,7 @@ def mk_tex(tex_table, label, targetdir):
     tex_out_fname = os.path.join(targetdir,
                                  "%s_shape_table.tex" % label)
 
-    out_str = ("\\documentclass[convert={convertexe={magick.exe}}]{standalone}"  # noqa
+    out_str = ("\\documentclass[convert={convertexe={magick.exe}, density={150}}]{standalone}"  # noqa
                "\n\\usepackage{booktabs}"
                "\n\\usepackage{cmbright}"
                "\n\\begin{document}")
@@ -111,8 +111,6 @@ class mirror():
         self.xx = self.xx * norm
         self.yy = self.yy * norm
         self.z = z
-        self.mask = (self.xx-self.row.decx) ** 2/self.row.xhalfwidth**2 + (self.yy - self.row.decy)**2/self.row.yhalfwidth**2 > 1  # noqa
-        self.z[self.mask] = np.nan
 
     def mkParam_tex_table(self):
         params = self.row
@@ -128,7 +126,9 @@ class mirror():
         df_ = pd.DataFrame([values], columns=labels,
                            index=['Value'])
         tex_table = df_.to_latex()
-        mk_tex(tex_table, m.name, 'surfaceDefinitions')
+        if not os.path.exists("CAD/tex_tables"):
+            os.mkdir("CAD/tex_tables")
+        mk_tex(tex_table, m.name, 'CAD/tex_tables')
 
     def plotSurface(self, save=False):
         fig, ax = plt.subplots()
@@ -145,17 +145,12 @@ class mirror():
         ax.set_xlabel('x [mm]')
         ax.set_ylabel('y [mm]')
 
-        t = np.linspace(0, 2*np.pi, 1000)
-        x = self.row.decx + self.row.xhalfwidth * np.cos(t)
-        y = self.row.decy + self.row.yhalfwidth * np.sin(t)
-
-        plt.plot(x, y, color='C1')
         plt.ylim([-3000, 3000])
         plt.figtext(0.65, 0.02, "Max depth = %1.2f mm" % peaktopeak)
         # plt.ylim([self.row.yhalfwidth*1.05, -self.row.yhalfwidth*1.05])
 
         if save:
-            plt.savefig('surfaceDefinitions/%s.png' % self.row.name,
+            plt.savefig('CAD/surfaceDefinitions/%s.png' % self.row.name,
                         dpi=150)
             plt.close()
         else:
@@ -168,11 +163,8 @@ df = pd.concat(coeffs, axis=1)
 df.columns = mirror_names
 df = df.transpose()
 
-df_apertures = pd.DataFrame(apertures)
-df = combineDataFrames(df, df_apertures)
-
-df.to_latex('surfaceDefinitions/mirror_defs.tex')
-df.to_html('surfaceDefinitions/mirror_defs.html')
+df.to_latex('CAD/surfaceDefinitions/mirror_defs.tex')
+df.to_html('CAD/surfaceDefinitions/mirror_defs.html')
 
 # test code...
 
@@ -182,6 +174,6 @@ for j in range(3):
     m = mirror(row)
     mirrors.append(m)
     m.plotSurface(save=True)
-    m.matrix_df.to_latex('surfaceDefinitions/%s.tex' % m.name)
-    m.matrix_df.to_html('surfaceDefinitions/%s.html' % m.name)
+    m.matrix_df.to_latex('CAD/surfaceDefinitions/%s.tex' % m.name)
+    m.matrix_df.to_html('CAD/surfaceDefinitions/%s.html' % m.name)
     m.mkParam_tex_table()

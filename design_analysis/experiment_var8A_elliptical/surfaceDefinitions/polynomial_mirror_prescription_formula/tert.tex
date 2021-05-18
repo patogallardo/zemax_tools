@@ -1,10 +1,10 @@
-\documentclass[convert={convertexe={magick.exe}}]{standalone}
+\documentclass[convert={convertexe={magick.exe}, density={200}}]{standalone}
 \usepackage{cmbright}
 
 \begin{document}
 
 $ z(x, y) = C_{X0Y1} \, \frac{y}{R} + 
-C_{X2Y0} \, (x/R)^2 + 
+C_{X2Y0} \, (\frac{x}{R})^2 + 
 C_{X0Y2} \, (\frac{y}{R})^2 + 
 C_{X2Y1} \, (\frac{x}{R})^2\frac{y}{R}+ 
 C_{X0Y3} \, (\frac{y}{R})^3 + 

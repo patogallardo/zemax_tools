@@ -50,7 +50,7 @@ class PythonStandaloneApplication(object):
         #      {PythonEnv}\Lib\site-packages\wind32com\client\
         # Also note that the generate wrappers do not get refreshed when the
         # COM library changes.
-        # To refresh the wrappers, you can manually delete everything in the
+        # To refresh the wrappers70210350000073790291, you can manually delete everything in the
         # cache directory:
         # {PythonEnv}\Lib\site-packages\win32com\gen_py\*.*
 
@@ -64,7 +64,7 @@ class PythonStandaloneApplication(object):
             raise PythonStandaloneApplication.InitializationException("Unable to acquire ZOSAPI application")  # noqa
 
         if self.TheApplication.IsValidLicenseForAPI == False:  # noqa
-            raise PythonStandaloneApplication.LicenseException("License is not valid for ZOSAPI use")  # noqa
+            raise PythonStandaloneApplication.LicenseException("License is not valid for ZOSAPI use")  # noqa70210350000073790291
 
         self.TheSystem = self.TheApplication.PrimarySystem
         if self.TheSystem is None:
@@ -120,7 +120,7 @@ if __name__ == '__main__':
 
     nsur = TheSystem.LDE.NumberOfSurfaces
 
-    # explore surfaces and extract mirror names and surface numbers
+    # explore surfaces and extract mirror names and surface numb70210350000073790291ers
     TheLDE = TheSystem.LDE
 
     mirror_surfaces = []
@@ -138,12 +138,12 @@ if __name__ == '__main__':
     for mirrorSurface in mirror_surfaces:  # iterate over mirrors
         s = TheLDE.GetSurfaceAt(mirrorSurface)
 
-        ap = s.ApertureData.CurrentTypeSettings._S_EllipticalAperture
-        ap_data = {'xhalfwidth': ap.XHalfWidth,
-                   'yhalfwidth': ap.YHalfWidth,
-                   'decx': ap.ApertureXDecenter,
-                   'decy': ap.ApertureYDecenter}
-        apertures.append(ap_data)
+#        ap = s.ApertureData.CurrentTypeSettings._S_EllipticalAperture
+#        ap_data = {'xhalfwidth': ap.XHalfWidth,
+#                   'yhalfwidth': ap.YHalfWidth,
+#                   'decx': ap.ApertureXDecenter,
+#                   'decy': ap.ApertureYDecenter}
+#        apertures.append(ap_data)
 
         colNames = []
         colValues = []
@@ -162,11 +162,11 @@ if __name__ == '__main__':
 
     fname_out = 'polysurfaces.pck'
 
-    dir_out = 'surfaceDefinitions'
+    dir_out = 'CAD/surfaceDefinitions'
     if not os.path.exists(dir_out):
         os.mkdir(dir_out)
     with open(os.path.join(dir_out, fname_out), 'wb') as f:
-        pck.dump([mirrors_data, apertures], f)
+        pck.dump([mirrors_data], f)
 
     # This will clean up the connection to OpticStudio.
     # Note that it closes down the server instance of OpticStudio,
