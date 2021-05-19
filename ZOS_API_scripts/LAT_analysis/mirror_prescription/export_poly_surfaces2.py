@@ -126,6 +126,12 @@ class mirror():
         df_ = pd.DataFrame([values], columns=labels,
                            index=['Value'])
         tex_table = df_.to_latex()
+        dictionary = {'prime': "\\bf{M1}",
+                      'second': "\\bf{M2}",
+                      'tert': "\\bf{M3}"}
+        tex_table = tex_table.replace(r"{}",
+                                      dictionary[self.name])
+        self.tex_table = tex_table
         if not os.path.exists("CAD/tex_tables"):
             os.mkdir("CAD/tex_tables")
         mk_tex(tex_table, m.name, 'CAD/tex_tables')
