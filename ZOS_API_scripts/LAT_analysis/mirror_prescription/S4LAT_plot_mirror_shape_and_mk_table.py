@@ -120,5 +120,8 @@ for j in range(len(mirror_surfaces)):
     df.to_csv(os.path.join(targetdirs[1],
                            "%s_surface_values_table.csv" % mirror_names[j]))
 
+    name = {"prime": "M1", "second": "M2", "tert": "M3"}
     tex_str = df.to_latex(float_format="%.3f")
+    tex_str = tex_str.replace("{}",
+                              "\\bf{%s}" % name[mirror_names[j]])
     mk_tex(tex_str, mirror_names[j], targetdirs[1])

@@ -118,8 +118,8 @@ class mirror():
         isnumber = np.isfinite(params.values.astype(float))
         sel = nozero
         sel[0] = False  # exclude max term #
-        sel[-1], sel[-2] = False, False  # exclude decx decy
-        sel[-3], sel[-4] = False, False
+#        sel[-1], sel[-2] = False, False  # exclude decx decy
+#        sel[-3], sel[-4] = False, False
         sel = np.logical_and(isnumber, sel)
         labels = params.index[sel]
         values = params.values[sel]
