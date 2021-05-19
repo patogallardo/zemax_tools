@@ -24,7 +24,7 @@ def mk_tex(tex_table, label, targetdir):
     tex_out_fname = os.path.join(targetdir,
                                  "%s_shape_table.tex" % label)
 
-    out_str = ("\\documentclass[convert={convertexe={magick.exe}, density={150}}]{standalone}"  # noqa
+    out_str = ("\\documentclass[convert={convertexe={magick.exe}, density={300}}]{standalone}"  # noqa
                "\n\\usepackage{booktabs}"
                "\n\\usepackage{cmbright}"
                "\n\\begin{document}")
