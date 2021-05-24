@@ -39,6 +39,7 @@ After a few hours running, Zemax seems to find a solution that is better than th
 ![](f_numbers/summary_semi_fov.png)
 ## f/#
 ![](f_numbers/summary_fn.png)
+![](f_numbers/cam_fnumbers_hist.png)
 ## Strehls
 Optimizing all cameras individually, a best case scenario we get:
 ![](strehls_1mm/area_above_0p8.png)
