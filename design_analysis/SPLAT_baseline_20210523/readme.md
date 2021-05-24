@@ -27,8 +27,14 @@
 ![](sag/surface_sag_surf_second.JPG)
 ![](sag/surface_sag_surf_tert.JPG)
 ## Polynomial terms
+![](CAD/tex_tables/prime_shape_table.png)
+![](CAD/tex_tables/second_shape_table.png)
+![](CAD/tex_tables/tert_shape_table.png)
 
-![](CAD\tex_tables\prime_shape_table.png)
+## Surface values
+![](CAD/sag_tables/prime_surface_values_table.png)
+![](CAD/sag_tables/second_surface_values_table.png)
+![](CAD/sag_tables/tert_surface_values_table.png)
 
 ## CAD
 ### [No rays](CAD)
