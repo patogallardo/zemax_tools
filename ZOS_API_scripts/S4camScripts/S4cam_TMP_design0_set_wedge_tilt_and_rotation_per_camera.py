@@ -54,7 +54,7 @@ print('Connected to OpticStudio')
 print('Serial #: ', TheApplication.SerialCode)
 
 # constants
-lyot_surf = 62
+lyot_surf = 64
 mce_row_wedge_rot = 6
 mce_row_wedge_tilt = 5
 
@@ -73,6 +73,9 @@ mce = TheSystem.MCE
 
 MFE.RemoveOperandsAt(1, MFE.NumberOfOperands)
 
+MFE.AddOperand()
+MFE.AddOperand()
+MFE.AddOperand()
 MFE.AddOperand()
 MFE.AddOperand()
 MFE.AddOperand()

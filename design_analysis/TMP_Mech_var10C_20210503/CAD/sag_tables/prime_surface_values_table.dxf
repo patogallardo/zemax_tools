@@ -203,7 +203,7 @@ LAYER
 100
 AcDbSymbolTable
  70
-1
+2
   0
 LAYER
   5
@@ -214,6 +214,20 @@ AcDbSymbolTableRecord
 AcDbLayerTableRecord
   2
 0
+ 70
+0
+  6
+CONTINUOUS
+  0
+LAYER
+  5
+51
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+prime_surface_values_table
  70
 0
   6
@@ -583,7 +597,7 @@ LWPOLYLINE
 100
 AcDbEntity
   8
-0
+prime_surface_values_table
  62
 7
 100
@@ -595,13 +609,13 @@ AcDbPolyline
  10
 0.000000
  20
-48.061563
+48.060932
  30
 0.0
  10
-724.652344
+724.649581
  20
-48.061563
+48.060932
  30
 0.0
   0
@@ -611,7 +625,7 @@ LWPOLYLINE
 100
 AcDbEntity
   8
-0
+prime_surface_values_table
  62
 7
 100
@@ -623,13 +637,13 @@ AcDbPolyline
  10
 0.000000
  20
-30.456094
+30.456967
  30
 0.0
  10
-724.652344
+724.649581
  20
-30.456094
+30.456967
  30
 0.0
   0
@@ -639,7 +653,7 @@ LWPOLYLINE
 100
 AcDbEntity
   8
-0
+prime_surface_values_table
  62
 7
 100
@@ -651,13 +665,13 @@ AcDbPolyline
  10
 0.000000
  20
-0.397500
+0.399025
  30
 0.0
  10
-724.652344
+724.649581
  20
-0.397500
+0.399025
  30
 0.0
   0

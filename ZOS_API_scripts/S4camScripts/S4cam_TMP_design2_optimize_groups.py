@@ -11,6 +11,7 @@ CyclesAuto = True  # how many cycles True takes the most time
 RUN_OPTIMIZER = True
 RUN_OPTIMIZER2ndRound = False
 RUN_OPTIMIZER3rdRound = False
+UPDATE_FOV = True
 hammer_time_s = 0
 
 
@@ -126,7 +127,7 @@ mfe = TheSystem.MFE
 if len(sys.argv) == 2:
     mf_path = sys.argv[1]
 else:
-    mf_path = glob.glob('groups_info/*.MF')
+    mf_path = glob.glob('groups_info/merit_function.MF')
     mf_path = os.path.abspath(mf_path[0])
 
 assert len(glob.glob('groups_info/initial_values_it1.csv')) == 1
@@ -161,6 +162,8 @@ for j, group_leader in progressbar(enumerate(group_leaders)):
     # point to the configuration to evaluate, rm all vars and set the lowest
     # conf to variable
     mfe.GetOperandAt(1).GetOperandCell(2).IntegerValue = group_leader  # evalgl
+    if UPDATE_FOV:
+        mfe.GetOperandAt(10).GetOperandCell(3).IntegerValue = group_leader
     TheSystem.Tools.RemoveAllVariables()
     conf_to_vary = df_group_info.query('group == %i' % current_group).config.min()  # noqa
 

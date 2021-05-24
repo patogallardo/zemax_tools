@@ -4,5 +4,6 @@ python C:\Users\pgall\Documents\wilson\code\zemax_tools\ZOS_API_scripts\S4camScr
 
 python C:\Users\pgall\Documents\wilson\code\zemax_tools\ZOS_API_scripts\S4camScripts\S4cam_ellipticity_1_extract_marginal_pupil_rays.py
 python C:\Users\pgall\Documents\wilson\code\zemax_tools\ZOS_API_scripts\S4camScripts\S4cam_ellipticity_2_fit_ellipses.py
+python C:\Users\pgall\Documents\wilson\code\zemax_tools\ZOS_API_scripts\S4camScripts\f_numbers_mk_85cam_plot.py
 
 python C:\Users\pgall\Documents\wilson\code\zemax_tools\ZOS_API_scripts\LAT_analysis\open_zmx_zpl.py S4Cam_gen_footprints_TMP.ZPL
