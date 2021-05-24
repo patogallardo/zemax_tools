@@ -8,6 +8,10 @@ python C:\Users\pgall\Documents\wilson\code\zemax_tools\ZOS_API_scripts\LAT_anal
 python C:\Users\pgall\Documents\wilson\code\zemax_tools\ZOS_API_scripts\LAT_analysis\export_LAT_cad.py
 python C:\Users\pgall\Documents\wilson\code\zemax_tools\ZOS_API_scripts\LAT_analysis\plate_scale.py
 
+python C:\Users\pgall\Documents\wilson\code\zemax_tools\ZOS_API_scripts\LAT_analysis\mirror_prescription\export_poly_surfaces.py
+python C:\Users\pgall\Documents\wilson\code\zemax_tools\ZOS_API_scripts\LAT_analysis\mirror_prescription\export_poly_surfaces2.py
+python C:\Users\pgall\Documents\wilson\code\zemax_tools\ZOS_API_scripts\LAT_analysis\mirror_prescription\S4LAT_plot_mirror_shape_and_mk_table.py
+
 python C:\Users\pgall\Documents\wilson\code\zemax_tools\ZOS_API_scripts\LAT_analysis\open_zmx_zpl.py lat_export_footprints.zpl
 python C:\Users\pgall\Documents\wilson\code\zemax_tools\ZOS_API_scripts\LAT_analysis\open_zmx_zpl.py lat_export_layout.zpl
 python C:\Users\pgall\Documents\wilson\code\zemax_tools\ZOS_API_scripts\LAT_analysis\open_zmx_zpl.py lat_export_sag.zpl

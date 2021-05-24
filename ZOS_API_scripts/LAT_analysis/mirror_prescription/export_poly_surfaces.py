@@ -50,7 +50,7 @@ class PythonStandaloneApplication(object):
         #      {PythonEnv}\Lib\site-packages\wind32com\client\
         # Also note that the generate wrappers do not get refreshed when the
         # COM library changes.
-        # To refresh the wrappers70210350000073790291, you can manually delete everything in the
+        # To refresh the wrappers, you can manually delete everything in the
         # cache directory:
         # {PythonEnv}\Lib\site-packages\win32com\gen_py\*.*
 
@@ -120,7 +120,7 @@ if __name__ == '__main__':
 
     nsur = TheSystem.LDE.NumberOfSurfaces
 
-    # explore surfaces and extract mirror names and surface numb70210350000073790291ers
+    # explore surfaces and extract mirror names and surface numbers
     TheLDE = TheSystem.LDE
 
     mirror_surfaces = []
@@ -163,6 +163,8 @@ if __name__ == '__main__':
     fname_out = 'polysurfaces.pck'
 
     dir_out = 'CAD/surfaceDefinitions'
+    if not os.path.exists("CAD"):
+        os.mkdir("CAD")
     if not os.path.exists(dir_out):
         os.mkdir(dir_out)
     with open(os.path.join(dir_out, fname_out), 'wb') as f:
