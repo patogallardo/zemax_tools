@@ -3,13 +3,11 @@ field map.
 
 '''
 
-from win32com.client.gencache import EnsureDispatch, EnsureModule
+from win32com.client.gencache import EnsureDispatch
 from win32com.client import CastTo, constants
 from win32com.client import gencache
 import os
-import matplotlib.pyplot as plt
 import numpy as np
-import os
 import sys
 import pandas as pd
 import glob
@@ -20,31 +18,20 @@ else:
     fnames = glob.glob('*.zmx')
     assert len(fnames) == 1
     fname = fnames[0]
-    print('No filename provided, using %s' %fname)
+    print('No filename provided, using %s' % fname)
 fname = os.path.abspath(fname)
 
 print('Exporting Strehl ratios for field 1.\n\nRemember to check zmx file.')
 
-print("opening %s" %fname)
+print("opening %s" % fname)
 
-#parameters of the extraction
+# parameters of the extraction
 
-sampling = 400 #number of samples to be extracted
+sampling = 400  # number of samples to be extracted
 field_semi_width = 7
 
 
-#end parameters
-
-# Notes
-#
-# The python project and script was tested with the following tools:
-#       Python 3.4.3 for Windows (32-bit) (https://www.python.org/downloads/) - Python interpreter
-#       Python for Windows Extensions (32-bit, Python 3.4) (http://sourceforge.net/projects/pywin32/) - for COM support
-#       Microsoft Visual Studio Express 2013 for Windows Desktop (https://www.visualstudio.com/en-us/products/visual-studio-express-vs.aspx) - easy-to-use IDE
-#       Python Tools for Visual Studio (https://pytools.codeplex.com/) - integration into Visual Studio
-#
-# Note that Visual Studio and Python Tools make development easier, however this python script should should run without either installed.
-
+# end parameters
 class PythonStandaloneApplication(object):
     class LicenseException(Exception):
         pass
@@ -61,8 +48,10 @@ class PythonStandaloneApplication(object):
     def __init__(self):
         # make sure the Python wrappers are available for the COM client and
         # interfaces
-        gencache.EnsureModule('{EA433010-2BAC-43C4-857C-7AEAC4A8CCE0}', 0, 1, 0)
-        gencache.EnsureModule('{F66684D7-AAFE-4A62-9156-FF7A7853F764}', 0, 1, 0)
+        gencache.EnsureModule('{EA433010-2BAC-43C4-857C-7AEAC4A8CCE0}',
+                              0, 1, 0)
+        gencache.EnsureModule('{F66684D7-AAFE-4A62-9156-FF7A7853F764}',
+                              0, 1, 0)
         # Note - the above can also be accomplished using 'makepy.py' in the
         # following directory:
         #      {PythonEnv}\Lib\site-packages\wind32com\client\
@@ -70,22 +59,22 @@ class PythonStandaloneApplication(object):
         # COM library changes.
         # To refresh the wrappers, you can manually delete everything in the
         # cache directory:
-        #	   {PythonEnv}\Lib\site-packages\win32com\gen_py\*.*
-        
+        # {PythonEnv}\Lib\site-packages\win32com\gen_py\*.*
+
         self.TheConnection = EnsureDispatch("ZOSAPI.ZOSAPI_Connection")
         if self.TheConnection is None:
-            raise PythonStandaloneApplication.ConnectionException("Unable to intialize COM connection to ZOSAPI")
+            raise PythonStandaloneApplication.ConnectionException("Unable to intialize COM connection to ZOSAPI")  # noqa
 
         self.TheApplication = self.TheConnection.CreateNewApplication()
         if self.TheApplication is None:
-            raise PythonStandaloneApplication.InitializationException("Unable to acquire ZOSAPI application")
+            raise PythonStandaloneApplication.InitializationException("Unable to acquire ZOSAPI application")  # noqa
 
-        if self.TheApplication.IsValidLicenseForAPI == False:
-            raise PythonStandaloneApplication.LicenseException("License is not valid for ZOSAPI use")
+        if self.TheApplication.IsValidLicenseForAPI == False:  # noqa
+            raise PythonStandaloneApplication.LicenseException("License is not valid for ZOSAPI use")  # noqa
 
         self.TheSystem = self.TheApplication.PrimarySystem
         if self.TheSystem is None:
-            raise PythonStandaloneApplication.SystemNotPresentException("Unable to acquire Primary system")
+            raise PythonStandaloneApplication.SystemNotPresentException("Unable to acquire Primary system")  # noqa
 
     def __del__(self):
         if self.TheApplication is not None:
@@ -96,26 +85,26 @@ class PythonStandaloneApplication(object):
 
     def OpenFile(self, filepath, saveIfNeeded):
         if self.TheSystem is None:
-            raise PythonStandaloneApplication.SystemNotPresentException("Unable to acquire Primary system")
+            raise PythonStandaloneApplication.SystemNotPresentException("Unable to acquire Primary system")  # noqa
         self.TheSystem.LoadFile(filepath, saveIfNeeded)
 
     def CloseFile(self, save):
         if self.TheSystem is None:
-            raise PythonStandaloneApplication.SystemNotPresentException("Unable to acquire Primary system")
+            raise PythonStandaloneApplication.SystemNotPresentException("Unable to acquire Primary system")  # noqa
         self.TheSystem.Close(save)
 
     def SamplesDir(self):
         if self.TheApplication is None:
-            raise PythonStandaloneApplication.InitializationException("Unable to acquire ZOSAPI application")
+            raise PythonStandaloneApplication.InitializationException("Unable to acquire ZOSAPI application")  # noqa
 
         return self.TheApplication.SamplesDir
 
     def ExampleConstants(self):
-        if self.TheApplication.LicenseStatus is constants.LicenseStatusType_PremiumEdition:
+        if self.TheApplication.LicenseStatus is constants.LicenseStatusType_PremiumEdition:  # noqa
             return "Premium"
-        elif self.TheApplication.LicenseStatus is constants.LicenseStatusType_ProfessionalEdition:
+        elif self.TheApplication.LicenseStatus is constants.LicenseStatusType_ProfessionalEdition:  # noqa
             return "Professional"
-        elif self.TheApplication.LicenseStatus is constants.LicenseStatusType_StandardEdition:
+        elif self.TheApplication.LicenseStatus is constants.LicenseStatusType_StandardEdition:  # noqa
             return "Standard"
         else:
             return "Invalid"
@@ -142,15 +131,15 @@ if __name__ == '__main__':
     for i in range(1, num_fields + 1):
         if (abs(TheSystem.SystemData.Fields.GetField(i).Y) > max_field):
             max_field = abs(TheSystem.SystemData.Fields.GetField(i).Y)
-    #! [e22s03_py]
+# ! [e22s03_py]
 
     if TheSystem.SystemData.Fields.GetFieldType() == constants.FieldType_Angle:
         field_type = 'Angle'
-    elif TheSystem.SystemData.Fields.GetFieldType() == constants.FieldType_ObjectHeight:
+    elif TheSystem.SystemData.Fields.GetFieldType() == constants.FieldType_ObjectHeight:  # noqa
         field_type = 'Height'
-    elif TheSystem.SystemData.Fields.GetFieldType() == constants.FieldType_ParaxialImageHeight:
+    elif TheSystem.SystemData.Fields.GetFieldType() == constants.FieldType_ParaxialImageHeight:  # noqa
         field_type = 'Height'
-    elif TheSystem.SystemData.Fields.GetFieldType() == constants.FieldType_RealImageHeight:
+    elif TheSystem.SystemData.Fields.GetFieldType() == constants.FieldType_RealImageHeight:  # noqa
         field_type = 'Height'
 
     analysis = TheSystem.Analyses.New_RMSFieldMap()
@@ -159,21 +148,21 @@ if __name__ == '__main__':
     analysisSettings = analysis.GetSettings()
 
     newSettings = analysis.GetSettings()
-    rms_settings = CastTo(newSettings, "IAS_RMSFieldMap")  # Cast to IAS_Spot interface; enables access to Spot Diagram properties
+    rms_settings = CastTo(newSettings, "IAS_RMSFieldMap")
     rms_settings.Field.SetFieldNumber(1)
     rms_settings.Surface.SetSurfaceNumber(nsur)
     rms_settings.Wavelength.SetWavelengthNumber(1)
     rms_settings.UsePolarization = False
     rms_settings.RemoveVignettingFactors = False
-    
+
     rms_settings.X_FieldSampling = sampling
     rms_settings.Y_FieldSampling = sampling
 
     rms_settings.X_FieldSize = field_semi_width
     rms_settings.Y_FieldSize = field_semi_width
-    
+
     analysis.ApplyAndWaitForCompletion()
-    
+
     res = analysis.GetResults()
     r = res.GetDataGrid(0)
     res = r.Values
@@ -183,18 +172,16 @@ if __name__ == '__main__':
     minx = r.MinX
     miny = r.MinY
 
-
-    xx, yy = np.meshgrid(x,y)
+    xx, yy = np.meshgrid(x, y)
     xx = xx.flatten()
     yy = yy.flatten()
     zz = z.flatten()
-    
+
     toStore = {'xx_deg': xx, 'yy_deg': yy, 'z_strehl': zz}
     df = pd.DataFrame(toStore)
     fname_out = 'strehl_map.hdf'
     df.to_hdf(fname_out, key='df')
     print("File %s written" % fname_out)
-
 
     del zosapi
     zosapi = None

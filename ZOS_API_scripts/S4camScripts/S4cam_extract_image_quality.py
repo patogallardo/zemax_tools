@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt  # noqa
 from progressbar import progressbar
 from scipy.optimize import fsolve
 
-sampling = 100
+sampling = 50
 field_size = 0.45
 
 

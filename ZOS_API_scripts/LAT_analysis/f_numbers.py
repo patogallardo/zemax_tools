@@ -99,21 +99,21 @@ def make_fnumber_hists(df_fn, show=True):
     fn_yp_av, fn_yp_m, fn_yp_p = get_stats(df_fn.fn_yp.values[sel])
     plt.hist(df_fn.fn_yp.values[sel],
              histtype='step',
-             label='$f/\\#_{y+}: %1.2f_{-%1.2f}^{+%1.2f}$' % (fn_yp_av,
+             label='$f/\\#_{y+}: %1.2f_{-%1.2f}^{+%1.1f}$' % (fn_yp_av,
                                                 fn_yp_m, fn_yp_p),  # noqa
              bins=40)
 
     fn_ym_av, fn_ym_m, fn_ym_p = get_stats(df_fn.fn_ym.values[sel])
     plt.hist(df_fn.fn_ym.values[sel],
              histtype='step',
-             label='$f/\\#_{y-}: %1.2f_{-%1.2f}^{+%1.2f}$' % (fn_ym_av,
+             label='$f/\\#_{y-}: %1.2f_{-%1.2f}^{+%1.1f}$' % (fn_ym_av,
                                                 fn_ym_m, fn_ym_p),  # noqa
              bins=40)
 
     fn_xp_av, fn_xp_m, fn_xp_p = get_stats(df_fn.fn_xp.values[sel])
     plt.hist(df_fn.fn_xp.values[sel],
              histtype='step',
-             label='$f/\\#_{x+}: %1.2f_{-%1.2f}^{+%1.2f}$' % (fn_xp_av,
+             label='$f/\\#_{x+}: %1.2f_{-%1.2f}^{+%1.1f}$' % (fn_xp_av,
                                                 fn_xp_m, fn_xp_p),  # noqa
 
              bins=40)
@@ -121,7 +121,7 @@ def make_fnumber_hists(df_fn, show=True):
     fn_xm_av, fn_xm_m, fn_xm_p = get_stats(df_fn.fn_xm.values[sel])
     plt.hist(df_fn.fn_xm.values[sel],
              histtype='step',
-             label='$f/\\#_{x-}: %1.2f_{-%1.2f}^{+%1.2f}$' % (fn_xm_av,
+             label='$f/\\#_{x-}: %1.2f_{-%1.2f}^{+%1.1f}$' % (fn_xm_av,
                                                 fn_xm_m, fn_xm_p),  # noqa
              bins=40)
 
@@ -131,7 +131,7 @@ def make_fnumber_hists(df_fn, show=True):
 
     plt.hist(df_fn.fn_av.values[sel],
              histtype='step', lw=2,
-             label='$f/\\#_{av}: %1.2f_{-%1.2f}^{+%1.2f}$' % (av, av_m, av_p),
+             label='$f/\\#_{av}: %1.2f_{-%1.1f}^{+%1.1f}$' % (av, av_m, av_p),
              bins=40)
     plt.axvspan(av-av_m, av+av_p, color='C4', alpha=0.2)
 
@@ -199,6 +199,7 @@ def make_chief_angle_map(df_fn, show=False):
     plt.ylabel('y$_{focal plane}$ [mm]')
     plt.axis('equal')
     plt.colorbar()
+    plt.tight_layout()
 
     if not os.path.exists('./chief_ray'):
         os.mkdir('./chief_ray')
@@ -214,8 +215,8 @@ def make_chief_angle_hist(df_fn, show=False):
     plt.figure(figsize=[8, 4.5])
     chief_ray_angles = df_fn['chief_ray_angle_deg'].values
     sel = np.logical_not(np.isnan(chief_ray_angles))
-    pct_50, pct_50p, pct_50m = np.percentile(chief_ray_angles[sel],
-                                             [50, 50-32, 50+32])
+    pct_50, pct_50m, pct_50p = np.percentile(chief_ray_angles[sel],
+                                             [50, 50-34, 50+34])
     sigma_p, sigma_m = pct_50p-pct_50, pct_50 - pct_50m
     plt.hist(chief_ray_angles[sel], bins=50, histtype='step',
              color='black', label='angle=$%1.2f^{+%1.2f}_{-%1.2f}$' % (
@@ -228,6 +229,7 @@ def make_chief_angle_hist(df_fn, show=False):
     plt.xlabel('chief ray angle [deg]')
     plt.ylabel('N')
 
+    plt.tight_layout()
     if not os.path.exists('./chief_ray'):
         os.mkdir('./chief_ray')
     if show:

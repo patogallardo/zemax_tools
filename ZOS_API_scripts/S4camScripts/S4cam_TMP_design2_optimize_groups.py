@@ -11,7 +11,7 @@ CyclesAuto = True  # how many cycles True takes the most time
 RUN_OPTIMIZER = True
 RUN_OPTIMIZER2ndRound = False
 RUN_OPTIMIZER3rdRound = False
-UPDATE_FOV = True
+UPDATE_FOV = False
 hammer_time_s = 0
 
 

@@ -50,16 +50,20 @@ def get_lens_surfaces(TheSystem, material="silicon_cold"):
 
 
 def zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=True):
-    print('Running Local Optimization')
+    print('\nRunning Local Optimization')
     LocalOpt = TheSystem.Tools.OpenLocalOptimization()
+    print("\t Initial Merit Function: %1.10f" % LocalOpt.InitialMeritFunction)
     LocalOpt.Algorithm = ZOSAPI.Tools.Optimization.OptimizationAlgorithm.DampedLeastSquares  # noqa
     OptCycles = ZOSAPI.Tools.Optimization.OptimizationCycles
     if CyclesAuto:
         LocalOpt.Cycles = OptCycles.Automatic
     else:
-        LocalOpt.Cycles = OptCycles.Fixed_5_Cycles
+        LocalOpt.Cycles = OptCycles.Fixed_5_Cycles  # noqa
+#        LocalOpt.Cycles = OptCycles.Fixed_50_Cycles  # noqa
+#        LocalOpt.Cycles = OptCycles.Fixed_10_Cycles
     LocalOpt.NumberOfCores = 8
     LocalOpt.RunAndWaitForCompletion()
+    print("\t Final Merit Function: %1.10f" % LocalOpt.CurrentMeritFunction)
     LocalOpt.Close()
 
 
