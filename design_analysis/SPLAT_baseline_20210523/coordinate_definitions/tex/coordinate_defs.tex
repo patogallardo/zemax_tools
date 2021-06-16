@@ -1,0 +1,37 @@
+\documentclass[]{article}
+\usepackage{hyperref}
+
+\title{SPLAT Baseline Coordinate Definitions}
+\author{P. Gallardo}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+In this document I summarize the coordinate
+definitions for the three mirrors in the TMA design 
+filename  SPLAT\textunderscore Base \textunderscore Fwd.zmx, which can be found in \url{https://github.com/patogallardo/zemax_tools/tree/master/design_analysis/SPLAT_baseline_20210523/
+SPLAT_Base_Fwd.zmx}. For Step files of this design see folder coordinate\textunderscore definitions/step\textunderscore files. 
+
+Surfaces covered in this document are: Origin, Primary, Secondary, Tertiary and Image surface. These surfaces can be fully defined with a location vector and a rotation angle. Another way of defining these is by using a location vector and a rotation matrix, which is useful for Grasp studies.
+
+\section{Surface definitions}
+
+Table \ref{surfdeftable} shows the surface definitions for this design. Angle $\alpha$ refers to the rotation around the X coordinate in degrees.
+
+\begin{center}
+\begin{table}
+\begin{tabular}{l c c c c}
+Surface       &  X[mm]           &   Y[mm]           &   Z[mm]         &  $\alpha$[deg]   \\
+Origin        &  0               &   0               &   0             &  0               \\
+Prime (M1)    &  0               &   0               &   0             &  1.554018105E+02 \\
+Secondary (M2)&  0               &   5.615000000E+03 & 4.898000000E+03 &  1.711645903E+02 \\ 
+Tertiary (M3) &  0               &  8.367000000E+03  & 4.450000000E+02 & -1.708825424E+02 \\
+Image         &  0               &   9.575761967E+03 & 5.024441463E+03 &  1.689266466E+02 \\                 
+\end{tabular}
+\label{surfdeftable}
+\caption{Surface definition coordinates for the TMA.}
+\end{table}
+\end{center}
+
+\end{document}
