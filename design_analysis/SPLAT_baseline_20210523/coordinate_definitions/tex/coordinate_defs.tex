@@ -1,4 +1,5 @@
 \documentclass[]{article}
+\usepackage{booktabs}
 \usepackage{hyperref}
 
 \title{SPLAT Baseline Coordinate Definitions}
@@ -33,5 +34,38 @@ Image         &  0               &   9.575761967E+03 & 5.024441463E+03 &  1.6892
 \caption{Surface definition coordinates for the TMA.}
 \end{table}
 \end{center}
+
+\begin{table}
+\begin{center}
+	\input{coordinate_sys_pos_rot_angles.tex}
+\end{center}
+\end{table}
+
+\begin{table}
+\begin{center}
+	\input{prime_rotmat.tex}
+\end{center}
+\end{table}
+
+
+\begin{table}
+\begin{center}
+	\input{second_rotmat.tex}
+\end{center}
+\end{table}
+
+
+\begin{table}
+\begin{center}
+	\input{tert_rotmat.tex}
+\end{center}
+\end{table}
+
+
+\begin{table}
+\begin{center}
+	\input{Image_rotmat.tex}
+\end{center}
+\end{table}
 
 \end{document}
