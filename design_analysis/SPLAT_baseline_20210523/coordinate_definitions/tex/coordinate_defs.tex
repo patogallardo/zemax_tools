@@ -1,6 +1,8 @@
 \documentclass[]{article}
 \usepackage{booktabs}
 \usepackage{hyperref}
+\usepackage{pdfpages}
+\usepackage{caption}
 
 \title{SPLAT Baseline Coordinate Definitions}
 \author{P. Gallardo}
@@ -16,56 +18,65 @@ SPLAT_Base_Fwd.zmx}. For Step files of this design see folder coordinate\textund
 
 Surfaces covered in this document are: Origin, Primary, Secondary, Tertiary and Image surface. These surfaces can be fully defined with a location vector and a rotation angle. Another way of defining these is by using a location vector and a rotation matrix, which is useful for Grasp studies.
 
-\section{Surface definitions}
+\section{Surface definitions and rotation angles}
 
 Table \ref{surfdeftable} shows the surface definitions for this design. Angle $\alpha$ refers to the rotation around the X coordinate in degrees.
-
-\begin{center}
-\begin{table}
-\begin{tabular}{l c c c c}
-Surface       &  X[mm]           &   Y[mm]           &   Z[mm]         &  $\alpha$[deg]   \\
-Origin        &  0               &   0               &   0             &  0               \\
-Prime (M1)    &  0               &   0               &   0             &  1.554018105E+02 \\
-Secondary (M2)&  0               &   5.615000000E+03 & 4.898000000E+03 &  1.711645903E+02 \\ 
-Tertiary (M3) &  0               &  8.367000000E+03  & 4.450000000E+02 & -1.708825424E+02 \\
-Image         &  0               &   9.575761967E+03 & 5.024441463E+03 &  1.689266466E+02 \\                 
-\end{tabular}
-\label{surfdeftable}
-\caption{Surface definition coordinates for the TMA.}
-\end{table}
-\end{center}
 
 \begin{table}
 \begin{center}
 	\input{coordinate_sys_pos_rot_angles.tex}
 \end{center}
+
+\caption{Surface local coordinate system locations and rotations about the X axis for the TMA.}
+\label{surfdeftable}
 \end{table}
 
-\begin{table}
-\begin{center}
+
+\section{Rotation matrices}
+The rotation angle can be expressed more generally by a rotation matrix and an offset,
+ which gives the freedom to represent any 3D rotation in space.
+ 
+In this formalism a vector in the local coordinate system $\vec x_l$ can be expressed as a global vector $\vec x_g$ via an offset $\vec x_O$ and a rotation matrix $R$ as \begin{equation}
+\vec x_g = \vec x_O + R\vec x_l.
+\end{equation} 
+
+Note that the columns of $R$ contain the orientation vectors of the local x,y,z directions. 
+
+Tables \ref{rot:prime}, \ref{rot:second}, \ref{rot:tert} and \ref{rot:img} show the rotation matrices for the origins of the mirror
+coordinate systems.
+
+
+\begin{minipage}{0.45\linewidth}
 	\input{prime_rotmat.tex}
-\end{center}
-\end{table}
-
-
-\begin{table}
+	\label{rot:prime}
+	\captionof{table}{Rotation matrix for the M1 local coordinate system.}
+\end{minipage}
+\begin{minipage}{0.45\linewidth}
 \begin{center}
 	\input{second_rotmat.tex}
+	\captionof{table}{Rotation matrix for the M2 local coordinate system.}
+	\label{rot:second}
 \end{center}
-\end{table}
+\end{minipage}
 
+\vspace{5em}
 
-\begin{table}
+\begin{minipage}{0.45\linewidth}
 \begin{center}
 	\input{tert_rotmat.tex}
+	\captionof{table}{Rotation matrix for the M3 local coordinate system.}
+	\label{rot:tert}
 \end{center}
-\end{table}
-
-
-\begin{table}
+\end{minipage}
+\begin{minipage}{0.45\linewidth}
 \begin{center}
 	\input{Image_rotmat.tex}
+	\captionof{table}{Rotation matrix for the image surface local coordinate system.}
+	\label{rot:img}
 \end{center}
-\end{table}
+\end{minipage}
+
+\newpage
+\includepdf[trim=0cm 0.38cm 0cm 0cm]{../step_files/sldw/Orientations_drawing.pdf}
 
 \end{document}
