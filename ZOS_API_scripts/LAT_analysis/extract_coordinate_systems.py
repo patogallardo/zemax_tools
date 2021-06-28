@@ -34,9 +34,11 @@ LDE = TheSystem.LDE
 
 surfaces_to_extract = []
 for j in range(1, LDE.NumberOfSurfaces):
-    if LDE.GetSurfaceAt(j).Material.lower() == 'mirror':
+    s = LDE.GetSurfaceAt(j)
+    c = s.Comment
+    if (s.Material.lower() == 'mirror' or
+            c == "Front of cryo plate" or c == "TMP_image"):
         surfaces_to_extract.append(j)
-surfaces_to_extract.append(LDE.NumberOfSurfaces-1)
 
 surface_names = []
 for surface_num in surfaces_to_extract:
@@ -61,12 +63,12 @@ tex_str = tex_str.replace("{}",
                           "\\bf{%s}" % fname.split("\\")[-1].replace(
                               "_", "\\textunderscore "))
 tex_str = tex_str.replace("alpha", "$\\alpha$")
-with open("coordinate_definitions/tex/coordinate_sys_pos_rot_angles.tex", 'w') as f:  # noqa
+with open("coordinate_sys_pos_rot_angles.tex", 'w') as f:  # noqa
     f.write(tex_str)
 
 
 for j, RotMat in enumerate(RotMats):
     df = pd.DataFrame(RotMat)
-    fname_out = "coordinate_definitions/tex/" + surface_names[j] + "_rotmat.tex" # noqa
+    fname_out = surface_names[j] + "_rotmat.tex" # noqa
     df.to_latex(fname_out,
                 float_format="%.5f", index=False, header=False)
