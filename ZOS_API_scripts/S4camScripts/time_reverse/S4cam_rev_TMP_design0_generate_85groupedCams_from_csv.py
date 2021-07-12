@@ -111,7 +111,7 @@ rows_to_set = [row_cam_centerx, row_cam_centery]
 
 for cam_centerx, cam_centery in zip(cam_centerxs, cam_centerys):
     #  copy current configuration
-    TheMCE.AddConfiguration(True)
+    TheMCE.AddConfiguration(True)  # with or without pickups
     values = [-cam_centerx, -cam_centery]
     make_rows_fixed(rows_to_set)
     set_values(rows_to_set, values, TheMCE)
