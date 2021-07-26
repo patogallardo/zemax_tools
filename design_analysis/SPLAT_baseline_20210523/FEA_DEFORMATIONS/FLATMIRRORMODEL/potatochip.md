@@ -22,11 +22,12 @@ some fitting.
 
 ![](M2_cup.png)
 
-In order to push this calculation al the way through Strehls we will need:
+In order to push this calculation all the way through Strehls we will need:
 
-1. A list of deformations in the coordinate system of each Mirror
+1. A list of (z-axis) deformations in the coordinate system of each Mirror
 2. A fit of these deformations in x/y polynomials
 3. A Strehl calculation of combinations of these.
 
-If we want to evaluate for instance two extreme cases per mirror there are 8
- combinations of cases to evaluate.
+If we want to evaluate for instance three extreme cases per mirror (one plus
+  case, one minus case and a zero case) there are 27
+  combinations of cases to evaluate.
