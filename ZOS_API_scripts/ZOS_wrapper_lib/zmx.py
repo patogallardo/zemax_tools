@@ -83,3 +83,38 @@ def set_rows_zero(mcerow_zeros, conf, mce, ZOSAPI):
         mcerow = mce.GetOperandAt(mce_row)
         mcecell = mcerow.GetOperandCell(conf)
         mcecell.DoubleValue = 0.0
+
+
+def populate_MFE_with_blanks(MFE, nblanks=100):
+    MFE.RemoveOperandsAt(1, MFE.NumberOfOperands)
+    for j in range(nblanks):
+        MFE.AddOperand()
+
+
+def set_MFE_row(operandType, row, MFE, ZOSAPI, param1val=None, param2val=None,
+                param3val=None, param4val=None, param5val=None,
+                param6val=None,
+                weight=0.0,
+                target=None):
+    param1 = ZOSAPI.Editors.MFE.MeritColumn.Param1
+    param2 = ZOSAPI.Editors.MFE.MeritColumn.Param2
+    param3 = ZOSAPI.Editors.MFE.MeritColumn.Param3
+    param4 = ZOSAPI.Editors.MFE.MeritColumn.Param4
+    param5 = ZOSAPI.Editors.MFE.MeritColumn.Param5
+    param6 = ZOSAPI.Editors.MFE.MeritColumn.Param6
+
+    row = MFE.GetOperandAt(row)
+    row.ChangeType(operandType)
+    params = [param1, param2, param3, param4, param5, param6]
+    paramVals = [param1val, param2val, param3val,
+                 param4val, param5val, param6val]
+    for j, param in enumerate(params):
+        if paramVals[j] is not None:
+            cell = row.GetOperandCell(param)
+            if type(paramVals[j]) == int:
+                cell.IntegerValue = paramVals[j]
+            if type(paramVals[j]) == float:
+                cell.DoubleValue = paramVals[j]
+    row.Weight = weight
+    if target is not None:
+        row.Target = target

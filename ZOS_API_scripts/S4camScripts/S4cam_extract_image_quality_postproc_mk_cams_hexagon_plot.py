@@ -41,6 +41,9 @@ def mk_hexagons(fname, color_col, rotation=0, show=False):
                  '%3i %%' % color_vals[j],
                  ha='center', va='center',
                  color='gray')
+        plt.text(df.x_mm.values[j]+50, df.y_mm.values[j]+50,
+                 '%i' % (j+1), ha='center', va='center',
+                 color='gray')
     ax.set_aspect('equal')
     plt.colorbar(collection,
                  label='%% of array above Strehl %1.1f' % (pct_strehl))

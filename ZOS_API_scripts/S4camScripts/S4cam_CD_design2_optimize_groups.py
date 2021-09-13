@@ -11,8 +11,8 @@ CyclesAuto = True  # how many cycles True takes the most time
 RUN_OPTIMIZER = True
 STANDARD_SURF_ON_FIRST_IT = True
 
-SURFACES_TO_START_AS_STANDARD = [45, 52, 59]
-SURFACES_TO_END_AS_BICONIC = [52]
+SURFACES_TO_START_AS_STANDARD = [44, 48, 52]
+SURFACES_TO_END_AS_BICONIC = [48]
 BICONIC_CFG_NUMBERS = [[27, 28, 29]]  # [[16, 17, 18], [27, 28, 29], [38, 39, 40]]  # noqa
 
 RUN_OPTIMIZER2ndRound = True
@@ -101,14 +101,20 @@ def copy_std_lens_params_to_biconic(lens_surface_numbers,
         op = MCE.GetOperandAt(biconic_cfg_numbers[j][0])
         cell = op.GetCellAt(current_conf)
         cell.DoubleValue = Angle
+        print("Setting angle to %1.2f on row %i" % (Angle,
+                                                    biconic_cfg_numbers[j][0]))
 
         op = MCE.GetOperandAt(biconic_cfg_numbers[j][1])
         cell = op.GetCellAt(current_conf)
         cell.DoubleValue = R
+        print("Setting R to %1.2f on row %i" % (R,
+                                                biconic_cfg_numbers[j][1]))
 
         op = MCE.GetOperandAt(biconic_cfg_numbers[j][2])
         cell = op.GetCellAt(current_conf)
         cell.DoubleValue = C
+        print("Setting C to %1.2f on row %i" % (C,
+                                                biconic_cfg_numbers[j][2]))
 
 
 aKey = winreg.OpenKey(winreg.ConnectRegistry(None, winreg.HKEY_CURRENT_USER),
@@ -238,8 +244,8 @@ for j, group_leader in progressbar(enumerate(group_leaders)):
         print('Second round of optimization')
         set_variables_or_const(mcerow_variables_second_it, conf_to_vary,
                                mce, ZOSAPI, vars=True)
-        if not STANDARD_SURF_ON_FIRST_IT:
-            set_rows_constant(df_initial_values_it2, conf_to_vary, mce, ZOSAPI)
+#        if not STANDARD_SURF_ON_FIRST_IT:
+        set_rows_constant(df_initial_values_it2, conf_to_vary, mce, ZOSAPI)
         zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=CyclesAuto)
         for j in range(1):
             zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=CyclesAuto)

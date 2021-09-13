@@ -5,7 +5,7 @@ import hexlattice
 import os
 
 Ngroups = 5
-scale = 219/np.sqrt(3)
+scale = 219/np.sqrt(3)  # center to center distance/sqrt(3)
 df = hexlattice.gen85CamPosition(scale=scale)
 
 fig, ax = plt.subplots(figsize=[8, 8])
