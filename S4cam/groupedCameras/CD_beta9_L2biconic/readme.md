@@ -22,3 +22,7 @@ We have explored somewhat the image quality for two groups of cameras for the TM
 ![](../TMP_baseline_rev_multicam_test1_2groups_leaders_8_39/strehls_1mm/area_above_0p8.png)
 *Next Steps:*
 1. Set Lyot stop sizes and explore the need for an elliptical Lyot.
+
+## Next steps for both designs
+1. Add front plate curvature
+2. Check details for filter stack and define clearances.
