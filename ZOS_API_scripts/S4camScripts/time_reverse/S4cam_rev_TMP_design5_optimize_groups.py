@@ -9,10 +9,10 @@ import numpy as np
 
 CyclesAuto = True  # how many cycles True takes the most time
 RUN_OPTIMIZER = True
-RUN_OPTIMIZER2ndRound = False
-RUN_OPTIMIZER3rdRound = False
+RUN_OPTIMIZER2ndRound = True
+RUN_OPTIMIZER3rdRound = True
 UPDATE_FOV = False
-hammer_time_s = 0
+hammer_time_s = 3600/2
 
 
 def zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=True):
@@ -27,7 +27,7 @@ def zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=True):
         LocalOpt.Cycles = OptCycles.Fixed_5_Cycles  # noqa
 #        LocalOpt.Cycles = OptCycles.Fixed_50_Cycles  # noqa
 #        LocalOpt.Cycles = OptCycles.Fixed_10_Cycles
-    LocalOpt.NumberOfCores = 8
+    LocalOpt.NumberOfCores = 7
     LocalOpt.RunAndWaitForCompletion()
     print("\t Final Merit Function: %1.10f" % LocalOpt.CurrentMeritFunction)
     LocalOpt.Close()
@@ -176,9 +176,6 @@ for j, group_leader in progressbar(enumerate(group_leaders)):
     if RUN_OPTIMIZER:
         print("First round of optimization")
         zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=CyclesAuto)
-        if hammer_time_s > 0:
-            zemax_run_hammer(TheSystem, time_s=hammer_time_s)
-            zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=CyclesAuto)
     TheSystem.Tools.RemoveAllVariables()
 
     if RUN_OPTIMIZER and RUN_OPTIMIZER2ndRound:
@@ -195,6 +192,9 @@ for j, group_leader in progressbar(enumerate(group_leaders)):
         set_variables_or_const(mcerow_variables_third_it, conf_to_vary,
                                mce, ZOSAPI, vars=True)
         for j in range(3):
+            zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=CyclesAuto)
+        if hammer_time_s > 0:
+            zemax_run_hammer(TheSystem, time_s=hammer_time_s)
             zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=CyclesAuto)
 
     TheSystem.Tools.RemoveAllVariables()
