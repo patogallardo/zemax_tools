@@ -37,3 +37,7 @@ Here notice that the beam walks up in the primary.
 ![](Footprints/PRI/footprint_cam_78.JPG)
 
 Note that for a given ring of cameras I am only showing the extreme cases, so not all of them are pathological, however we need to come up with a way of controlling this.
+
+
+Cheat sheet for camera numbers:
+![](groups_info/camera_groups.png)
