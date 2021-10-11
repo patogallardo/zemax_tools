@@ -19,13 +19,13 @@ Here, note that the perturbations happen in the second decimal place for the coe
 The perturbations for individual mirrors give small changes in the spot diagrams, which can be corrected almost entirely by refocusing. For instance,
 
 The nominal case has these spot diagrams
-![](spot_diagrams/SpotDiagram_conf1_unperturbed.bmp)
+![](spot_diagrams/SpotDiagram_conf1_unperturbed.png)
 
 While the biggest deviation occurs when all mirror deformations are active
-![](spot_diagrams/SpotDiagram_conf8_allmirrors_deformed.bmp)
+![](spot_diagrams/SpotDiagram_conf8_allmirrors_deformed.png)
 
 If we refocus 8mm we get
-![](spot_diagrams/SpotDiagram_conf9_allmirrors_deformed_refocused.bmp)
+![](spot_diagrams/SpotDiagram_conf9_allmirrors_deformed_refocused.png)
 
 Which is in the same level as the original spot diagram.
 
