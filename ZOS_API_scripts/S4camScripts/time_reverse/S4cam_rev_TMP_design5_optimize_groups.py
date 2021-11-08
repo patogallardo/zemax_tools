@@ -191,7 +191,7 @@ for j, group_leader in progressbar(enumerate(group_leaders)):
         print("Third round of optimization")
         set_variables_or_const(mcerow_variables_third_it, conf_to_vary,
                                mce, ZOSAPI, vars=True)
-        for j in range(3):
+        for j in range(1):
             zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=CyclesAuto)
         if hammer_time_s > 0:
             zemax_run_hammer(TheSystem, time_s=hammer_time_s)

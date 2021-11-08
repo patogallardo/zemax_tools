@@ -1,0 +1,10 @@
+ipython .\fits.py 2
+ipython .\fits.py 3
+ipython .\fits.py 4
+ipython .\fits.py 5
+ipython .\fits.py 6
+ipython .\fits.py 7
+ipython .\fits.py 8
+ipython .\fits.py 9
+ipython .\fits.py 10
+ipython .\fits.py 11
