@@ -40,7 +40,7 @@ def write_params(starting_operand_row,
 starting_operand_row = 9
 how_many_operand_rows = 17
 copy_from_conf = 1
-target_conf = 2
+target_conf = 2  # gravitational
 
 write_params(starting_operand_row, how_many_operand_rows,
              copy_from_conf, target_conf, -1*A, MCE=MCE,
@@ -57,7 +57,24 @@ write_params(starting_operand_row, how_many_operand_rows,
              replace=False)
 
 
-target_conf = 5
+target_conf = 4  # combined
+starting_operand_row = 9
+write_params(starting_operand_row, how_many_operand_rows,
+             copy_from_conf, target_conf, -1*A, MCE=MCE,
+             replace=False)
+
+starting_operand_row = 27  # sec
+write_params(starting_operand_row, how_many_operand_rows,
+             copy_from_conf, target_conf, A_sec, MCE=MCE,
+             replace=False)
+
+starting_operand_row = 45  # tert
+write_params(starting_operand_row, how_many_operand_rows,
+             copy_from_conf, target_conf, -1*A, MCE=MCE,
+             replace=False)
+
+
+target_conf = 6  # test
 starting_operand_row = 9
 write_params(starting_operand_row, how_many_operand_rows,
              copy_from_conf, target_conf, -1*A, MCE=MCE,
