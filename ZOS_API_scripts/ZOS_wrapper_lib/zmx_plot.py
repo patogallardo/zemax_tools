@@ -42,6 +42,10 @@ def mk_hex(x, y, z,
         plt.text(x[j], y[j],
                  st,
                  ha='center', va='center', color='gray')
+        plt.text(x[j]+50, y[j]+50,
+                 "%i" % (j+1),
+                 ha='center', va='center',
+                 color='gray')
 
     ax.set_aspect('equal')
     plt.colorbar(collection,

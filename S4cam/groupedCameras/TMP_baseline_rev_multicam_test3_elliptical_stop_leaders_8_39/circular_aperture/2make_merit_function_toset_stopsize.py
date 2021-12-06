@@ -2,14 +2,17 @@ import zmx_api
 import zmx  # noqa
 import numpy as np
 from progressbar import progressbar
+import os
 
 TheSystem, ZOSAPI, ZOSAPI_NetHelper = zmx_api.connect_zmx_interactive()
 
 MFE = TheSystem.MFE
 MCE = TheSystem.MCE
 
+MF_fnameout = os.path.abspath("./adjust_circular_stop_MF_envelope.MF")
+
 x_radius, y_radius = 2500., 2747.
-TARGET_KEEPOUT_RADIUS_MM = 100
+TARGET_KEEPOUT_RADIUS_MM = 150
 SURF, Hx, Hy, Px, Py = [2, 4, 5, 6, 7]
 
 
@@ -71,6 +74,13 @@ def compute_keepout(rows_to_diff):
     op.GetOperandCell(3).IntegerValue = end_row
     op.Weight = 1.0
 
+    op = MFE.AddOperand()
+    op.ChangeType(ZOSAPI.Editors.MFE.MeritOperandType.EQUA)
+    op.Target = 0.0
+    op.GetOperandCell(2).IntegerValue = start_row
+    op.GetOperandCell(3).IntegerValue = end_row
+    op.Weight = 0  # 1e-5
+
 
 t_p = np.deg2rad(np.arange(0, 360, 30))
 t_h = np.deg2rad(np.arange(0, 360, 60) + 30)
@@ -93,3 +103,4 @@ for i in progressbar(range(len(hxs))):
         rows_to_diff.append(todiff)
 
 compute_keepout(rows_to_diff)
+MFE.SaveMeritFunction(MF_fnameout)
