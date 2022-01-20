@@ -5,6 +5,7 @@ from scipy.optimize import minimize
 from numpy.polynomial.polynomial import polyval2d
 import sys
 import seaborn as sns
+import os
 
 show = False
 
@@ -141,7 +142,9 @@ if show:
     plt.show()
 else:
     plt.savefig('fit_model_residuals_degree_%i.pdf' % degree)
-    plt.savefig('fit_model_residuals_degree_%i.png' % degree)
+    paper_folder = r"C:\Users\pgall\OneDrive - The University of Chicago\Github\SPLAT_paper\figures"  # noqa
+    fnameout = os.path.join(paper_folder, "fea_deformation_fit.pdf")
+    plt.savefig(fnameout)
     plt.close()
 
 np.savez('./model_parameters_deg_%i.npz' % degree,

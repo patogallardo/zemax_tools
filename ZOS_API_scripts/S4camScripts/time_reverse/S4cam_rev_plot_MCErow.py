@@ -23,6 +23,7 @@ for conf in range(1, number_of_configurations+1):
     MCE_row_values[conf-1] = val
 
 df = pd.read_csv('./groups_info/85cam_groups.csv')
+df.sort_values(by=['config'], inplace=True)
 x = df.x.values
 y = df.y.values
 

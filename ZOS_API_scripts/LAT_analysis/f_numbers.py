@@ -94,21 +94,21 @@ def get_stats(fn):
 
 def make_fnumber_hists(df_fn, show=True):
     sel = np.logical_not(np.isnan(df_fn.fn_av.values))
-    plt.figure(figsize=[8, 4.5])
+    plt.figure(figsize=[8, 7])
 
     fn_yp_av, fn_yp_m, fn_yp_p = get_stats(df_fn.fn_yp.values[sel])
     plt.hist(df_fn.fn_yp.values[sel],
              histtype='step',
              label='$f/\\#_{y+}: %1.2f_{-%1.2f}^{+%1.1f}$' % (fn_yp_av,
                                                 fn_yp_m, fn_yp_p),  # noqa
-             bins=40)
+             bins=40, density=True)
 
     fn_ym_av, fn_ym_m, fn_ym_p = get_stats(df_fn.fn_ym.values[sel])
     plt.hist(df_fn.fn_ym.values[sel],
              histtype='step',
              label='$f/\\#_{y-}: %1.2f_{-%1.2f}^{+%1.1f}$' % (fn_ym_av,
                                                 fn_ym_m, fn_ym_p),  # noqa
-             bins=40)
+             bins=40, density=True)
 
     fn_xp_av, fn_xp_m, fn_xp_p = get_stats(df_fn.fn_xp.values[sel])
     plt.hist(df_fn.fn_xp.values[sel],
@@ -116,14 +116,14 @@ def make_fnumber_hists(df_fn, show=True):
              label='$f/\\#_{x+}: %1.2f_{-%1.2f}^{+%1.1f}$' % (fn_xp_av,
                                                 fn_xp_m, fn_xp_p),  # noqa
 
-             bins=40)
+             bins=40, density=True)
 
     fn_xm_av, fn_xm_m, fn_xm_p = get_stats(df_fn.fn_xm.values[sel])
     plt.hist(df_fn.fn_xm.values[sel],
              histtype='step',
              label='$f/\\#_{x-}: %1.2f_{-%1.2f}^{+%1.1f}$' % (fn_xm_av,
                                                 fn_xm_m, fn_xm_p),  # noqa
-             bins=40)
+             bins=40, density=True)
 
     av = np.percentile(df_fn.fn_av.values[sel], 50)
     av_m = av-np.percentile(df_fn.fn_av.values[sel], 50-34)
@@ -132,18 +132,20 @@ def make_fnumber_hists(df_fn, show=True):
     plt.hist(df_fn.fn_av.values[sel],
              histtype='step', lw=2,
              label='$f/\\#_{av}: %1.2f_{-%1.1f}^{+%1.1f}$' % (av, av_m, av_p),
-             bins=40)
+             bins=40, density=True)
     plt.axvspan(av-av_m, av+av_p, color='C4', alpha=0.2)
 
     plt.legend(loc='upper right')
     plt.title('Chief ray relative $f/\\#$')
     plt.xlabel('$f/\\#$ [-]')
-    plt.ylabel('count [-]')
+    plt.ylabel('pdf [-]')
     plt.tight_layout()
     if show:
         plt.show()
     else:
         plt.savefig(os.path.join(out_folder, 'fnumber_hists.png'), dpi=150)
+        plt.savefig(os.path.join(out_folder, 'fnumber_hists.pdf'))
+        plt.savefig(r"C:\Users\pgall\OneDrive - The University of Chicago\Github\SPLAT_paper\figures\fnumber_hists.pdf")  # noqa
         plt.close()
 
 
@@ -212,7 +214,7 @@ def make_chief_angle_map(df_fn, show=False):
 
 
 def make_chief_angle_hist(df_fn, show=False):
-    plt.figure(figsize=[8, 4.5])
+    plt.figure(figsize=[8, 7])
     chief_ray_angles = df_fn['chief_ray_angle_deg'].values
     sel = np.logical_not(np.isnan(chief_ray_angles))
     pct_50, pct_50m, pct_50p = np.percentile(chief_ray_angles[sel],
@@ -235,6 +237,7 @@ def make_chief_angle_hist(df_fn, show=False):
     if show:
         plt.show()
     else:
+        plt.savefig(os.path.join('./chief_ray', 'chief_ray_angles_hist.pdf'))
         plt.savefig(os.path.join('./chief_ray', 'chief_ray_angles_hist.png'),
                     dpi=150)
     plt.close()

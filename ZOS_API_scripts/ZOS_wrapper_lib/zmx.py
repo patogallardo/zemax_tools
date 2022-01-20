@@ -23,6 +23,17 @@ def get_mirror_surfaces(TheSystem, material="MIRROR"):
     return mirror_names, mirror_surfaces
 
 
+def zemax_run_hammer(TheSystem, time_s=120):
+    print('\nRunning Hammer Optimization')
+    HammerOpt = TheSystem.Tools.OpenHammerOptimization()
+    print('\tInitial Merit Function: % 1.10f' % HammerOpt.InitialMeritFunction)
+    HammerOpt.RunAndWaitWithTimeout(time_s)
+    HammerOpt.Cancel()
+    HammerOpt.WaitForCompletion()
+    print("Final Merit Function: %1.10f" % HammerOpt.CurrentMeritFunction)
+    HammerOpt.Close()
+
+
 def get_lens_surfaces(TheSystem, material="silicon_cold"):
     '''Gets TheSystem and returns a list of the surface numbers
     containing a lens with curvature in it.'''
@@ -49,11 +60,16 @@ def get_lens_surfaces(TheSystem, material="silicon_cold"):
     return lens_surfaces, lens_curved_surfaces, lens_names
 
 
-def zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=True):
+def zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=True,
+                   algorithm="DLS"):
     print('\nRunning Local Optimization')
     LocalOpt = TheSystem.Tools.OpenLocalOptimization()
     print("\t Initial Merit Function: %1.10f" % LocalOpt.InitialMeritFunction)
-    LocalOpt.Algorithm = ZOSAPI.Tools.Optimization.OptimizationAlgorithm.DampedLeastSquares  # noqa
+    if algorithm == "DLS":
+        LocalOpt.Algorithm = ZOSAPI.Tools.Optimization.OptimizationAlgorithm.DampedLeastSquares  # noqa
+    elif algorithm == "OD":
+        LocalOpt.Algorithm = ZOSAPI.Tools.Optimization.OptimizationAlgorithm.OrthogonalDescent  # noqa
+    print("Using method: %s" % algorithm)
     OptCycles = ZOSAPI.Tools.Optimization.OptimizationCycles
     if CyclesAuto:
         LocalOpt.Cycles = OptCycles.Automatic

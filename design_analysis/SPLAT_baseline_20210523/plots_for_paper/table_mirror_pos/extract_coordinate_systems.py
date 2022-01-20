@@ -3,6 +3,7 @@
 from zmx_api import connect_zmx_interactive
 import numpy as np
 import pandas as pd
+import shutil
 
 
 def get_rot_mat_origin(LDE, surface):
@@ -61,3 +62,8 @@ for j, RotMat in enumerate(RotMats):
     fname_out = surface_names[j] + "_rotmat.tex" # noqa
     df.to_latex(fname_out,
                 float_format="%.5f", index=False, header=False)
+
+
+fname_tocopy = './coordinate_sys_pos_rot_angles.tex'
+dir_out = r'C:\Users\pgall\OneDrive - The University of Chicago\Github\SPLAT_paper\tables'  # noqa
+shutil.copy(fname_tocopy, dir_out)

@@ -63,6 +63,9 @@ tex_str = tex_str.replace("{}",
                           "\\bf{%s}" % fname.split("\\")[-1].replace(
                               "_", "\\textunderscore "))
 tex_str = tex_str.replace("alpha", "$\\alpha$")
+tex_str = tex_str.replace("prime", "M1")
+tex_str = tex_str.replace("second", "M2")
+tex_str = tex_str.replace("tert", "M3")
 with open("coordinate_sys_pos_rot_angles.tex", 'w') as f:  # noqa
     f.write(tex_str)
 
