@@ -74,7 +74,7 @@ def eval_distance_to_rim(max_rs, MFE, surfnum):
     op_equa.ChangeType(ZOSAPI.Editors.MFE.MeritOperandType.EQUA)
     op_equa.GetOperandCell(2).IntegerValue = first_diff_rownum
     op_equa.GetOperandCell(3).IntegerValue = last_diff_rownum
-    op_equa.Weight = 8.0e-4
+    op_equa.Weight = 1.0e-2
 
     op_min = MFE.AddOperand()
     op_min.ChangeType(ZOSAPI.Editors.MFE.MeritOperandType.MINN)
@@ -87,7 +87,7 @@ def eval_distance_to_rim(max_rs, MFE, surfnum):
     op_max.ChangeType(ZOSAPI.Editors.MFE.MeritOperandType.MAXX)
     op_max.GetOperandCell(2).IntegerValue = first_diff_rownum
     op_max.GetOperandCell(3).IntegerValue = last_diff_rownum
-    op_max.Weight = 1.0e-2
+    op_max.Weight = 1.0e-1
     op_max.Target = TARGET_KEEPOUT_RADIUS_MM + 40
 
     op_opgt = MFE.AddOperand()
