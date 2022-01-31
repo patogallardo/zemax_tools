@@ -35,7 +35,7 @@ table = table.replace(' 0 ', '')
 
 plt.rcParams.update({
     "text.usetex": True})
-plt.figure(figsize=[8, 4.5])
+# plt.figure(figsize=[8, 4.5])
 plt.hist(z, histtype='step', color='black', bins=15)
 plt.xlabel('$f/\\#$')
 plt.ylabel('camera count')

@@ -6,6 +6,7 @@ import os
 import glob
 
 #  To do: export wavelngth from zemax
+
 fnames = glob.glob('*/strehls.npz')
 assert len(fnames) > 1
 
@@ -41,8 +42,7 @@ def make_circle(radius):
     t = np.linspace(0, 2*np.pi, 300)
     x_circ = radius * np.cos(t)
     y_circ = radius * np.sin(t)
-    a_circ = np.pi * radius**2
-    return x_circ, y_circ, a_circ
+    return x_circ, y_circ
 
 
 def make_summary(fraction_of_array_above_threshold, strehls_above):
@@ -91,7 +91,8 @@ def make_plots_and_pack_results(fname):
         plt.colorbar(pc, label='Strehl ratio [-]')
 
         #  make array circle
-        x_circ, y_circ, a_circ = make_circle(array_radius)
+        x_circ, y_circ = make_circle(array_radius)
+        a_circ = z_in.count() * dx**2
         plt.plot(x_circ, y_circ,
                  label='%i mm $\\phi$' % array_radius,
                  color='C1')

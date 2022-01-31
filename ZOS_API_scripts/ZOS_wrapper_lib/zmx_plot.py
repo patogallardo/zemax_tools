@@ -26,7 +26,7 @@ def mk_hex(x, y, z,
     else:
         collection.set_clim(plot_range)
 
-    fig, ax = plt.subplots(figsize=[12, 9])
+    fig, ax = plt.subplots()
     ax.add_collection(collection)
 
     min_max_space = 1.15
@@ -41,7 +41,8 @@ def mk_hex(x, y, z,
             st = "$%3.2f^{%3.2f}_{%3.2f}$" % (z[j], upper, lower)
         plt.text(x[j], y[j],
                  st,
-                 ha='center', va='center', color='gray')
+                 ha='center', va='center', color='gray',
+                 size=7)
         plt.text(x[j]+50, y[j]+50,
                  "%i" % (j+1),
                  ha='center', va='center',

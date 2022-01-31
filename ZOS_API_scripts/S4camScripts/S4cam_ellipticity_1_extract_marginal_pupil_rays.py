@@ -127,6 +127,7 @@ if __name__ == '__main__':
         os.makedirs(zosapi.TheApplication.SamplesDir + "\\API\\Python")
 
     TheSystem = zosapi.TheSystem
+    Fields = TheSystem.SystemData.Fields
     TheApplication = zosapi.TheApplication
 
     # Set up primary optical system
@@ -157,6 +158,8 @@ if __name__ == '__main__':
 
     for configuration in progressbar.progressbar(range(1, nconf+1, 1)):
         MCE.SetCurrentConfiguration(configuration)
+        Fields.ClearVignetting()
+        Fields.SetVignetting()
         raytrace = TheSystem.Tools.OpenBatchRayTrace()
 # Determine maximum field
         num_fields = TheSystem.SystemData.Fields.NumberOfFields

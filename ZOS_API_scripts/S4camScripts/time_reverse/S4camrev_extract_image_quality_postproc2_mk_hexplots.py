@@ -29,7 +29,7 @@ def mk_hexagons(fname, color_col, rotation=0, show=False):
     collection = PatchCollection(patches, cmap=cmap)
     collection.set_array(color_vals)
     collection.set_clim([0, 100])
-    fig, ax = plt.subplots(figsize=[12, 9])
+    fig, ax = plt.subplots() # figsize=[12, 9])  # noqa
     ax.add_collection(collection)
 
     min_max_space = 1.15
@@ -38,9 +38,10 @@ def mk_hexagons(fname, color_col, rotation=0, show=False):
 
     for j in range(len(df)):
         plt.text(df.x_mm.values[j], df.y_mm.values[j],
-                 '%3i %%' % color_vals[j],
+                 '%3i%%' % color_vals[j],
                  ha='center', va='center',
-                 color='gray')
+                 color='gray',
+                 size=7)
     ax.set_aspect('equal')
     plt.colorbar(collection,
                  label='%% of array above Strehl %1.1f' % (pct_strehl))

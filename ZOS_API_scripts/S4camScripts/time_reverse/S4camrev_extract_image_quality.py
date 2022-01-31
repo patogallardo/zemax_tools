@@ -22,7 +22,9 @@ def check_args(argv):
         fname = argv[1]
     else:
         print("no fname given, searching this directory")
-        fnames = glob.glob('*.zmx')
+        fnames = glob.glob('*.zos')
+        if len(fnames) == 0:
+            fnames = glob.glob("*.zmx")  # legacy mode
         assert len(fnames) == 1
         fname = fnames[0]
     return fname
@@ -46,7 +48,7 @@ def getStrehls(TheSystem, wavelengthNumber):
     settings.Surface.SetSurfaceNumber(img_sur)
     settings.Wavelength.SetWavelengthNumber(wavelengthNumber)
     settings.UsePolarization = False
-    settings.RemoveVignettingFactors = True
+    settings.RemoveVignettingFactors = False
 
     settings.X_FieldSampling = sampling
     settings.Y_FieldSampling = sampling
@@ -255,6 +257,8 @@ if __name__ == '__main__':
         zs = np.zeros([nconf, sampling, sampling])
         for current_conf in progressbar(range(1, nconf+1)):
             MCE.SetCurrentConfiguration(current_conf)
+            Fields.ClearVignetting()
+            Fields.SetVignetting()
             x, y, z = getStrehls(TheSystem, wavelengthNumber)
             zs[current_conf-1, :, :] = z
 

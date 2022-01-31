@@ -14,7 +14,34 @@ MCE = TheSystem.MCE
 MF_DIROUT = './center_pri_footprint/'
 
 Nconf = 85
-# Nconf = 2
+# Nconf = 10
+
+
+def do_we_need_to_reoptimize(MFE):
+    """returns True if we need to reoptimize.
+       returns False if we reached a viable solution.
+    """
+    # check that we found a solution and run optimizer again if not
+    MFE.CalculateMeritFunction()
+    Nop = MFE.NumberOfOperands
+    REOPTIMIZE = False
+    for j in range(6):
+        op = MFE.GetOperandAt(Nop - j)
+        contribution = op.Contribution
+        print("Contribution %i: %1.2e" % (j, contribution))
+        REOPTIMIZE = REOPTIMIZE or (contribution > 1e-7)
+    op_margin = MFE.GetOperandAt(Nop - 7)
+    reached_target = np.isclose(op_margin.Value,
+                                op_margin.Target, atol=10)
+    print("Margin: %1.2e" % op_margin.Value)
+    REOPTIMIZE = REOPTIMIZE or not reached_target
+
+    op_equa = MFE.GetOperandAt(Nop - 8)
+    reached_target = op_equa.Value < 10
+    print("Avg Deviation from edge shape: %1.2f" % op_equa.Value)
+    REOPTIMIZE = REOPTIMIZE or not reached_target
+    return REOPTIMIZE
+
 
 for active_conf in progressbar(range(1, Nconf + 1)):
     mf_fnameout = os.path.abspath(os.path.join(MF_DIROUT,
@@ -29,22 +56,9 @@ for active_conf in progressbar(range(1, Nconf + 1)):
                                active_conf,
                                MCE, ZOSAPI, vars=True)
     zmx.zemax_optimize(TheSystem, ZOSAPI,
-                       algorithm="OD")
+                       algorithm="DLS")
 
-# check that we found a solution and run optimizer again if not
-    MFE.CalculateMeritFunction()
-    Nop = MFE.NumberOfOperands
-    REOPTIMIZE = False
-    for j in range(4):
-        op = MFE.GetOperandAt(Nop - j)
-        contribution = op.Contribution
-        print("Contribution %i: %1.2e" % (j, contribution))
-        REOPTIMIZE = REOPTIMIZE or (contribution > 1e-7)
-    op_margin = MFE.GetOperandAt(Nop - 5)
-    reached_target = np.isclose(op_margin.Value,
-                                op_margin.Target, atol=5)
-    REOPTIMIZE = REOPTIMIZE or not reached_target
-
+    REOPTIMIZE = do_we_need_to_reoptimize(MFE)
     if REOPTIMIZE:
         print("reoptimizing...")
         zmx.set_variables_or_const(mce_rows_to_optimize,
@@ -53,27 +67,24 @@ for active_conf in progressbar(range(1, Nconf + 1)):
         zmx.zemax_optimize(TheSystem, ZOSAPI,
                            algorithm="OD",
                            CyclesAuto=True)
-    MFE.CalculateMeritFunction()
-    Nop = MFE.NumberOfOperands
-#  Check that we found a solution and run hammer if we didn't
-    REOPTIMIZE = False
-    for j in range(4):
-        op = MFE.GetOperandAt(Nop - j)
-        contribution = op.Contribution
-        print("Contribution %i: %1.2e" % (j, contribution))
-        REOPTIMIZE = REOPTIMIZE or (contribution > 1e-7)
-    op_margin = MFE.GetOperandAt(Nop - 5)
-    reached_target = np.isclose(op_margin.Value,
-                                op_margin.Target,
-                                atol=5.0)
-    REOPTIMIZE = REOPTIMIZE or not reached_target
-    if REOPTIMIZE:
-        print("reoptimizing...")
-        zmx.set_variables_or_const(mce_rows_to_optimize,
-                                   active_conf,
-                                   MCE, ZOSAPI, vars=True)
-        zmx.zemax_run_hammer(TheSystem,
-                             time_s=15 * 60)
+
+        REOPTIMIZE = do_we_need_to_reoptimize(MFE)
+        if REOPTIMIZE:
+            print("reoptimizing...")
+            zmx.set_variables_or_const(mce_rows_to_optimize,
+                                       active_conf,
+                                       MCE, ZOSAPI, vars=True)
+            zmx.zemax_optimize(TheSystem, ZOSAPI,
+                               algorithm="DLS",
+                               CyclesAuto=True)
+            REOPTIMIZE = do_we_need_to_reoptimize(MFE)
+            if REOPTIMIZE:
+                print("reoptimizing one last time...")
+                zmx.set_variables_or_const(mce_rows_to_optimize,
+                                           active_conf,
+                                           MCE, ZOSAPI, vars=True)
+                zmx.zemax_run_hammer(TheSystem,
+                                     time_s=15 * 60)
 
 if not os.path.exists('./elliptical_stop'):
     os.mkdir('./elliptical_stop')

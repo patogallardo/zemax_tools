@@ -9,7 +9,7 @@ import os
 XRADIUS = 2500
 YRADIUS = 2747
 TARGET_KEEPOUT_RADIUS_MM = 150.0
-PRECISE_VIGNETTING = False
+PRECISE_VIGNETTING = True
 
 
 def eval_distance_to_rim(max_rs, MFE, surfnum):
@@ -74,7 +74,18 @@ def eval_distance_to_rim(max_rs, MFE, surfnum):
     op_equa.ChangeType(ZOSAPI.Editors.MFE.MeritOperandType.EQUA)
     op_equa.GetOperandCell(2).IntegerValue = first_diff_rownum
     op_equa.GetOperandCell(3).IntegerValue = last_diff_rownum
-    op_equa.Weight = 1.0e-2
+    op_equa.Weight = 0.0
+
+    op_cons = MFE.AddOperand()
+    op_cons.ChangeType(ZOSAPI.Editors.MFE.MeritOperandType.CONS)
+    op_cons.Weight = 0
+    op_cons.Target = len(max_rs)
+
+    op_divi = MFE.AddOperand()
+    op_divi.ChangeType(ZOSAPI.Editors.MFE.MeritOperandType.DIVI)
+    op_divi.Weight = 100
+    op_divi.GetOperandCell(2).IntegerValue = op_equa.OperandNumber
+    op_divi.GetOperandCell(3).IntegerValue = op_cons.OperandNumber
 
     op_min = MFE.AddOperand()
     op_min.ChangeType(ZOSAPI.Editors.MFE.MeritOperandType.MINN)
@@ -87,7 +98,7 @@ def eval_distance_to_rim(max_rs, MFE, surfnum):
     op_max.ChangeType(ZOSAPI.Editors.MFE.MeritOperandType.MAXX)
     op_max.GetOperandCell(2).IntegerValue = first_diff_rownum
     op_max.GetOperandCell(3).IntegerValue = last_diff_rownum
-    op_max.Weight = 1.0e-1
+    op_max.Weight = 0.0
     op_max.Target = TARGET_KEEPOUT_RADIUS_MM + 40
 
     op_opgt = MFE.AddOperand()
@@ -113,6 +124,18 @@ def eval_distance_to_rim(max_rs, MFE, surfnum):
     op_oplt.Target = 1200.
     op_oplt.Weight = 1e12
     op_oplt.GetOperandCell(2).IntegerValue = op_min.OperandNumber
+
+    op_opgt = MFE.AddOperand()
+    op_opgt.ChangeType(ZOSAPI.Editors.MFE.MeritOperandType.OPGT)
+    op_opgt.Target = 140
+    op_opgt.Weight = 1e12
+    op_opgt.GetOperandCell(2).IntegerValue = op_max.OperandNumber
+
+    op_oplt = MFE.AddOperand()
+    op_oplt.ChangeType(ZOSAPI.Editors.MFE.MeritOperandType.OPLT)
+    op_oplt.Target = 300
+    op_oplt.Weight = 1e12
+    op_oplt.GetOperandCell(2).IntegerValue = op_max.OperandNumber
 
 
 def find_max_radius_fields(df, x_mean, y_mean):
@@ -153,11 +176,22 @@ def eval_rim_centroid(max_rs, MFE, surfnum, REAXORY):
         op.GetOperandCell(6).DoubleValue = max_rs.px.values[j_field]  # Px
         op.GetOperandCell(7).DoubleValue = max_rs.py.values[j_field]  # Py
         op.Weight = 0.0
-    op = MFE.AddOperand()
-    op.ChangeType(ZOSAPI.Editors.MFE.MeritOperandType.OSUM)
-    op.GetOperandCell(2).IntegerValue = row_start
-    op.GetOperandCell(3).IntegerValue = row_end
-    op.Weight = 10.0
+    op_osum = MFE.AddOperand()
+    op_osum.ChangeType(ZOSAPI.Editors.MFE.MeritOperandType.OSUM)
+    op_osum.GetOperandCell(2).IntegerValue = row_start
+    op_osum.GetOperandCell(3).IntegerValue = row_end
+    op_osum.Weight = 0.0
+
+    op_cons = MFE.AddOperand()
+    op_cons.ChangeType(ZOSAPI.Editors.MFE.MeritOperandType.CONS)
+    op_cons.Weight = 0
+    op_cons.Target = len(max_rs)
+
+    op_divi = MFE.AddOperand()
+    op_divi.ChangeType(ZOSAPI.Editors.MFE.MeritOperandType.DIVI)
+    op_divi.Weight = 1.0
+    op_divi.GetOperandCell(2).IntegerValue = op_osum.OperandNumber
+    op_divi.GetOperandCell(3).IntegerValue = op_cons.OperandNumber
 
 
 MKPLOT = True
@@ -188,8 +222,9 @@ MF_DIROUT = './center_pri_footprint/'
 if not os.path.exists(MF_DIROUT):
     os.mkdir(MF_DIROUT)
 
+Ncams = 85
 if MK_MERITFUNCTIONS:
-    for active_conf in progressbar(range(1, 86)):
+    for active_conf in progressbar(range(1, Ncams + 1)):
         #  MFE.GetOperandAt(1).GetOperandCell(2).IntegerValue = 1
         MCE.SetCurrentConfiguration(active_conf)
         px_out, py_out, hx_out, hy_out, x, y = [], [], [], [], [], []
