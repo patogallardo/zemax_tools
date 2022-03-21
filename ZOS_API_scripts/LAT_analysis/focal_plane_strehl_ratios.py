@@ -87,8 +87,8 @@ class open_databases:
         vig = np.logical_or(vig_p, vig_m)
         self.vig = vig
 
-        df_pos.x_pos.values[vig] = np.nan
-        df_pos.y_pos.values[vig] = np.nan
+#        df_pos.x_pos.values[vig] = np.nan
+#        df_pos.y_pos.values[vig] = np.nan
 
         u = interpolate_vignetting_for_strehls(df_pos.hx_deg.values,
                                                df_pos.hy_deg.values,
@@ -207,7 +207,7 @@ def plotArea_focal_plane(x_mm, y_mm, z_strehl,
 
 def plot_img_qual_sky(db, thresholds=[0.95]):
     df_strh = db.df_strh
-    sel = df_strh.vignetted == 0
+    sel = df_strh.z_strehl.values > 0.47
 
     x, y = df_strh.xx_deg.values[sel], df_strh.yy_deg.values[sel]
     z = df_strh.z_strehl.values[sel]
@@ -241,18 +241,19 @@ def plot_img_qual_sky(db, thresholds=[0.95]):
     cbar = plt.colorbar(hb, cax=cax, ticks=np.arange(0.95, 1.01, 0.01))
     cbar.set_label('Strehl ratio [-]')
 
-    cs = ax.contour(x_bin, y_bin, res.statistic.T, np.arange(0.95, 1.01, 0.01),
+    cs = ax.contour(x_bin, y_bin, res.statistic.T,
+                    np.array([0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99]),
                     cmap='inferno')
     ax.clabel(cs, inline=1, fontsize=15)
 
     ax.set_xlabel('$x_{sky}$ [deg]')
     ax.set_ylabel('$y_{sky}$ [deg]')
 
-    xmax = 5.0
+    xmax = 6.0
     ax.set_xlim([-xmax, xmax])
     ax.set_ylim([-xmax, xmax])
 
-    ax.set_title('Sky Strehl ratio at $\\lambda=1mm$')
+    ax.set_title('Strehl ratio at $\\lambda=1mm$')
     ax.grid(alpha=0.3)
 
 #    bubble
@@ -261,8 +262,8 @@ def plot_img_qual_sky(db, thresholds=[0.95]):
              for j in range(len(thresholds))]
     textstr = '\n'.join(texts)
     props = dict(boxstyle='round', facecolor='white', alpha=0.7)
-    plt.figtext(0.60, 0.165, textstr, bbox=props, fontsize=8)
-    plt.figtext(0.9, 0.05, projectName, fontsize=5, ha='right')
+    plt.figtext(0.588, 0.175, textstr, bbox=props, fontsize=8)
+#    plt.figtext(0.9, 0.05, projectName, fontsize=5, ha='right')
     if not os.path.exists('./strehls'):
         os.mkdir('./strehls')
     fig.tight_layout()

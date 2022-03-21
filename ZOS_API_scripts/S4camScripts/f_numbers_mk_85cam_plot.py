@@ -38,7 +38,7 @@ plt.rcParams.update({
 # plt.figure(figsize=[8, 4.5])
 plt.hist(z, histtype='step', color='black', bins=15)
 plt.xlabel('$f/\\#$')
-plt.ylabel('camera count')
+plt.ylabel('Camera count [-]')
 plt.title('Camera f-numbers')
 plt.figtext(0.7, 0.7, table)
 

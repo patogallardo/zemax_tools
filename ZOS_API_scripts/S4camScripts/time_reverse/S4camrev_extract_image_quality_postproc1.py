@@ -122,6 +122,7 @@ def make_plots_and_pack_results(fname):
         plt.ylabel('y [mm]')
         plt.legend(loc='upper right')
         plt.savefig('%s/%02i.png' % (folder, conf+1), dpi=150)
+        plt.savefig('%s/%02i.pdf' % (folder, conf+1))
         plt.close()
 
     df_coords = pd.read_csv("./groups_info/85cam_groups.csv")

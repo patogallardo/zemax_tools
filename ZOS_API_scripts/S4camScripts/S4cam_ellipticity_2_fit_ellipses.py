@@ -114,7 +114,7 @@ for configuration in progressbar.progressbar(range(1, 86, 1)):
     cs = plt.tricontour(df_ellipses.Hx, df_ellipses.Hy,
                      1.0/2.0/np.tan(np.deg2rad(np.sqrt(df_ellipses.angle_a *  # noqa
                                                        df_ellipses.angle_b))),  # noqa
-                        levels=np.arange(1.7, 2.1, 0.05),
+                        levels=np.arange(1.7, 2.2, 0.05),
                         vmin=1.8, vmax=2.1,
                         colors='gray')
     plt.clabel(cs, inline=1, fontsize=15)
@@ -126,6 +126,9 @@ for configuration in progressbar.progressbar(range(1, 86, 1)):
     plt.savefig('f_numbers/equivalent_f_number/'
                 'eq_f_n_%02i.png' % configuration,
                 dpi=120)
+    plt.savefig('f_numbers/equivalent_f_number/'
+                'eq_f_n_%02i.pdf' % configuration)
+
     plt.close()
 
 

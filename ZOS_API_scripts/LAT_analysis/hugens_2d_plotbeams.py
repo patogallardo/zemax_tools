@@ -56,18 +56,37 @@ for FieldNumber in progressbar(range(1, NumberOfFields + 1)):
     zs.append(z)
     win.Close()
 
-
+extent = [-6, 6, -6, 6]
 fig, axs = plt.subplots(nrows=3, ncols=3,
-                        figsize=(7.5, 6),
-                        subplot_kw={'xticks': [],
-                                    'yticks': []})
-
+                        figsize=(6.0, 7.5),
+                        subplot_kw={'xticks': np.arange(-6, 9, 3),
+                                    'yticks': np.arange(-6, 9, 3)})
+vmin, vmax = -75, 0
 for ax, z in zip(axs.flat, zs):
-    im = ax.imshow(np.log10(z), cmap='viridis')
+    im = ax.imshow(10 * np.log10(z),
+                   cmap='viridis',
+                   extent=extent,
+                   vmin=vmin,
+                   vmax=vmax)
+    ax.grid(color='gray',
+            alpha=0.35)
 #    ax.set_title(str(j))
 
-cbar_ax = fig.add_axes([0.92, 0.15, 0.02, 0.7])
-fig.colorbar(im, cax=cbar_ax)
+# cbar_ax = fig.add_axes([0.15, 0.07, 0.7, 0.015])
+# fig.colorbar(im, cax=cbar_ax, orientation='horizontal')
+plt.subplots_adjust(left=0.05,
+                    right=0.99,
+                    top=0.99,
+#                    bottom=0.05,  # noqa
+                    hspace=0.05,
+                    wspace=0.2)
+
+fig.colorbar(im, ax=axs,
+             orientation='horizontal',
+             fraction=0.02,
+             label='dB',
+             aspect=20,
+             pad=0.09)
 
 # plt.tight_layout()
 if show:
