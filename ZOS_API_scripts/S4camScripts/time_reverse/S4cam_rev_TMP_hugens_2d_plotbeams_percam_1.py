@@ -1,3 +1,5 @@
+import matplotlib
+matplotlib.use("Agg")
 import zmx_api
 import numpy as np
 import os
@@ -84,6 +86,9 @@ for configuration in progressbar(range(1, NumberOfConfigurations + 1)):
         for i in range(Ny):
             for j in range(Nx):
                 z[i, j] = g.Z(i, j)
+        fnameout = "psf2d/cam_%02i_field_%02i" % (configuration, FieldNumber)
+        np.savez(fnameout,
+                 x=x, y=y, z=z)
         zs.append(z)
         win.Close()
 
