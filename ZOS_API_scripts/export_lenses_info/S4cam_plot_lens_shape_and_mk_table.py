@@ -82,7 +82,7 @@ def mk_tex(tex_table, label, targetdir):
                    cwd=targetdir)
 
 
-fnames = glob.glob('./*.zmx')
+fnames = glob.glob('./*.zos')
 assert len(fnames) == 1
 fname = os.path.abspath(fnames[0])
 print("Opening: %s" % fname)

@@ -18,7 +18,7 @@ if len(sys.argv) == 2:  # optional support for specifying filename
     fname = sys.argv[1]
 else:
     print('No file name provided, searching current directory')
-    fnames = glob.glob('*.zmx')
+    fnames = glob.glob('*.zos')
     assert len(fnames) == 1
     fname = fnames[0]
 projectName = fname

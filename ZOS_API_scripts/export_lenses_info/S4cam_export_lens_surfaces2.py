@@ -24,7 +24,8 @@ def mk_standalone_tex_from_df(df, fname_out):
                    cwd=os.path.split(fname_out)[0])  # noqa
 
 
-assert df.SurfType[0] == 'Biconic Zernike' or df.SurfType[0] == 'Even Asphere'
+surf_type = df.SurfType[0]
+assert surf_type == 'Biconic Zernike' or surf_type == 'Even Asphere' or surf_type == 'Standard'  # noqa
 
 # column numbers for biconic zernike
 if df.SurfType[0] == 'Biconic Zernike':
@@ -43,6 +44,9 @@ elif df.SurfType[0] == 'Even Asphere':
                          '8th Order Term', '10th Order Term',
                          '12th Order Term', '14th Order Term',
                          '16th Order Term']
+    columnNumbersToExportMultiline = []
+elif surf_type == 'Standard':
+    columns_for_table = ['SurfType', 'Radius', 'Thickness', 'Clear Semi-Dia', 'Conic']  # noqa
     columnNumbersToExportMultiline = []
 
 print(df[columns_for_table])

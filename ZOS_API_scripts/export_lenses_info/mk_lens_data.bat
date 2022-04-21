@@ -1,5 +1,5 @@
 echo "Make sure OpticStudio is running."
-SET MY_PATH="C:\Users\pgall\Documents\wilson\code\zemax_tools\ZOS_API_scripts\export_lenses_info"
+SET MY_PATH=C:\Users\pgall\OneDrive - The University of Chicago\Github\zemax_tools\ZOS_API_scripts\export_lenses_info
 
 python "%MY_PATH%\S4cam_export_lens_cads.py"
 python "%MY_PATH%\S4cam_export_lens_surfaces.py"
