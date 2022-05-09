@@ -8,17 +8,16 @@ import seaborn as sns
 import os
 
 show = False
+move_figure_to_paper = False
 
 columns = ["Node", "Value_mm", "x_mm", "y_mm", 'z_mm', "Components"]
 
-fname = 'FEA_Mirror3Ra_WithCone-M3Ra_El00Pa00ct_Bonded-Results-DispZ-M.txt'
+fname = 'data/FEA_Mirror1S_WithCone2-M1S_El00Pa00c-DisplZ-1.txt'
 df = pd.read_csv(fname,
-                 delimiter='\t',
-                 skiprows=15,
+                 delim_whitespace=True,
+                 skiprows=8,
                  names=columns,
-                 encoding='latin-1',
-                 thousands='\xa0',
-                 engine='python')
+                 encoding='latin-1')
 
 x, y, z = df.x_mm.values, df.y_mm.values, df.Value_mm.values
 
@@ -144,9 +143,10 @@ if show:
     plt.show()
 else:
     plt.savefig('fit_model_residuals_degree_%i.pdf' % degree)
-    paper_folder = r"C:\Users\pgall\OneDrive - The University of Chicago\Github\SPLAT_paper\figures"  # noqa
-    fnameout = os.path.join(paper_folder, "fea_deformation_fit.pdf")
-    plt.savefig(fnameout)
+    if move_figure_to_paper:
+        paper_folder = r"C:\Users\pgall\OneDrive - The University of Chicago\Github\SPLAT_paper\figures"  # noqa
+        fnameout = os.path.join(paper_folder, "fea_deformation_fit.pdf")
+        plt.savefig(fnameout)
     plt.close()
 
 np.savez('./model_parameters_deg_%i.npz' % degree,

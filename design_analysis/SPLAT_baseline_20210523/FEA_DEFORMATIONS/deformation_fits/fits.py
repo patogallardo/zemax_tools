@@ -8,6 +8,7 @@ import seaborn as sns
 import os
 
 show = False
+move_figure_to_paper = False
 
 columns = ["Node", "Value_mm", "x_mm", "y_mm", 'z_mm', "Components"]
 
@@ -142,9 +143,10 @@ if show:
     plt.show()
 else:
     plt.savefig('fit_model_residuals_degree_%i.pdf' % degree)
-    paper_folder = r"C:\Users\pgall\OneDrive - The University of Chicago\Github\SPLAT_paper\figures"  # noqa
-    fnameout = os.path.join(paper_folder, "fea_deformation_fit.pdf")
-    plt.savefig(fnameout)
+    if move_figure_to_paper:
+        paper_folder = r"C:\Users\pgall\OneDrive - The University of Chicago\Github\SPLAT_paper\figures"  # noqa
+        fnameout = os.path.join(paper_folder, "fea_deformation_fit.pdf")
+        plt.savefig(fnameout)
     plt.close()
 
 np.savez('./model_parameters_deg_%i.npz' % degree,
