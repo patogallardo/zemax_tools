@@ -77,7 +77,7 @@ def zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=True,
         LocalOpt.Cycles = OptCycles.Fixed_5_Cycles  # noqa
 #        LocalOpt.Cycles = OptCycles.Fixed_50_Cycles  # noqa
 #        LocalOpt.Cycles = OptCycles.Fixed_10_Cycles
-    LocalOpt.NumberOfCores = 8
+    LocalOpt.NumberOfCores = 15
     LocalOpt.RunAndWaitForCompletion()
     print("\t Final Merit Function: %1.10f" % LocalOpt.CurrentMeritFunction)
     LocalOpt.Close()
