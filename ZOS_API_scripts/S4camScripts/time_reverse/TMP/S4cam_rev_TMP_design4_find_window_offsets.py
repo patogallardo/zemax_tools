@@ -5,7 +5,7 @@ c = zmx_api.connect_zmx_interactive()
 TheSystem, ZOSAPI, ZOSAPI_NetHelper = c
 MCE, MFE = TheSystem.MCE, TheSystem.MFE
 
-window_entrance_surface = 20
+window_entrance_surface = 25
 offset_x_mce_row = 22
 offset_y_mce_row = 23
 NCONF = MCE.NumberOfConfigurations

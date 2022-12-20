@@ -12,13 +12,24 @@ import sys
 import pandas as pd
 import glob
 
-if len(sys.argv) == 2:
+if len(sys.argv) == 3:
+    fname, wavelengthnumber = sys.argv[1], sys.argv[2]
+elif len(sys.argv) == 2:
     fname = sys.argv[1]
+    wavelengthnumber = 1
 else:
     fnames = glob.glob('*.zmx')
     assert len(fnames) == 1
     fname = fnames[0]
+    wavelengthnumber = 1
     print('No filename provided, using %s' % fname)
+
+print("fname: %s" % fname)
+print("wavelength number: %s" % wavelengthnumber)
+
+assert os.path.exists(fname)
+
+print("usage: script.py fname.zmx wln, where wln is wavelength number")
 fname = os.path.abspath(fname)
 
 print('Exporting Strehl ratios for field 1.\n\nRemember to check zmx file.')
@@ -151,7 +162,7 @@ if __name__ == '__main__':
     rms_settings = CastTo(newSettings, "IAS_RMSFieldMap")
     rms_settings.Field.SetFieldNumber(1)
     rms_settings.Surface.SetSurfaceNumber(nsur)
-    rms_settings.Wavelength.SetWavelengthNumber(1)
+    rms_settings.Wavelength.SetWavelengthNumber(wavelengthnumber)
     rms_settings.UsePolarization = False
     rms_settings.RemoveVignettingFactors = False
 
@@ -179,9 +190,15 @@ if __name__ == '__main__':
 
     toStore = {'xx_deg': xx, 'yy_deg': yy, 'z_strehl': zz}
     df = pd.DataFrame(toStore)
-    fname_out = 'strehl_map.hdf'
-    df.to_hdf(fname_out, key='df')
-    print("File %s written" % fname_out)
+    fname_out = 'strehl_map_wl_%s.hdf' % wavelengthnumber
+    df.to_hdf(fname_out, key='df', mode='w')
 
-    del zosapi
-    zosapi = None
+    wl = TheSystem.SystemData.Wavelengths.GetWavelength(int(wavelengthnumber)).Wavelength  # noqa
+    s = pd.Series({'wavelength_um': wl})
+    s.to_hdf(fname_out, key='wavelength', mode='r+')
+
+    print("File %s written" % fname_out)
+    print("wl: %1.2f um" % wl)
+
+#    del zosapi
+#    zosapi = None

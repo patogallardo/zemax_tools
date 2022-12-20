@@ -1,0 +1,77 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+
+plt.rcParams.update({'font.size': 18})
+df = pd.read_csv('tol_sweep.csv')
+
+fig_size = np.array([6, 7])
+fig = plt.figure(constrained_layout=True, figsize=fig_size)
+axs = fig.subplots(3)
+
+ax = axs[0]
+ax.plot(df['thickness'],
+         df['M1-M2 dist'],
+         label='M1-M2 dist')
+ax.plot(df['thickness'],
+         df['M2-M3 dist'],
+         label='M2-M3 dist')
+ax.plot(df['thickness'],
+         df['M3-FP dist'],
+         label='M3-FP dist')
+ax.plot(df['dec x'],
+        df['M2 dec x'],
+        label='M2 dec x')
+ax.plot(df['dec x'],
+        df['M3 dec x'],
+        label='M3 dec x')
+ax.plot(df['dec y'],
+        df['M2 dec y'],
+        label='M2 dec y')
+ax.plot(df['dec y'],
+        df['M3 dec y'],
+        label='M3 dec y')
+ax.plot()
+ax.legend(ncol=3, fontsize=10, loc='lower center')
+ax.set_xlabel('Displacement [mm]')
+ax.set_ylabel('Min Strehl [-]')
+
+ax = axs[1]
+ax.plot(df['tilt x'],
+        df['M2 tilt x'],
+        label='M2 tilt x')
+ax.plot(df['tilt x'],
+        df['M3 tilt x'],
+        label='M3 tilt x')
+ax.plot(df['tilt y'],
+        df['M2 tilt y'],
+        label='M2 tilt y')
+ax.plot(df['tilt y'],
+        df['M3 tilt y'],
+        label='M3 tilt y')
+ax.plot(df['tilt x'],
+        df['FP tilt x'],
+        label='FP tilt x')
+ax.plot(df['tilt y'],
+        df['FP tilt y'],
+        label='FP tilt y')
+ax.set_xlabel('Tilt [degrees]')
+ax.set_ylabel('Min Strehl')
+ax.legend(loc='lower center',
+          ncol=3, fontsize=10)
+
+ax = axs[2]
+MF_val = 0.05442
+df = pd.read_excel('../montecarlo/sim_res_suggested_spread.xls')
+ax.hist(df.strehl, bins=20, cumulative=False, density=False, histtype='step',
+        color='black')
+ax.axvline(1-MF_val - 0.05,
+         label='5% Strehl degradation')
+ax.set_xlabel('Strehl ratio [-]')
+ax.set_ylabel('Count [-]')
+ax.legend(loc='lower right', fontsize=15)
+
+plt.savefig('tel_tolerancing_3panels.pdf')
+plt.show()
+plt.close()
+

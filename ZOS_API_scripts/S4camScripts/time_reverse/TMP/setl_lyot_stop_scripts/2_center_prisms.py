@@ -47,7 +47,7 @@ REAY = ZOSAPI.Editors.MFE.MeritOperandType.REAY
 surfnum = 44
 wavenum = 1
 
-t = np.linspace(0, 2*np.pi, 5)[:-1]
+t = np.linspace(0, 2*np.pi, 37)[:-1]
 rs = np.linspace(0, 1, 4)
 Pxs = np.cos(t)
 Pys = np.sin(t)

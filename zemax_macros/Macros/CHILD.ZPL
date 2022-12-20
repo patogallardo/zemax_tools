@@ -1,0 +1,5 @@
+PRINT "Executing child macro"
+PRINT CALD(1)
+A$ = $CALLSTR(1)
+PRINT A$
+CALLSETDBL 1, 7.11

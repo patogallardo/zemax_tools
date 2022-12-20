@@ -7,6 +7,10 @@ import glob
 
 #  To do: export wavelngth from zemax
 
+plt.rcParams.update({
+    "text.usetex": True})
+plt.rcParams.update({"font.size": 18})
+
 fnames = glob.glob('*/strehls.npz')
 assert len(fnames) > 1
 
@@ -94,7 +98,7 @@ def make_plots_and_pack_results(fname):
         x_circ, y_circ = make_circle(array_radius)
         a_circ = z_in.count() * dx**2
         plt.plot(x_circ, y_circ,
-                 label='%i mm $\\phi$' % array_radius,
+                 label='r=%i mm' % array_radius,
                  color='C1')
         plt.axis('equal')
 
@@ -116,13 +120,14 @@ def make_plots_and_pack_results(fname):
                            fc=(0.5, 0.5, 0.5, 0.5),),
                  zorder=10)
 
-        plt.title('conf: %i wavelength: %1.1f' % (conf+1, wavelength))
+        plt.title('Camera: %i, $\\lambda$= %1.1f mm' % (conf+1, wavelength))
 
         plt.xlabel('x [mm]')
         plt.ylabel('y [mm]')
-        plt.legend(loc='upper right')
-        plt.savefig('%s/%02i.png' % (folder, conf+1), dpi=150)
-        plt.savefig('%s/%02i.pdf' % (folder, conf+1))
+        plt.legend(loc='upper right', fontsize=13)
+        plt.tight_layout()
+        plt.savefig('%s/strehl_cam_%02i.png' % (folder, conf+1), dpi=150)
+        plt.savefig('%s/strehl_cam_%02i.pdf' % (folder, conf+1))
         plt.close()
 
     df_coords = pd.read_csv("./groups_info/85cam_groups.csv")

@@ -6,6 +6,9 @@ import scipy.interpolate as interp
 from scipy import stats
 import os
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+import sys
+
+assert len(sys.argv) == 2
 
 plt.rcParams.update({'font.size': 14})
 s = pd.read_hdf('ray_db.hdf', 'system_variables')
@@ -13,6 +16,9 @@ center_field_deg = [s.center_field_x, s.center_field_y]
 
 overlay_circle = True
 rs = [2200/2]  # radii for circles overlay
+assert len(sys.argv) == 2
+strehl_map_fname = "strehl_map_wl_%s.hdf" % sys.argv[1]
+print(strehl_map_fname)
 
 
 def get_field_positions_and_strehl_map_fname():
@@ -21,7 +27,7 @@ def get_field_positions_and_strehl_map_fname():
     if there are more than one file per flavor of database it will
     raise an error.'''
     field_position_fnames = glob.glob('ray_db.hdf')
-    strehl_fnames = glob.glob('strehl_map.hdf')
+    strehl_fnames = glob.glob(strehl_map_fname)
 
     field_position_fnames.sort()
     strehl_fnames.sort()
@@ -97,6 +103,7 @@ class open_databases:
         df_strh = pd.read_hdf(strehl_fname, key='df')
         df_strh['vignetted'] = u((df_strh.xx_deg.values,
                                  df_strh.yy_deg.values))
+        wl = pd.read_hdf(strehl_fname, key='wavelength').wavelength_um/1e3
 
         self.df_pos = df_pos
         self.df_xp = df_xp
@@ -104,6 +111,7 @@ class open_databases:
         self.df_xm = df_xm
         self.df_ym = df_ym
         self.df_strh = df_strh
+        self.wavelength = wl
 
 
 db = open_databases()
@@ -205,7 +213,7 @@ def plotArea_focal_plane(x_mm, y_mm, z_strehl,
     plt.close()
 
 
-def plot_img_qual_sky(db, thresholds=[0.95]):
+def plot_img_qual_sky(db, thresholds=[0.95, 0.9, 0.8]):
     df_strh = db.df_strh
     sel = df_strh.z_strehl.values > 0.47
 
@@ -233,17 +241,18 @@ def plot_img_qual_sky(db, thresholds=[0.95]):
 #   now make the plot
     fig, ax = plt.subplots(figsize=[6, 5])
 
-    hb = ax.hexbin(x, y, z, vmin=0.95, vmax=1.0)
+    hb = ax.hexbin(x, y, z, vmin=0.5, vmax=1.0)
 
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="3%", pad=0.05)
 
-    cbar = plt.colorbar(hb, cax=cax, ticks=np.arange(0.95, 1.01, 0.01))
+    cbar = plt.colorbar(hb, cax=cax, ticks=np.arange(0.5, 1.1, 0.1))
     cbar.set_label('Strehl ratio [-]')
 
     cs = ax.contour(x_bin, y_bin, res.statistic.T,
                     np.array([0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99]),
-                    cmap='inferno')
+                    colors='white')
+#                    cmap='inferno')
     ax.clabel(cs, inline=1, fontsize=15)
 
     ax.set_xlabel('$x_{sky}$ [deg]')
@@ -253,22 +262,23 @@ def plot_img_qual_sky(db, thresholds=[0.95]):
     ax.set_xlim([-xmax, xmax])
     ax.set_ylim([-xmax, xmax])
 
-    ax.set_title('Strehl ratio at $\\lambda=1mm$')
+    ax.set_title('TMA Strehl ratio at $\\lambda=%1.1f mm$' % db.wavelength)
     ax.grid(alpha=0.3)
 
 #    bubble
-    texts = ['$\\Omega_{Strehl > %1.2f}$: %1.2f deg$^2$' % (thresholds[j],
-                                                            areas[j])
+    texts = ['$\\Omega_{Strehl > %1.2f}$: %1.1f deg$^2$' % (thresholds[j],
+                                                            round(areas[j], 1))
              for j in range(len(thresholds))]
     textstr = '\n'.join(texts)
     props = dict(boxstyle='round', facecolor='white', alpha=0.7)
-    plt.figtext(0.588, 0.175, textstr, bbox=props, fontsize=8)
+    plt.figtext(0.60, 0.175, textstr, bbox=props, fontsize=8)
 #    plt.figtext(0.9, 0.05, projectName, fontsize=5, ha='right')
     if not os.path.exists('./strehls'):
         os.mkdir('./strehls')
     fig.tight_layout()
-    plt.savefig('./strehls/sky_strehls.png', dpi=150)
-    plt.savefig('./strehls/sky_strehls.pdf')
+    plt.savefig('./strehls/sky_strehls_TMA_wl_%i_mm.png' % db.wavelength,
+                dpi=150)
+    plt.savefig('./strehls/sky_strehls_TMA_wl_%i_mm.pdf' % db.wavelength)
     plt.close()
 
 

@@ -7,7 +7,7 @@ import numpy as np
 mce_rows_to_optimize = [1, 2, 3, 19, 20]
 
 TheSystem, ZOSAPI, ZOSAPI_NetHelper = zmx_api.connect_zmx_interactive()
-TheSystem.LoadFile('circular_stop/TMP_baseline_rev_multicam_test4_elliptical_2groups_groupleaders_8_39.zos', False)  # noqa
+#TheSystem.LoadFile('circular_stop/TMP_baseline_rev_multicam_test4_elliptical_2groups_groupleaders_8_39.zos', False)  # noqa
 
 MFE = TheSystem.MFE
 MCE = TheSystem.MCE

@@ -74,10 +74,10 @@ def zemax_optimize(TheSystem, ZOSAPI, CyclesAuto=True,
     if CyclesAuto:
         LocalOpt.Cycles = OptCycles.Automatic
     else:
-        LocalOpt.Cycles = OptCycles.Fixed_5_Cycles  # noqa
+#        LocalOpt.Cycles = OptCycles.Fixed_5_Cycles  # noqa
 #        LocalOpt.Cycles = OptCycles.Fixed_50_Cycles  # noqa
-#        LocalOpt.Cycles = OptCycles.Fixed_10_Cycles
-    LocalOpt.NumberOfCores = 15
+        LocalOpt.Cycles = OptCycles.Fixed_10_Cycles
+    LocalOpt.NumberOfCores = 32
     LocalOpt.RunAndWaitForCompletion()
     print("\t Final Merit Function: %1.10f" % LocalOpt.CurrentMeritFunction)
     LocalOpt.Close()
@@ -131,6 +131,13 @@ def set_MFE_row(operandType, row, MFE, ZOSAPI, param1val=None, param2val=None,
                 cell.IntegerValue = paramVals[j]
             if type(paramVals[j]) == float:
                 cell.DoubleValue = paramVals[j]
+    if row.TypeName == "BLNK" and type(param1val) is str:
+        cell = row.GetOperandCell(1)
+        cell.Value = param1val
     row.Weight = weight
     if target is not None:
         row.Target = target
+    if weight != 0:
+        row.RowColor = ZOSAPI.Common.ZemaxColor.Color3
+    elif row.TypeName != 'BLNK':
+        row.RowColor = ZOSAPI.Common.ZemaxColor.Color7

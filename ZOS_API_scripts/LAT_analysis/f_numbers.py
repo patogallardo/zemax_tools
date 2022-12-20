@@ -94,7 +94,7 @@ def get_stats(fn):
 
 def make_fnumber_hists(df_fn, show=True):
     sel = np.logical_not(np.isnan(df_fn.fn_av.values))
-    plt.figure(figsize=[8, 7])
+    plt.figure(figsize=[5, 2.5], constrained_layout=True)
 
     fn_yp_av, fn_yp_m, fn_yp_p = get_stats(df_fn.fn_yp.values[sel])
     plt.hist(df_fn.fn_yp.values[sel],
@@ -135,11 +135,11 @@ def make_fnumber_hists(df_fn, show=True):
              bins=40, density=True)
     plt.axvspan(av-av_m, av+av_p, color='C4', alpha=0.2)
 
-    plt.legend(loc='upper right')
-    plt.title('Chief ray relative $f/\\#$')
+    plt.legend(loc='upper right', fontsize=12)
+#    plt.title('Chief ray relative $f/\\#$')
     plt.xlabel('$f/\\#$ [-]')
     plt.ylabel('pdf [-]')
-    plt.tight_layout()
+#    plt.tight_layout()
     if show:
         plt.show()
     else:
